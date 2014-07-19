@@ -17,7 +17,7 @@
 Signature="$WINDOWS NT$"
 Class=Sample
 ClassGuid={78A1C341-4539-11d3-B88D-00C04FAD5171}
-Provider=%MSFT%
+Provider="f3flight"
 DriverVer=10/01/2002,6.0.5058.0
 CatalogFile=wudf.cat
 
@@ -158,7 +158,6 @@ HKR,,CoInstallers32,0x00010000,"WudfUpdate_$UMDFCOINSTALLERVERSION$.dll"
 ;---------------------------------------------------------------;
 
 [Strings]
-MSFT="Microsoft"
 MfgName="Microsoft"
 Disk_Description="WUDFVhidmini Installation Disk"
 DeviceDesc="UMDF HID minidriver Sample Device (Wudfvhidmini)"
