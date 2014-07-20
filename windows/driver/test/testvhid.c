@@ -183,6 +183,9 @@ main(
 				buffer = malloc(bufferSize);
 				ZeroMemory(buffer, bufferSize);
 				buffer->ReportID = 0x01;
+				buffer->InRange = 1;
+				buffer->X = 10000;
+				buffer->Y = 15000;
 				DWORD bytesWritten;
 				bSuccess = WriteFile(file, (PVOID)buffer, bufferSize, &bytesWritten, NULL);
 				if (bSuccess)

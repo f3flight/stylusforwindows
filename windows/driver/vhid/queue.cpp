@@ -1163,7 +1163,8 @@ Return Value:
     UCHAR reportId; 
     SIZE_T pOutBufferSize;
     PHIDMINI_OUTPUT_REPORT outputReport = NULL;
-    
+	PSPEN_REPORT spenReport = NULL;
+
     // *************************************************************************
     // IOCTL_HID_WRITE_REPORT
     // Input report ID:
@@ -1205,14 +1206,17 @@ Return Value:
         Trace(TRACE_LEVEL_ERROR, "RetrieveINputMemory failed %!hresult!\n", hr);
         return hr;        
     }
-    outputReport = (PHIDMINI_OUTPUT_REPORT) memory->GetDataBuffer(&inBufferCb);
+
+    //outputReport = (PHIDMINI_OUTPUT_REPORT) memory->GetDataBuffer(&inBufferCb);
+	spenReport = (PSPEN_REPORT)memory->GetDataBuffer(&inBufferCb);
     SAFE_RELEASE(memory);
 
     //
     // make sure buffer is big enough.
     //
-    reportSize = sizeof(HIDMINI_OUTPUT_REPORT);  
-    if (inBufferCb < reportSize) 
+    //reportSize = sizeof(HIDMINI_OUTPUT_REPORT);  
+	reportSize = sizeof(SPEN_REPORT)+1;
+	if (inBufferCb != reportSize) 
     {
         hr =  HRESULT_FROM_NT(STATUS_INVALID_BUFFER_SIZE);
         Trace(TRACE_LEVEL_ERROR, 
@@ -1223,7 +1227,10 @@ Return Value:
     //
     // Store the device data in device extension. 
     //
-    m_Device->m_DeviceData = outputReport->Data;
+    //m_Device->m_DeviceData = outputReport->Data;
+	m_Device->m_SpenLastState.InRange = spenReport->InRange;
+	m_Device->m_SpenLastState.X = spenReport->X;
+	m_Device->m_SpenLastState.Y = spenReport->Y;
 
     //
     // set status and information
