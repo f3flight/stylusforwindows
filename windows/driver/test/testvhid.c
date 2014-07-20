@@ -221,7 +221,7 @@ main(
         //
         // Read/Write report loopback 
         //
-        bSuccess = ReadInputData(file);
+        /*bSuccess = ReadInputData(file);
         if (bSuccess == FALSE) {
             goto cleanup;
         }
@@ -234,7 +234,7 @@ main(
         bSuccess = ReadInputData(file);
         if (bSuccess == FALSE) {
             goto cleanup;
-        }
+        }*/
 
         //
         // Get Strings
