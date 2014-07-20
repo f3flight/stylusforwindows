@@ -117,4 +117,23 @@ typedef struct _HIDMINI_OUTPUT_REPORT {
 #define INPUT_REPORT_SIZE_CB        ((USHORT)(sizeof(HIDMINI_INPUT_REPORT) - 1))
 #define OUTPUT_REPORT_SIZE_CB       ((USHORT)(sizeof(HIDMINI_OUTPUT_REPORT) - 1))
 
+typedef struct _SPEN_REPORT
+{
+	UCHAR ReportID	: 8;
+	BOOL Tip		: 1;
+	BOOL Barrel		: 1;
+	BOOL Invert		: 1;
+	BOOL Eraser		: 1;
+	BOOL			: 1;
+	BOOL InRange	: 1;
+	BOOL			: 2;
+	USHORT X		: 16;
+	USHORT Y		: 16;
+	UCHAR Pressure	: 8;
+	UCHAR XTilt		: 8;
+	UCHAR YTilt		: 8;
+	UCHAR Twist		: 8;
+	UCHAR			: 8;
+} SPEN_REPORT, *PSPEN_REPORT;
+
 #endif //__VHIDMINI_COMMON_H__
