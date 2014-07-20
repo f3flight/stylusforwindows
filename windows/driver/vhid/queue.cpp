@@ -57,7 +57,7 @@ HID_REPORT_DESCRIPTOR           G_DefaultReportDescriptor[] = {
 	0x05, 0x0d,                    // USAGE_PAGE (Digitizers)
 	0x09, 0x02,                    // USAGE (Pen)
 	0xa1, 0x01,                    // COLLECTION (Application)
-	0x85, 0x02,                    //   REPORT_ID (2)
+	0x85, HID_PEN_REPORT_ID,       //   REPORT_ID
 	0x09, 0x20,                    //   USAGE (Stylus)
 	0xa1, 0x00,                    //   COLLECTION (Physical)
 	0x09, 0x42,                    //     USAGE (Tip Switch)
@@ -1626,25 +1626,19 @@ CMyManualQueue::_TimerCallback(
         else
         {
 			Trace(TRACE_LEVEL_INFORMATION, "Buffer size of input report is %d", bufferSizeCb);
-			ZeroMemory(buffer, bufferSizeCb);
             //
             //Create input report
             //
-			//spenReport = (PSPEN_REPORT)buffer;
-			//spenReport->ReportID = 0x02;
-			////spenReport->InRange = 1;
-			////spenReport->X = 10000;
-			////spenReport->Y = 8000;
+			memcpy(buffer, &This->m_Device->m_SpenLastState, sizeof(SPEN_REPORT));
+			fxRequest2->SetInformation(bufferSizeCb);
 
-			//fxRequest2->SetInformation(bufferSizeCb);
-
-            readReport = (PHIDMINI_INPUT_REPORT)buffer;
-            readReport->ReportId = CONTROL_FEATURE_REPORT_ID;
-            readReport->Data = This->m_Device->m_DeviceData;
+            //readReport = (PHIDMINI_INPUT_REPORT)buffer;
+            //readReport->ReportId = CONTROL_FEATURE_REPORT_ID;
+            //readReport->Data = This->m_Device->m_DeviceData;
             //
             // Report how many bytes were copied
             //
-            fxRequest2->SetInformation(readReportSizeCb);
+            //fxRequest2->SetInformation(readReportSizeCb);
             hr = S_OK;
         }
 
