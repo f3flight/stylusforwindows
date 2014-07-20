@@ -44,7 +44,11 @@ Author:
 #define HIDMINI_TEST_VID              0xFEED
 #define HIDMINI_TEST_VERSION          0x0505
 
-
+typedef struct _TEST_REPORT
+{
+	UCHAR ReportID;
+	UCHAR Data;
+} TEST_REPORT, *PTEST_REPORT;
 //
 // Function prototypes
 //
@@ -182,14 +186,15 @@ main(
     if (found) {
         printf("...sending control request to our device\n");
 
-		PVOID buffer;
-		UCHAR bufferSize = 2;
+		PTEST_REPORT buffer;
+		UCHAR bufferSize = sizeof(TEST_REPORT);
 		buffer = malloc(bufferSize);
 		ZeroMemory(buffer, bufferSize);
+		buffer->ReportID = SPEN_OUTPUT_REPORT_ID;
 		DWORD bytesWritten;
-		bSuccess = WriteFile(file, buffer, bufferSize, &bytesWritten, NULL);
+		bSuccess = WriteFile(file, (PVOID)buffer, bufferSize, &bytesWritten, NULL);
 		BOOLEAN ok = bSuccess;
-
+		free(buffer);
 		//PVOID buffer;
 		//UCHAR bufferSize = sizeof(SPEN_REPORT)+1;
 		//buffer = malloc(bufferSize);
