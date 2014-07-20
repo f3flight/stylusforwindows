@@ -58,6 +58,8 @@ public:
 
     BYTE m_DeviceData;
 
+	SPEN_REPORT m_SpenLastState;
+
 //
 // Private methods.
 //
@@ -76,6 +78,8 @@ private:
         m_Attributes.ProductID = HIDMINI_PID;
         m_Attributes.VersionNumber = HIDMINI_VERSION;
         m_DeviceData = 'K';
+
+		ZeroMemory(&m_SpenLastState, sizeof(SPEN_REPORT));
     }
 
     HRESULT
