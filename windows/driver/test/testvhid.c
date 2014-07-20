@@ -182,6 +182,17 @@ main(
     if (found) {
         printf("...sending control request to our device\n");
 
+		PVOID buffer;
+		UCHAR bufferSize = sizeof(SPEN_REPORT)+1;
+		buffer = malloc(bufferSize);
+		PSPEN_REPORT spenReport = (PSPEN_REPORT)buffer;
+		spenReport->ReportID = HID_PEN_REPORT_ID;
+		spenReport->InRange = 1;
+		spenReport->X = 5000;
+		spenReport->Y = 10000;
+		DWORD bytesWritten;
+		bSuccess = WriteFile(file, buffer, bufferSize, &bytesWritten, NULL);
+		BOOLEAN ok = bSuccess;
         //
         // Get/Set feature loopback 
         //
