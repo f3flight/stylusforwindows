@@ -185,38 +185,38 @@ main(
         //
         // Get/Set feature loopback 
         //
-        bSuccess = GetFeature(file);
-        if (bSuccess == FALSE) {
-            goto cleanup;
-        }
-        
-        bSuccess = SetFeature(file);
-        if (bSuccess == FALSE) {
-            goto cleanup;
-        }
-
-        bSuccess = GetFeature(file);
-        if (bSuccess == FALSE) {
-            goto cleanup;
-        }
-
+        //bSuccess = GetFeature(file);
+        //if (bSuccess == FALSE) {
+        //    goto cleanup;
+        //}
         //
-        // Get/Set report loopback
-        //
-        bSuccess = GetInputReport(file);
-        if (bSuccess == FALSE) {
-            goto cleanup;
-        }
+        //bSuccess = SetFeature(file);
+        //if (bSuccess == FALSE) {
+        //    goto cleanup;
+        //}
 
-        bSuccess = SetOutputReport(file);
-        if (bSuccess == FALSE) {
-            goto cleanup;
-        }
+        //bSuccess = GetFeature(file);
+        //if (bSuccess == FALSE) {
+        //    goto cleanup;
+        //}
 
-        bSuccess = GetInputReport(file);
-        if (bSuccess == FALSE) {
-            goto cleanup;
-        }
+        ////
+        //// Get/Set report loopback
+        ////
+        //bSuccess = GetInputReport(file);
+        //if (bSuccess == FALSE) {
+        //    goto cleanup;
+        //}
+
+        //bSuccess = SetOutputReport(file);
+        //if (bSuccess == FALSE) {
+        //    goto cleanup;
+        //}
+
+        //bSuccess = GetInputReport(file);
+        //if (bSuccess == FALSE) {
+        //    goto cleanup;
+        //}
 
         //
         // Read/Write report loopback 
@@ -249,6 +249,7 @@ main(
             goto cleanup;
         }
 
+		
     }
     else {
         printf("Failure: Could not find our HID device \n");
