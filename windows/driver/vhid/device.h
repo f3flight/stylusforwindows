@@ -17,6 +17,8 @@ Environment:
 
 --*/
 
+#include "common.h"
+
 #pragma once
 
 //
