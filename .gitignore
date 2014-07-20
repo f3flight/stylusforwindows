@@ -1,5 +1,7 @@
 key/
 
+TraceView.ini
+
 *.lnk
 
 ## Ignore Visual Studio temporary files, build results, and
