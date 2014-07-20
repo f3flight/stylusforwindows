@@ -175,110 +175,111 @@ main(
                                 &deviceInterfaceData,
                                 &file)){
             found = TRUE;
-            break;
+			if (found) {
+				printf("...sending control request to our device\n");
+
+				PSPEN_REPORT buffer;
+				DWORD bufferSize = sizeof(SPEN_REPORT)+1;
+				buffer = malloc(bufferSize);
+				ZeroMemory(buffer, bufferSize);
+				buffer->ReportID = 0x01;
+				DWORD bytesWritten;
+				bSuccess = WriteFile(file, (PVOID)buffer, bufferSize, &bytesWritten, NULL);
+				if (bSuccess)
+				{
+					printf("WriteFile succeeded.");
+				}
+				free(buffer);
+				//PVOID buffer;
+				//UCHAR bufferSize = sizeof(SPEN_REPORT)+1;
+				//buffer = malloc(bufferSize);
+				//PSPEN_REPORT spenReport = (PSPEN_REPORT)buffer;
+				//spenReport->ReportID = HID_PEN_REPORT_ID;
+				//spenReport->InRange = 1;
+				//spenReport->X = 5000;
+				//spenReport->Y = 10000;
+				//DWORD bytesWritten;
+				//bSuccess = WriteFile(file, buffer, bufferSize, &bytesWritten, NULL);
+				//BOOLEAN ok = bSuccess;
+				//
+				// Get/Set feature loopback 
+				//
+				//bSuccess = GetFeature(file);
+				//if (bSuccess == FALSE) {
+				//    goto cleanup;
+				//}
+				//
+				//bSuccess = SetFeature(file);
+				//if (bSuccess == FALSE) {
+				//    goto cleanup;
+				//}
+
+				//bSuccess = GetFeature(file);
+				//if (bSuccess == FALSE) {
+				//    goto cleanup;
+				//}
+
+				////
+				//// Get/Set report loopback
+				////
+				//bSuccess = GetInputReport(file);
+				//if (bSuccess == FALSE) {
+				//    goto cleanup;
+				//}
+
+				//bSuccess = SetOutputReport(file);
+				//if (bSuccess == FALSE) {
+				//    goto cleanup;
+				//}
+
+				//bSuccess = GetInputReport(file);
+				//if (bSuccess == FALSE) {
+				//    goto cleanup;
+				//}
+
+				//
+				// Read/Write report loopback 
+				//
+				/*bSuccess = ReadInputData(file);
+				if (bSuccess == FALSE) {
+				goto cleanup;
+				}*/
+
+				//bSuccess = WriteOutputData(file);
+				//if (bSuccess == FALSE) {
+					//goto cleanup;
+				//}
+
+				/*bSuccess = ReadInputData(file);
+				if (bSuccess == FALSE) {
+				goto cleanup;
+				}*/
+
+				//
+				// Get Strings
+				//
+				//bSuccess = GetIndexedString(file);
+				//if (bSuccess == FALSE) {
+				//    goto cleanup;
+				//}
+
+				//bSuccess = GetStrings(file);
+				//if (bSuccess == FALSE) {
+				//    goto cleanup;
+				//}
+
+
+			}
+			else {
+				printf("Failure: Could not find our HID device \n");
+			}
         }
 
         //
         //device was not found so loop around.
         //
     }
-
-    if (found) {
-        printf("...sending control request to our device\n");
-
-		PTEST_REPORT buffer;
-		UCHAR bufferSize = sizeof(TEST_REPORT);
-		buffer = malloc(bufferSize);
-		ZeroMemory(buffer, bufferSize);
-		buffer->ReportID = SPEN_OUTPUT_REPORT_ID;
-		DWORD bytesWritten;
-		bSuccess = WriteFile(file, (PVOID)buffer, bufferSize, &bytesWritten, NULL);
-		BOOLEAN ok = bSuccess;
-		free(buffer);
-		//PVOID buffer;
-		//UCHAR bufferSize = sizeof(SPEN_REPORT)+1;
-		//buffer = malloc(bufferSize);
-		//PSPEN_REPORT spenReport = (PSPEN_REPORT)buffer;
-		//spenReport->ReportID = HID_PEN_REPORT_ID;
-		//spenReport->InRange = 1;
-		//spenReport->X = 5000;
-		//spenReport->Y = 10000;
-		//DWORD bytesWritten;
-		//bSuccess = WriteFile(file, buffer, bufferSize, &bytesWritten, NULL);
-		//BOOLEAN ok = bSuccess;
-        //
-        // Get/Set feature loopback 
-        //
-        //bSuccess = GetFeature(file);
-        //if (bSuccess == FALSE) {
-        //    goto cleanup;
-        //}
-        //
-        //bSuccess = SetFeature(file);
-        //if (bSuccess == FALSE) {
-        //    goto cleanup;
-        //}
-
-        //bSuccess = GetFeature(file);
-        //if (bSuccess == FALSE) {
-        //    goto cleanup;
-        //}
-
-        ////
-        //// Get/Set report loopback
-        ////
-        //bSuccess = GetInputReport(file);
-        //if (bSuccess == FALSE) {
-        //    goto cleanup;
-        //}
-
-        //bSuccess = SetOutputReport(file);
-        //if (bSuccess == FALSE) {
-        //    goto cleanup;
-        //}
-
-        //bSuccess = GetInputReport(file);
-        //if (bSuccess == FALSE) {
-        //    goto cleanup;
-        //}
-
-        //
-        // Read/Write report loopback 
-        //
-        /*bSuccess = ReadInputData(file);
-        if (bSuccess == FALSE) {
-            goto cleanup;
-        }
-
-        bSuccess = WriteOutputData(file);
-        if (bSuccess == FALSE) {
-            goto cleanup;
-        }
-
-        bSuccess = ReadInputData(file);
-        if (bSuccess == FALSE) {
-            goto cleanup;
-        }*/
-
-        //
-        // Get Strings
-        //
-        //bSuccess = GetIndexedString(file);
-        //if (bSuccess == FALSE) {
-        //    goto cleanup;
-        //}
-
-        //bSuccess = GetStrings(file);
-        //if (bSuccess == FALSE) {
-        //    goto cleanup;
-        //}
-
-		
-    }
-    else {
-        printf("Failure: Could not find our HID device \n");
-    }
-
+	goto cleanup;
 cleanup:
 
     if (found && bSuccess == FALSE) {

@@ -99,9 +99,9 @@ typedef struct _HIDMINI_OUTPUT_REPORT {
 
     UCHAR Data; 
 
-    USHORT Pad1;
+    //USHORT Pad1;
 
-    ULONG Pad2;
+    //ULONG Pad2;
 
 } HIDMINI_OUTPUT_REPORT, *PHIDMINI_OUTPUT_REPORT;
 
@@ -120,7 +120,7 @@ typedef struct _HIDMINI_OUTPUT_REPORT {
 
 
 #define HID_PEN_REPORT_ID 0x02
-#define SPEN_OUTPUT_REPORT_ID 0x03
+#define SPEN_OUTPUT_REPORT_ID 0x01 // has to be 1 for some reason
 
 typedef struct _SPEN_REPORT
 {

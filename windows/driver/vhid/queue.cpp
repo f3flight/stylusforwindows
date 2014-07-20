@@ -31,28 +31,28 @@ Environment:
 // by the mini driver in response to IOCTL_HID_GET_REPORT_DESCRIPTOR.
 //
 HID_REPORT_DESCRIPTOR           G_DefaultReportDescriptor[] = {
-    0x06,0x00, 0xFF,                // USAGE_PAGE (Vender Defined Usage Page)
-    0x09,0x01,                      // USAGE (Vendor Usage 0x01)
-    0xA1,0x01,                      // COLLECTION (Application)
-    0x85,CONTROL_FEATURE_REPORT_ID,    // REPORT_ID (1)
-    0x09,0x01,                         // USAGE (Vendor Usage 0x01)
-    0x15,0x00,                         // LOGICAL_MINIMUM(0)
-    0x26,0xff, 0x00,                   // LOGICAL_MAXIMUM(255)
-    0x75,0x08,                         // REPORT_SIZE (0x08)
-    //0x95,FEATURE_REPORT_SIZE_CB,       // REPORT_COUNT 
-    0x96,(FEATURE_REPORT_SIZE_CB & 0xff), (FEATURE_REPORT_SIZE_CB >> 8), // REPORT_COUNT 
-    0xB1,0x00,                         // FEATURE (Data,Ary,Abs)
-    0x09,0x01,                         // USAGE (Vendor Usage 0x01)
-    0x75,0x08,                         // REPORT_SIZE (0x08)
-    //0x95,INPUT_REPORT_SIZE_CB,       // REPORT_COUNT 
-    0x96,(INPUT_REPORT_SIZE_CB & 0xff), (INPUT_REPORT_SIZE_CB >> 8), // REPORT_COUNT 
-    0x81,0x00,                         // INPUT (Data,Ary,Abs)
-    0x09,0x01,                         // USAGE (Vendor Usage 0x01)
-    0x75,0x08,                         // REPORT_SIZE (0x08)
-    //0x95,OUTPUT_REPORT_SIZE_CB,      // REPORT_COUNT 
-    0x96,(OUTPUT_REPORT_SIZE_CB & 0xff), (OUTPUT_REPORT_SIZE_CB >> 8), // REPORT_COUNT 
-    0x91,0x00,                         // OUTPUT (Data,Ary,Abs)
-    0xC0,                           // END_COLLECTION
+ //   0x06,0x00, 0xFF,                // USAGE_PAGE (Vender Defined Usage Page)
+ //   0x09,0x01,                      // USAGE (Vendor Usage 0x01)
+ //   0xA1,0x01,                      // COLLECTION (Application)
+	//0x85, 0x01,    // REPORT_ID (1)
+ //   0x09,0x01,                         // USAGE (Vendor Usage 0x01)
+ //   0x15,0x00,                         // LOGICAL_MINIMUM(0)
+ //   0x26,0xff, 0x00,                   // LOGICAL_MAXIMUM(255)
+ //   //0x75,0x08,                         // REPORT_SIZE (0x08)
+ //   ////0x95,FEATURE_REPORT_SIZE_CB,       // REPORT_COUNT 
+ //   //0x96,(FEATURE_REPORT_SIZE_CB & 0xff), (FEATURE_REPORT_SIZE_CB >> 8), // REPORT_COUNT 
+ //   //0xB1,0x00,                         // FEATURE (Data,Ary,Abs)
+ //   //0x09,0x01,                         // USAGE (Vendor Usage 0x01)
+ //   //0x75,0x08,                         // REPORT_SIZE (0x08)
+ //   ////0x95,INPUT_REPORT_SIZE_CB,       // REPORT_COUNT 
+ //   //0x96,(INPUT_REPORT_SIZE_CB & 0xff), (INPUT_REPORT_SIZE_CB >> 8), // REPORT_COUNT 
+ //   //0x81,0x00,                         // INPUT (Data,Ary,Abs)
+ //   //0x09,0x01,                         // USAGE (Vendor Usage 0x01)
+ //   0x75,0x08,                         // REPORT_SIZE (0x08)
+ //   //0x95,OUTPUT_REPORT_SIZE_CB,      // REPORT_COUNT 
+ //   0x95,0x01, // REPORT_COUNT 
+ //   0x91,0x02,                         // OUTPUT (Data,Ary,Abs)
+ //   0xC0,                           // END_COLLECTION
 
 	0x05, 0x0d,                    // USAGE_PAGE (Digitizers)
 	0x09, 0x02,                    // USAGE (Pen)
@@ -121,10 +121,8 @@ HID_REPORT_DESCRIPTOR           G_DefaultReportDescriptor[] = {
 	0xa1, 0x01,                    // COLLECTION (Application)
 	0x85, SPEN_OUTPUT_REPORT_ID,   //   REPORT_ID
 	0x09, 0x01,                      // USAGE (Vendor Usage 0x01)
-	0x15, 0x00,                    //     LOGICAL_MINIMUM (0)
-	0x25, 0x01,                    //     LOGICAL_MAXIMUM (1)
-	0x75, 0x08,                    //     REPORT_SIZE (1 byte)
-	0x95, 0x01,						// REPORT_COUNT (1)
+	0x75, 0x08,                    //     REPORT_SIZE (in bits - 1 byte)
+	0x95, 0x0a,						// REPORT_COUNT (10 bytes)
 	0x91, 0x02,                    //     OUTPUT (Data,Var,Abs)
 	0xc0,                           // END_COLLECTION
 };

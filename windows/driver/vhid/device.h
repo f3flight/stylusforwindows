@@ -85,6 +85,7 @@ private:
 		m_SpenLastState.InRange = FALSE;
 		m_SpenLastState.X = 10000;
 		m_SpenLastState.Y = 5000;
+
     }
 
     HRESULT
