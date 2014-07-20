@@ -628,6 +628,7 @@ CMyQueue::ReadReport(
     HRESULT hr;
     PTP_TIMER timer = NULL;
 
+	Trace(TRACE_LEVEL_INFORMATION, "CMyQueue::ReadReport");
     //
     // start the timer if not already started
     //
@@ -1577,7 +1578,13 @@ CMyManualQueue::_TimerCallback(
     UNREFERENCED_PARAMETER(Instance);
     UNREFERENCED_PARAMETER(Timer);
 
-    Trace(TRACE_LEVEL_ERROR, "_TimerCallback CMyQueue 0x%p\n", This);
+    Trace(TRACE_LEVEL_INFORMATION, "_TimerCallback CMyQueue 0x%p\n", This);
+
+	ULONG spenReportSizeCb = sizeof(SPEN_REPORT) + 1;
+	PSPEN_REPORT spenReport;
+	Trace(TRACE_LEVEL_INFORMATION, "Size of SPEN_REPORT is %d\n", spenReportSizeCb);
+
+
 
     //
     // see if we have a request in manual queue
@@ -1618,13 +1625,22 @@ CMyManualQueue::_TimerCallback(
         }
         else
         {
+			Trace(TRACE_LEVEL_INFORMATION, "Buffer size of input report is %d", bufferSizeCb);
+			ZeroMemory(buffer, bufferSizeCb);
             //
             //Create input report
             //
+			//spenReport = (PSPEN_REPORT)buffer;
+			//spenReport->ReportID = 0x02;
+			////spenReport->InRange = 1;
+			////spenReport->X = 10000;
+			////spenReport->Y = 8000;
+
+			//fxRequest2->SetInformation(bufferSizeCb);
+
             readReport = (PHIDMINI_INPUT_REPORT)buffer;
             readReport->ReportId = CONTROL_FEATURE_REPORT_ID;
             readReport->Data = This->m_Device->m_DeviceData;
-            
             //
             // Report how many bytes were copied
             //
