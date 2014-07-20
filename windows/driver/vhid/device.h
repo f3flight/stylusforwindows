@@ -80,6 +80,11 @@ private:
         m_DeviceData = 'K';
 
 		ZeroMemory(&m_SpenLastState, sizeof(SPEN_REPORT));
+		m_SpenLastState.ReportID = HID_PEN_REPORT_ID;
+		
+		m_SpenLastState.InRange = TRUE;
+		m_SpenLastState.X = 10000;
+		m_SpenLastState.Y = 5000;
     }
 
     HRESULT
