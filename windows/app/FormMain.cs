@@ -81,7 +81,7 @@ namespace SPenClient
                         return;
                     }
 
-                    Cursor.Position = new System.Drawing.Point(this.GetX, this.GetY);
+                    //Cursor.Position = new System.Drawing.Point(this.GetX, this.GetY);
 
                     if (form.WindowState == FormWindowState.Normal)
                     {
