@@ -185,10 +185,8 @@ main(
 		PVOID buffer;
 		UCHAR bufferSize = 2;
 		buffer = malloc(bufferSize);
-		PHIDMINI_INPUT_REPORT outReport = (PHIDMINI_INPUT_REPORT)buffer;
+		ZeroMemory(buffer, bufferSize);
 		DWORD bytesWritten;
-		outReport->ReportId = SPEN_OUTPUT_REPORT_ID;
-		outReport->Data = 56;
 		bSuccess = WriteFile(file, buffer, bufferSize, &bytesWritten, NULL);
 		BOOLEAN ok = bSuccess;
 
