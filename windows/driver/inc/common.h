@@ -120,6 +120,7 @@ typedef struct _HIDMINI_OUTPUT_REPORT {
 
 
 #define HID_PEN_REPORT_ID 0x02
+#define SPEN_OUTOUT_REPORT_ID 0x03
 
 typedef struct _SPEN_REPORT
 {
