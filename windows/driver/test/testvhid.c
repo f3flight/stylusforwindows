@@ -253,7 +253,7 @@ main(
 		ULONG spenReportSize = sizeof(SPEN_REPORT);
 		ZeroMemory(&spenReport, spenReportSize);
 		spenReport.ReportID = HID_PEN_REPORT_ID;
-		spenReport.InRange = 1;
+		spenReport.InRange = TRUE;
 		spenReport.X = 5000;
 		spenReport.Y = 10000;
 
