@@ -117,6 +117,10 @@ typedef struct _HIDMINI_OUTPUT_REPORT {
 #define INPUT_REPORT_SIZE_CB        ((USHORT)(sizeof(HIDMINI_INPUT_REPORT) - 1))
 #define OUTPUT_REPORT_SIZE_CB       ((USHORT)(sizeof(HIDMINI_OUTPUT_REPORT) - 1))
 
+
+
+#define HID_PEN_REPORT_ID 0x02
+
 typedef struct _SPEN_REPORT
 {
 	UCHAR ReportID	: 8;
