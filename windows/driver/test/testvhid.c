@@ -239,15 +239,15 @@ main(
         //
         // Get Strings
         //
-        bSuccess = GetIndexedString(file);
-        if (bSuccess == FALSE) {
-            goto cleanup;
-        }
+        //bSuccess = GetIndexedString(file);
+        //if (bSuccess == FALSE) {
+        //    goto cleanup;
+        //}
 
-        bSuccess = GetStrings(file);
-        if (bSuccess == FALSE) {
-            goto cleanup;
-        }
+        //bSuccess = GetStrings(file);
+        //if (bSuccess == FALSE) {
+        //    goto cleanup;
+        //}
 
 		
     }
