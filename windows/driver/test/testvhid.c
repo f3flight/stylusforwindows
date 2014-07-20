@@ -249,6 +249,16 @@ main(
             goto cleanup;
         }
 
+		SPEN_REPORT spenReport;
+		ULONG spenReportSize = sizeof(SPEN_REPORT);
+		ZeroMemory(&spenReport, spenReportSize);
+		spenReport.ReportID = HID_PEN_REPORT_ID;
+		spenReport.InRange = 1;
+		spenReport.X = 5000;
+		spenReport.Y = 10000;
+
+		bSuccess = HidD_SetOutputReport(file, &spenReport, spenReportSize);
+
     }
     else {
         printf("Failure: Could not find our HID device \n");
@@ -570,7 +580,7 @@ SetOutputReport(
     ULONG bufferSize;
     PHIDMINI_OUTPUT_REPORT buffer;
     BOOLEAN bSuccess;
-
+	
     //
     // Allocate memory 
     //
