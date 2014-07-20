@@ -183,16 +183,26 @@ main(
         printf("...sending control request to our device\n");
 
 		PVOID buffer;
-		UCHAR bufferSize = sizeof(SPEN_REPORT)+1;
+		UCHAR bufferSize = 2;
 		buffer = malloc(bufferSize);
-		PSPEN_REPORT spenReport = (PSPEN_REPORT)buffer;
-		spenReport->ReportID = HID_PEN_REPORT_ID;
-		spenReport->InRange = 1;
-		spenReport->X = 5000;
-		spenReport->Y = 10000;
+		PHIDMINI_INPUT_REPORT outReport = (PHIDMINI_INPUT_REPORT)buffer;
 		DWORD bytesWritten;
+		outReport->ReportId = SPEN_OUTPUT_REPORT_ID;
+		outReport->Data = 56;
 		bSuccess = WriteFile(file, buffer, bufferSize, &bytesWritten, NULL);
 		BOOLEAN ok = bSuccess;
+
+		//PVOID buffer;
+		//UCHAR bufferSize = sizeof(SPEN_REPORT)+1;
+		//buffer = malloc(bufferSize);
+		//PSPEN_REPORT spenReport = (PSPEN_REPORT)buffer;
+		//spenReport->ReportID = HID_PEN_REPORT_ID;
+		//spenReport->InRange = 1;
+		//spenReport->X = 5000;
+		//spenReport->Y = 10000;
+		//DWORD bytesWritten;
+		//bSuccess = WriteFile(file, buffer, bufferSize, &bytesWritten, NULL);
+		//BOOLEAN ok = bSuccess;
         //
         // Get/Set feature loopback 
         //
