@@ -120,20 +120,20 @@ typedef struct _HIDMINI_OUTPUT_REPORT {
 typedef struct _SPEN_REPORT
 {
 	UCHAR ReportID	: 8;
-	BOOL Tip		: 1;
-	BOOL Barrel		: 1;
-	BOOL Invert		: 1;
-	BOOL Eraser		: 1;
-	BOOL			: 1;
-	BOOL InRange	: 1;
-	BOOL			: 2;
+	UCHAR Tip		: 1;
+	UCHAR Barrel	: 1;
+	UCHAR Invert	: 1;
+	UCHAR Eraser	: 1;
+	UCHAR			: 1;
+	UCHAR InRange	: 1;
+	UCHAR			: 2;
 	USHORT X		: 16;
 	USHORT Y		: 16;
 	UCHAR Pressure	: 8;
 	UCHAR XTilt		: 8;
 	UCHAR YTilt		: 8;
 	UCHAR Twist		: 8;
-	UCHAR			: 8;
+	//UCHAR			: 1; // For some reason this gives 2 bytes instead of 1. So I disabled this and instead add 1 to sizeof.
 } SPEN_REPORT, *PSPEN_REPORT;
 
 #endif //__VHIDMINI_COMMON_H__
