@@ -11,6 +11,7 @@ using System.Runtime.InteropServices;
 
 namespace SPenClient
 {
+
     public partial class FormMain : Form
     {
         public class PenData
@@ -155,6 +156,7 @@ namespace SPenClient
         {
             InitializeComponent();
 
+            HIDWriter hwr = new HIDWriter();
             pen = new PenData(this);
 
             init(12333);
