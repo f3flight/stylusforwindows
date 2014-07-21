@@ -1,4 +1,8 @@
-.\devcon64.exe remove root\wudfvhidmini
+if ([System.IntPtr]::Size -eq 4) {
+ .\devcon32.exe remove root\wudfvhidmini
+ } else {
+ .\devcon64.exe remove root\wudfvhidmini 
+ }
 $pnputil = (pnputil -e ) | Out-String
 $inflist = New-Object System.Collections.Specialized.StringCollection
 $regex = [regex] '(?m)^.*(oem\d+\.inf).*\r\n.*f3flight'
