@@ -86,7 +86,7 @@ namespace SPenClient
                     hwr.spenReport.Y = (short)(y*15);
                     hwr.spenReport.Pressure = (byte)(pressure * 255);
                     if (type.Equals("pen")){
-                        hwr.spenReport.Switches = HIDWriter.SwitchInRange | HIDWriter.SwitchTip; // Windows 7 x32 - SwitchTip does not do anything.
+                        hwr.spenReport.Switches = HIDWriter.SwitchInRange | HIDWriter.SwitchTip;
                         //hwr.spenReport.Switches = 255; //debug - all switches ON! may cause problems.
                         hwr.Write();
                     }                     

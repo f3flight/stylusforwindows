@@ -1231,10 +1231,7 @@ Return Value:
     // Store the device data in device extension. 
     //
     //m_Device->m_DeviceData = outputReport->Data;
-	m_Device->m_SpenLastState.InRange = spenReport->InRange;
-	m_Device->m_SpenLastState.X = spenReport->X;
-	m_Device->m_SpenLastState.Y = spenReport->Y;
-
+	memcpy(&m_Device->m_SpenLastState, spenReport, sizeof(SPEN_REPORT));
     //
     // set status and information
     //
