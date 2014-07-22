@@ -138,7 +138,7 @@ typedef struct _SPEN_REPORT
 	UCHAR XTilt		: 8;
 	UCHAR YTilt		: 8;
 	UCHAR Twist		: 8;
-	//UCHAR			: 1; // For some reason this gives 2 bytes instead of 1. So I disabled this and instead add 1 to sizeof.
+	//UCHAR			: 8; // For some reason this gives 2 bytes instead of 1. So I disabled this and instead add 1 to sizeof.
 } SPEN_REPORT, *PSPEN_REPORT;
 
 #endif //__VHIDMINI_COMMON_H__
