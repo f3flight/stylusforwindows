@@ -383,7 +383,11 @@ Return Value:
         // Returns a report from the device into a class driver-supplied 
         // buffer. 
         //
-        hr = ReadReport(fxRequest2, &completeRequest);
+		Trace(TRACE_LEVEL_INFORMATION,"IOCTL_HID_READ_REPORT\n");
+		if (m_Device->m_SpenLastState.InRange)
+			hr = ReadReport(fxRequest2, &completeRequest);
+		else
+			hr = HRESULT_FROM_NT(STATUS_NOT_IMPLEMENTED);
         break;
 
     case IOCTL_UMDF_HID_GET_FEATURE:       // METHOD_NEITHER
@@ -392,8 +396,7 @@ Return Value:
         break;
 
     case IOCTL_UMDF_HID_GET_INPUT_REPORT:  // METHOD_NEITHER
-
-        hr = GetInputReport(fxRequest2);
+		hr = GetInputReport(fxRequest2);
         break;
 
     case IOCTL_UMDF_HID_SET_FEATURE:       // METHOD_NEITHER
@@ -649,11 +652,11 @@ CMyQueue::ReadReport(
         Trace(TRACE_LEVEL_INFORMATION, "*** Setting the timer ***\n");
 
         *reinterpret_cast<PLONGLONG>(&dueTime) = 
-            -static_cast<LONGLONG>(MILLI_SECOND_TO_NANO100(1000));
+            -static_cast<LONGLONG>(MILLI_SECOND_TO_NANO100(100));
         
         SetThreadpoolTimer(timer,
                            &dueTime,
-                           5000,  // ms periodic
+                           250,  // ms periodic
                            0      // optional delay in ms
                            );
     }

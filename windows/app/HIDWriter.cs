@@ -13,6 +13,8 @@ namespace SPenClient
         //------------- Common -------------------------------
         const int INVALID_HANDLE = -1;
         const int HIDMINI_VAL = 0x0F3F; // This should be equal to the values from Device.h: HIDMINI_PID, HIDMINI_PID, HIDMINI_VERSION
+        const UInt16 HIDMINI_USAGE_PAGE = 0xFF00; //This should match vendor-defined usage page in HID_REPORT_DESCRIPTOR - if we use 2 devices.
+
         [StructLayout(LayoutKind.Sequential, Pack=1, Size=11)] 
         public struct SPEN_REPORT
         {
@@ -26,11 +28,11 @@ namespace SPenClient
             public byte Twist;
             //public byte Reserved;
         };
-        const byte SwitchTip = 1;     // These const bytes should be used with logical OR to fill Switches byte; Bit-field imitation.
-        const byte SwitchBarrel = 2;
-        const byte SwitchInvert = 4;
-        const byte SwitchEraser = 8;
-        const byte SwitchInRange = 32;
+        public const byte SwitchTip = 1;     // These const bytes should be used with logical OR to fill Switches byte; Bit-field imitation.
+        public const byte SwitchBarrel = 2;
+        public const byte SwitchInvert = 4;
+        public const byte SwitchEraser = 8;
+        public const byte SwitchInRange = 32;
         //------------- Common -------------------------------
 
 
@@ -123,10 +125,45 @@ namespace SPenClient
         //------------- HidD_GetAttributes -------------------
 
 
+        //------------- HidD_GetPreparsedData ---------------- // for debug only
+        [DllImport("hid.dll", SetLastError = true)]
+        static extern Boolean HidD_GetPreparsedData(SafeFileHandle HidDeviceObject, ref IntPtr preParsedData);
+        //------------- HidD_GetPreparsedData ---------------- // for debug only
+
+
+        //------------- HidP_GetCaps -------------------------
+        [StructLayout(LayoutKind.Sequential)]
+        public struct HIDP_CAPS
+        {
+            public UInt16 Usage;
+            public UInt16 UsagePage;
+            public UInt16 InputReportByteLength;
+            public UInt16 OutputReportByteLength;
+            public UInt16 FeatureReportByteLength;
+            public UInt16 Reserved;
+
+            public UInt16 NumberLinkCollectionNodes;
+
+            public UInt16 NumberInputButtonCaps;
+            public UInt16 NumberInputValueCaps;
+            public UInt16 NumberInputDataIndices;
+
+            public UInt16 NumberOutputButtonCaps;
+            public UInt16 NumberOutputValueCaps;
+            public UInt16 NumberOutputDataIndices;
+
+            public UInt16 NumberFeatureButtonCaps;
+            public UInt16 NumberFeatureValueCaps;
+            public UInt16 NumberFeatureDataIndices;
+        }
+        [DllImport("hid.dll", SetLastError = true)]
+        static extern Boolean HidP_GetCaps(IntPtr preParsedData, ref HIDP_CAPS hidCaps);
+        //------------- HidP_GetCaps -------------------------
+        
+        
         //------------- WriteFile ----------------------------
         [DllImport("kernel32.dll", SetLastError = true)]
-        static extern Boolean WriteFile(SafeFileHandle handle, ref SPEN_REPORT spenReport,
-          UInt32 numBytesToWrite, out UInt32 numBytesWritten, IntPtr NULL);
+        static extern Boolean WriteFile(SafeFileHandle handle, IntPtr buffer, UInt32 numBytesToWrite, out UInt32 numBytesWritten, IntPtr NULL);
         //------------- WriteFile ----------------------------
 
 
@@ -173,9 +210,20 @@ namespace SPenClient
                     {
                         if (ha.VendorID == HIDMINI_VAL & ha.ProductID == HIDMINI_VAL & ha.VersionNumber == HIDMINI_VAL)
                         {
-                            found = true;
-                            Write();
-                            break;
+                            IntPtr preparsedDataPointer = new System.IntPtr();
+                            if (HidD_GetPreparsedData(file, ref preparsedDataPointer))
+                            {
+                                HIDP_CAPS hidCaps = new HIDP_CAPS();
+                                if (HidP_GetCaps(preparsedDataPointer, ref hidCaps))
+                                {
+                                    if (hidCaps.UsagePage == HIDMINI_USAGE_PAGE)
+                                    {
+                                        found = true;
+                                        Write();
+                                        break;
+                                    }
+                                }
+                            }                           
                         }
                     }
 
@@ -192,18 +240,32 @@ namespace SPenClient
             if (found)
             {
                 spenReport.ReportID = 1;
-                spenReport.Switches = SwitchInRange;
-                spenReport.X = 20000;
-                spenReport.Y = 1000;
+                //spenReport.Switches = SwitchInRange;
+                //spenReport.X = 20000;
+                //spenReport.Y = 1000;
 
-                SPEN_REPORT buffer = new SPEN_REPORT();
-                buffer.ReportID = spenReport.ReportID;
-                buffer.Switches = spenReport.Switches;
-                buffer.X = spenReport.X;
-                buffer.Y = spenReport.Y;
+                int reportSize = Marshal.SizeOf(spenReport);
+                //byte[] buffer = new byte[reportSize];
+                //buffer[0] = 1;
+                //buffer[1] = 32;
+                //buffer[2] = 32;
+                //buffer[3] = 78;
+                //buffer[4] = 232;
+                //buffer[5] = 3;
+                //Marshal.Copy(spenReport, 0, buffer, reportSize);
+                IntPtr buffer = Marshal.AllocHGlobal(reportSize);         
+                //GCHandle handle = GCHandle.Alloc(buffer, GCHandleType.Pinned);
+                //Marshal.StructureToPtr(spenReport, handle.AddrOfPinnedObject(), false);
+                Marshal.StructureToPtr(spenReport, buffer, false);
+                //handle.Free();
+                //SPEN_REPORT buffer = new SPEN_REPORT();
+                //buffer.ReportID = spenReport.ReportID;
+                //buffer.Switches = spenReport.Switches;
+                //buffer.X = spenReport.X;
+                //buffer.Y = spenReport.Y;
                 UInt32 bytesWritten = 0;
-                UInt32 bufferSize = (uint)Marshal.SizeOf(buffer);
-                bSuccess = WriteFile(file, ref buffer, bufferSize, out bytesWritten, IntPtr.Zero);
+                UInt32 bufferSize = (uint)Marshal.SizeOf(spenReport);
+                bSuccess = WriteFile(file, buffer, bufferSize, out bytesWritten, IntPtr.Zero);
                 int error = Marshal.GetLastWin32Error();
             }
             return bSuccess;

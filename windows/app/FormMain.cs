@@ -60,18 +60,18 @@ namespace SPenClient
                 if (this.index >= this._index)
                 {
 
-                    if (!type.Equals(_type))
-                    {
-                        if (type.Equals("hover") && _type.Equals("pen"))
-                        {
-                            mouse_event((int)(MouseEventFlags.LEFTUP), 0, 0, 0, 0);
-                        }
+                    //if (!type.Equals(_type))
+                    //{
+                    //    if (type.Equals("hover") && _type.Equals("pen"))
+                    //    {
+                    //        mouse_event((int)(MouseEventFlags.LEFTUP), 0, 0, 0, 0);
+                    //    }
 
-                        if (type.Equals("pen") && _type.Equals("hover"))
-                        {
-                            mouse_event((int)(MouseEventFlags.LEFTDOWN), 0, 0, 0, 0);
-                        }
-                    }
+                    //    if (type.Equals("pen") && _type.Equals("hover"))
+                    //    {
+                    //        mouse_event((int)(MouseEventFlags.LEFTDOWN), 0, 0, 0, 0);
+                    //    }
+                    //}
 
 
                     if (pressure <= 0 && Math.Min(x, y) <= 0 & type.Equals("hover") || type.Equals("finger") && up.Equals("up"))
@@ -82,7 +82,28 @@ namespace SPenClient
                         return;
                     }
 
-                    //Cursor.Position = new System.Drawing.Point(this.GetX, this.GetY);
+                    hwr.spenReport.X = (short)(x*15);
+                    hwr.spenReport.Y = (short)(y*15);
+                    hwr.spenReport.Pressure = (byte)(pressure * 255);
+                    if (type.Equals("pen")){
+                        hwr.spenReport.Switches = HIDWriter.SwitchInRange | HIDWriter.SwitchTip;
+                        hwr.Write();
+                    }                     
+                    else if (type.Equals("hover"))
+                    {
+                        hwr.spenReport.Switches = HIDWriter.SwitchInRange;
+                        hwr.Write();
+                    }
+                    else
+                    {
+                        if (hwr.spenReport.Switches != 0)
+                        {
+                            hwr.spenReport.Switches = 0;
+                            hwr.Write();
+                        }
+                        Cursor.Position = new System.Drawing.Point(this.GetX, this.GetY);
+                    
+                    }                       
 
                     if (form.WindowState == FormWindowState.Normal)
                     {
@@ -152,11 +173,14 @@ namespace SPenClient
 
         private PenData pen;
         BackgroundWorker bw;
+
+        static HIDWriter hwr;
+
         public FormMain()
         {
             InitializeComponent();
 
-            HIDWriter hwr = new HIDWriter();
+            hwr = new HIDWriter();
             pen = new PenData(this);
 
             init(12333);
