@@ -33,8 +33,8 @@ Author:
 // These are the default device attributes set in the driver
 // which are used to identify the device.
 //
-#define HIDMINI_DEFAULT_PID              0xFEED
-#define HIDMINI_DEFAULT_VID              0xBEEF
+#define HIDMINI_DEFAULT_PID              0x0F3F
+#define HIDMINI_DEFAULT_VID              0x0F3f
 
 //
 // These are the device attributes returned by the mini driver in response
