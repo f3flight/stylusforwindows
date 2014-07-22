@@ -34,7 +34,7 @@ Author:
 // which are used to identify the device.
 //
 #define HIDMINI_DEFAULT_PID              0x0F3F
-#define HIDMINI_DEFAULT_VID              0x0F3f
+#define HIDMINI_DEFAULT_VID              0x0F3F
 
 //
 // These are the device attributes returned by the mini driver in response
