@@ -1231,7 +1231,23 @@ Return Value:
     // Store the device data in device extension. 
     //
     //m_Device->m_DeviceData = outputReport->Data;
-	memcpy(&m_Device->m_SpenLastState, spenReport, sizeof(SPEN_REPORT));
+	//memcpy(&m_Device->m_SpenLastState, spenReport, sizeof(SPEN_REPORT));
+	Trace(TRACE_LEVEL_INFORMATION, "OutputReport switches: Tip:%d, Barrel:%d, Invert:%d, Eraser:%d, InRange:%d",
+		spenReport->Tip,
+		spenReport->Barrel,
+		spenReport->Invert,
+		spenReport->Eraser,
+		spenReport->InRange);
+	m_Device->m_SpenLastState.Tip = spenReport->Tip;
+	m_Device->m_SpenLastState.Barrel = spenReport->Barrel;
+	m_Device->m_SpenLastState.Invert = spenReport->Invert;
+	m_Device->m_SpenLastState.Eraser = spenReport->Eraser;
+	m_Device->m_SpenLastState.InRange = spenReport->InRange;
+	m_Device->m_SpenLastState.X = spenReport->X;
+	m_Device->m_SpenLastState.Y = spenReport->Y;
+	m_Device->m_SpenLastState.XTilt = spenReport->XTilt;
+	m_Device->m_SpenLastState.YTilt = spenReport->YTilt;
+	m_Device->m_SpenLastState.Twist = spenReport->Twist;
     //
     // set status and information
     //
@@ -1642,7 +1658,12 @@ CMyManualQueue::_TimerCallback(
         }
         else
         {
-			Trace(TRACE_LEVEL_INFORMATION, "Buffer size of input report is %d", bufferSizeCb);
+			Trace(TRACE_LEVEL_INFORMATION, "InputReport switches: Tip:%d, Barrel:%d, Invert:%d, Eraser:%d, InRange:%d",
+				This->m_Device->m_SpenLastState.Tip,
+				This->m_Device->m_SpenLastState.Barrel,
+				This->m_Device->m_SpenLastState.Invert,
+				This->m_Device->m_SpenLastState.Eraser,
+				This->m_Device->m_SpenLastState.InRange);
             //
             //Create input report
             //
