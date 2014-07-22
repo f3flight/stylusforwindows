@@ -383,7 +383,7 @@ Return Value:
         // Returns a report from the device into a class driver-supplied 
         // buffer. 
         //
-		Trace(TRACE_LEVEL_INFORMATION,"IOCTL_HID_READ_REPORT\n");
+		//Trace(TRACE_LEVEL_INFORMATION,"IOCTL_HID_READ_REPORT\n");
 		if (m_Device->m_SpenLastState.InRange)
 			hr = ReadReport(fxRequest2, &completeRequest);
 		else
@@ -654,9 +654,14 @@ CMyQueue::ReadReport(
         *reinterpret_cast<PLONGLONG>(&dueTime) = 
             -static_cast<LONGLONG>(MILLI_SECOND_TO_NANO100(100));
         
+		FILETIME zeroTime;
+		zeroTime.dwHighDateTime = 0;
+		zeroTime.dwLowDateTime = 0;
+
         SetThreadpoolTimer(timer,
-                           &dueTime,
-                           250,  // ms periodic
+                           //&dueTime,
+						   &zeroTime, //dueTime - testing here
+                           50,  // ms periodic
                            0      // optional delay in ms
                            );
     }
@@ -1181,8 +1186,6 @@ Return Value:
     //
     // *************************************************************************
 
-    Trace(TRACE_LEVEL_INFORMATION, "WriteReport\n");
-
     //
     // Get report ID if needed.
     //
@@ -1611,13 +1614,10 @@ CMyManualQueue::_TimerCallback(
     UNREFERENCED_PARAMETER(Instance);
     UNREFERENCED_PARAMETER(Timer);
 
-    Trace(TRACE_LEVEL_INFORMATION, "_TimerCallback CMyQueue 0x%p\n", This);
+    //Trace(TRACE_LEVEL_INFORMATION, "_TimerCallback CMyQueue 0x%p\n", This);
 
 	ULONG spenReportSizeCb = sizeof(SPEN_REPORT) + 1;
 	PSPEN_REPORT spenReport;
-	Trace(TRACE_LEVEL_INFORMATION, "Size of SPEN_REPORT is %d\n", spenReportSizeCb);
-
-
 
     //
     // see if we have a request in manual queue
@@ -1626,7 +1626,7 @@ CMyManualQueue::_TimerCallback(
     if (SUCCEEDED(hr)) {
         IWDFIoRequest2 *fxRequest2;
         
-        Trace(TRACE_LEVEL_INFORMATION, "retrieved read request from manual queue CMyManualQueue 0x%p\n", This);
+        //Trace(TRACE_LEVEL_INFORMATION, "retrieved read request from manual queue CMyManualQueue 0x%p\n", This);
 
         hr = fxRequest->QueryInterface(IID_PPV_ARGS(&fxRequest2));
         if (FAILED(hr)){
@@ -1637,7 +1637,7 @@ CMyManualQueue::_TimerCallback(
         }
         fxRequest2->Release();
 
-        Trace(TRACE_LEVEL_INFORMATION, "EffectiveIoType: %d\n", fxRequest2->GetEffectiveIoType());
+        //Trace(TRACE_LEVEL_INFORMATION, "EffectiveIoType: %d\n", fxRequest2->GetEffectiveIoType());
 
         hr = fxRequest2->RetrieveOutputMemory(&memory);
         if (FAILED(hr)) {
