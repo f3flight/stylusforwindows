@@ -661,7 +661,7 @@ CMyQueue::ReadReport(
         SetThreadpoolTimer(timer,
                            //&dueTime,
 						   &zeroTime, //dueTime - testing here
-                           20,  // ms periodic
+                           10,  // ms periodic
                            0      // optional delay in ms
                            );
     }
@@ -1654,13 +1654,6 @@ CMyManualQueue::_TimerCallback(
         }
         else
         {
-			Trace(TRACE_LEVEL_INFORMATION, "InputReport: Tip:%d, Bar:%d, Inv:%d, Era:%d, InR:%d, Pre:%d",
-				This->m_Device->m_SpenLastState.Tip,
-				This->m_Device->m_SpenLastState.Barrel,
-				This->m_Device->m_SpenLastState.Invert,
-				This->m_Device->m_SpenLastState.Eraser,
-				This->m_Device->m_SpenLastState.InRange,
-				This->m_Device->m_SpenLastState.Pressure);
             //
             //Create input report
             //

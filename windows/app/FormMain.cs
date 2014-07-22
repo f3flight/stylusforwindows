@@ -106,16 +106,16 @@ namespace SPenClient
                     
                     }                       
 
-                    if (form.WindowState == FormWindowState.Normal)
-                    {
-                        form.labelx.Text = x.ToString();
-                        form.labely.Text = y.ToString();
-                        form.labelp.Text = pressure.ToString();
-                        form.labela.Text = action.ToString();
-                        form.labelt.Text = type.ToString();
-                        form.labeli.Text = index.ToString();
-                        form.labelu.Text = up.ToString();
-                    }
+                    //if (form.WindowState == FormWindowState.Normal)
+                    //{
+                    //    form.labelx.Text = x.ToString();
+                    //    form.labely.Text = y.ToString();
+                    //    form.labelp.Text = pressure.ToString();
+                    //    form.labela.Text = action.ToString();
+                    //    form.labelt.Text = type.ToString();
+                    //    form.labeli.Text = index.ToString();
+                    //    form.labelu.Text = up.ToString();
+                    //}
 
                     SetBackup();
                 }
