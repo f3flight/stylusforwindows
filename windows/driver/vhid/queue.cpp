@@ -661,7 +661,7 @@ CMyQueue::ReadReport(
         SetThreadpoolTimer(timer,
                            //&dueTime,
 						   &zeroTime, //dueTime - testing here
-                           50,  // ms periodic
+                           20,  // ms periodic
                            0      // optional delay in ms
                            );
     }
@@ -1235,12 +1235,7 @@ Return Value:
     //
     //m_Device->m_DeviceData = outputReport->Data;
 	//memcpy(&m_Device->m_SpenLastState, spenReport, sizeof(SPEN_REPORT));
-	Trace(TRACE_LEVEL_INFORMATION, "OutputReport switches: Tip:%d, Barrel:%d, Invert:%d, Eraser:%d, InRange:%d",
-		spenReport->Tip,
-		spenReport->Barrel,
-		spenReport->Invert,
-		spenReport->Eraser,
-		spenReport->InRange);
+	
 	m_Device->m_SpenLastState.Tip = spenReport->Tip;
 	m_Device->m_SpenLastState.Barrel = spenReport->Barrel;
 	m_Device->m_SpenLastState.Invert = spenReport->Invert;
@@ -1248,6 +1243,7 @@ Return Value:
 	m_Device->m_SpenLastState.InRange = spenReport->InRange;
 	m_Device->m_SpenLastState.X = spenReport->X;
 	m_Device->m_SpenLastState.Y = spenReport->Y;
+	m_Device->m_SpenLastState.Pressure = spenReport->Pressure;
 	m_Device->m_SpenLastState.XTilt = spenReport->XTilt;
 	m_Device->m_SpenLastState.YTilt = spenReport->YTilt;
 	m_Device->m_SpenLastState.Twist = spenReport->Twist;
@@ -1658,12 +1654,13 @@ CMyManualQueue::_TimerCallback(
         }
         else
         {
-			Trace(TRACE_LEVEL_INFORMATION, "InputReport switches: Tip:%d, Barrel:%d, Invert:%d, Eraser:%d, InRange:%d",
+			Trace(TRACE_LEVEL_INFORMATION, "InputReport: Tip:%d, Bar:%d, Inv:%d, Era:%d, InR:%d, Pre:%d",
 				This->m_Device->m_SpenLastState.Tip,
 				This->m_Device->m_SpenLastState.Barrel,
 				This->m_Device->m_SpenLastState.Invert,
 				This->m_Device->m_SpenLastState.Eraser,
-				This->m_Device->m_SpenLastState.InRange);
+				This->m_Device->m_SpenLastState.InRange,
+				This->m_Device->m_SpenLastState.Pressure);
             //
             //Create input report
             //
