@@ -12,6 +12,25 @@ namespace SPenClient
 
         //------------- Common -------------------------------
         const int INVALID_HANDLE = -1;
+        const int HIDMINI_VAL = 0x0F3F; // This should be equal to the values from Device.h: HIDMINI_PID, HIDMINI_PID, HIDMINI_VERSION
+        [StructLayout(LayoutKind.Sequential, Pack=1, Size=11)] 
+        public struct SPEN_REPORT
+        {
+	        public byte ReportID;
+            public byte Switches;
+            public Int16 X;
+            public Int16 Y;
+            public byte Pressure;
+            public byte XTilt;
+            public byte YTilt;
+            public byte Twist;
+            //public byte Reserved;
+        };
+        const byte SwitchTip = 1;     // These const bytes should be used with logical OR to fill Switches byte; Bit-field imitation.
+        const byte SwitchBarrel = 2;
+        const byte SwitchInvert = 4;
+        const byte SwitchEraser = 8;
+        const byte SwitchInRange = 32;
         //------------- Common -------------------------------
 
 
@@ -39,7 +58,7 @@ namespace SPenClient
             public IntPtr Reserved;
         }
         [DllImport("setupapi.dll", CharSet = CharSet.Auto, SetLastError = true)]
-        public static extern Boolean SetupDiEnumDeviceInterfaces(
+        static extern Boolean SetupDiEnumDeviceInterfaces(
            IntPtr hDevInfo, IntPtr devInfo,
            ref Guid interfaceClassGuid, UInt32 memberIndex,
            ref SP_DEVICE_INTERFACE_DATA deviceInterfaceData
@@ -56,7 +75,7 @@ namespace SPenClient
             public string DevicePath;
         }
         [DllImport("setupapi.dll", CharSet = CharSet.Auto, SetLastError = true)]
-        public static extern Boolean SetupDiGetDeviceInterfaceDetail(
+        static extern Boolean SetupDiGetDeviceInterfaceDetail(
            IntPtr hDevInfo,
            ref SP_DEVICE_INTERFACE_DATA deviceInterfaceData,
            ref SP_DEVICE_INTERFACE_DETAIL_DATA deviceInterfaceDetailData,
@@ -66,7 +85,7 @@ namespace SPenClient
         );
 
         [DllImport("setupapi.dll", CharSet = CharSet.Auto, SetLastError = true)]
-        public static extern Boolean SetupDiGetDeviceInterfaceDetail(
+        static extern Boolean SetupDiGetDeviceInterfaceDetail(
            IntPtr hDevInfo,
            ref SP_DEVICE_INTERFACE_DATA deviceInterfaceData,
            IntPtr NULL,
@@ -79,7 +98,7 @@ namespace SPenClient
 
         //------------- CreateFile ---------------------------
         [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-        public static extern SafeFileHandle CreateFile(
+        static extern SafeFileHandle CreateFile(
              [MarshalAs(UnmanagedType.LPTStr)] string filename,
              [MarshalAs(UnmanagedType.U4)] FileAccess access,
              [MarshalAs(UnmanagedType.U4)] FileShare share,
@@ -103,7 +122,23 @@ namespace SPenClient
         static extern Boolean HidD_GetAttributes(SafeFileHandle HidDeviceObject, ref HIDD_ATTRIBUTES Attributes);
         //------------- HidD_GetAttributes -------------------
 
+
+        //------------- WriteFile ----------------------------
+        [DllImport("kernel32.dll", SetLastError = true)]
+        static extern Boolean WriteFile(SafeFileHandle handle, ref SPEN_REPORT spenReport,
+          UInt32 numBytesToWrite, out UInt32 numBytesWritten, IntPtr NULL);
+        //------------- WriteFile ----------------------------
+
+
+        //------------- SetupDiDestroyDeviceInfoList ---------
+        [DllImport("setupapi.dll", SetLastError = true)]
+        static extern Boolean SetupDiDestroyDeviceInfoList(IntPtr hardwareDeviceInfo);
+        //------------- SetupDiDestroyDeviceInfoList ---------
+
+
         private SafeFileHandle file;
+        public bool found = false;
+        public SPEN_REPORT spenReport = new SPEN_REPORT();
 
         public HIDWriter()
         {
@@ -129,16 +164,49 @@ namespace SPenClient
                 didd.DevicePath = new string(char.MinValue, 256);
                 uint nBytes = (uint)didd.DevicePath.Length;
                 result = SetupDiGetDeviceInterfaceDetail(hardwareDeviceInfo, ref deviceInterfaceData, ref didd, nBytes, out requiredSize, IntPtr.Zero);
-                error = Marshal.GetLastWin32Error();
                 if (result)
                 {
                     file = CreateFile(didd.DevicePath, FileAccess.ReadWrite, FileShare.ReadWrite, IntPtr.Zero, FileMode.Open, 0, IntPtr.Zero);
-                    error = Marshal.GetLastWin32Error();
                     HIDD_ATTRIBUTES ha = new HIDD_ATTRIBUTES();
                     result = HidD_GetAttributes(file, ref ha);
+                    if (result)
+                    {
+                        if (ha.VendorID == HIDMINI_VAL & ha.ProductID == HIDMINI_VAL & ha.VersionNumber == HIDMINI_VAL)
+                        {
+                            found = true;
+                            Write();
+                            break;
+                        }
+                    }
+
                 }
+
                 i++;
             }
+            SetupDiDestroyDeviceInfoList(hardwareDeviceInfo);
+        }
+
+        public bool Write()
+        {
+            bool bSuccess = false;
+            if (found)
+            {
+                spenReport.ReportID = 1;
+                spenReport.Switches = SwitchInRange;
+                spenReport.X = 20000;
+                spenReport.Y = 1000;
+
+                SPEN_REPORT buffer = new SPEN_REPORT();
+                buffer.ReportID = spenReport.ReportID;
+                buffer.Switches = spenReport.Switches;
+                buffer.X = spenReport.X;
+                buffer.Y = spenReport.Y;
+                UInt32 bytesWritten = 0;
+                UInt32 bufferSize = (uint)Marshal.SizeOf(buffer);
+                bSuccess = WriteFile(file, ref buffer, bufferSize, out bytesWritten, IntPtr.Zero);
+                int error = Marshal.GetLastWin32Error();
+            }
+            return bSuccess;
         }
     }
 }
