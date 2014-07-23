@@ -39,23 +39,26 @@ public class MainActivity extends Activity {
 	private byte[] dtab =new byte[50];
 	private DatagramPacket pack;
 	private InetAddress broadcastAddress;
-	private int counter =0;
+	private int counter = 0;
 	private String signalType;
 	private String upSignal="";
-	private ByteBuffer spenReport = ByteBuffer.allocate(13);
+	private ByteBuffer spenReport = ByteBuffer.allocate(17);
 	private byte SwitchTipState;
 	private byte SwitchBarrelState;
 	private byte SwitchInvertState;
 	private byte SwitchEraserState;
 	private byte SwitchInRangeState;
+	private byte SwitchFingerState;
 	private final byte SwitchTip = 1;
 	private final byte SwitchBarrel = 2;
 	private final byte SwitchInvert = 4;
 	private final byte SwitchEraser = 8;
 	private final byte SwitchInRange = 16;
-	
+	private final byte SwitchFinger = 32;
     @Override
     public void onCreate(Bundle savedInstanceState) {
+		spenReport.order(ByteOrder.LITTLE_ENDIAN);
+		
     	requestWindowFeature(Window.FEATURE_NO_TITLE);
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy); 
@@ -84,15 +87,20 @@ public class MainActivity extends Activity {
 	    		counter=0;
 	    	}
 			spenReport.clear();
-			spenReport.put((byte)(SwitchTipState+SwitchBarrelState+SwitchInvertState+SwitchEraserState+SwitchInRangeState));
+			spenReport.put((byte)(SwitchTipState+SwitchBarrelState+SwitchInvertState+SwitchEraserState+SwitchInRangeState+SwitchFingerState));
 			spenReport.putFloat(x);
 			spenReport.putFloat(y);
 			spenReport.putFloat(pressure);
+			spenReport.putInt(counter);
 			//spenReportX = ByteBuffer.allocate(4).putFloat(x).array();
 			//spenReportY = ByteBuffer.allocate(4).putFloat(y).a
-			pack.setData((Float.toString(x)+"|"+Float.toString(y)+"|"+ Float.toString(pressure)+ "|"+Integer.toString(action)+ "|"+type+ "|"+Integer.toString(counter)+"|"+upSignal).getBytes());
+			//pack.setData(("|"+Float.toString(x)+"|"+Float.toString(y)+"|"+ Float.toString(pressure)+ "|"+Integer.toString(action)+ "|"+type+ "|"+Integer.toString(counter)+"|"+upSignal).getBytes());
 			upSignal = "";
+			//socket.send(pack);
+			
+			pack.setData(spenReport.array());
 			socket.send(pack);
+			
 	    	counter++;
 	    	
 			signalType=type;
@@ -197,6 +205,8 @@ public class MainActivity extends Activity {
 	
 	SPenHoverListener mSPenHoverListener = new SPenHoverListener(){
 		public boolean onHover(View view, MotionEvent event) {
+			SwitchInRangeState = SwitchInRange;
+			SwitchTipState = 0;
 			SendSignal(event.getX(), event.getY(), event.getPressure(), event.getAction(), "hover");
 			return false;
 		}
@@ -214,12 +224,15 @@ public class MainActivity extends Activity {
             if(event.getAction() == MotionEvent.ACTION_UP) {
             	upSignal = "up";
             }
-			
+			SwitchInRangeState = 0;
+			SwitchTipState = 0;
 			SendSignal(event.getX(), event.getY(), event.getPressure(), event.getAction(), "finger");
 			return false;
 		}
 
 		public boolean onTouchPen(View view, MotionEvent event) {
+			SwitchInRangeState = SwitchInRange;
+			SwitchTipState = SwitchTip;
 			SendSignal(event.getX(), event.getY(), event.getPressure(), event.getAction(), "pen");				
 			return false;
 		}
