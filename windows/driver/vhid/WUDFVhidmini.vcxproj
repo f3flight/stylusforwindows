@@ -509,6 +509,9 @@
       <AdditionalDependencies>%(AdditionalDependencies);$(SDK_LIB_PATH)\strsafe.lib;$(SDK_LIB_PATH)\kernel32.lib;$(SDK_LIB_PATH)\advapi32.lib</AdditionalDependencies>
       <ModuleDefinitionFile>exports.def</ModuleDefinitionFile>
     </Link>
+    <Inf>
+      <TimeStamp>0.0.0.1</TimeStamp>
+    </Inf>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Win8 Release|x64'">
     <ResourceCompile>
@@ -531,6 +534,9 @@
       <AdditionalDependencies>%(AdditionalDependencies);$(SDK_LIB_PATH)\strsafe.lib;$(SDK_LIB_PATH)\kernel32.lib;$(SDK_LIB_PATH)\advapi32.lib</AdditionalDependencies>
       <ModuleDefinitionFile>exports.def</ModuleDefinitionFile>
     </Link>
+    <Inf>
+      <TimeStamp>0.0.0.1</TimeStamp>
+    </Inf>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Win8.1 Release|x64'">
     <ResourceCompile>
@@ -553,6 +559,9 @@
       <AdditionalDependencies>%(AdditionalDependencies);$(SDK_LIB_PATH)\strsafe.lib;$(SDK_LIB_PATH)\kernel32.lib;$(SDK_LIB_PATH)\advapi32.lib</AdditionalDependencies>
       <ModuleDefinitionFile>exports.def</ModuleDefinitionFile>
     </Link>
+    <Inf>
+      <TimeStamp>0.0.0.1</TimeStamp>
+    </Inf>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Win7 Debug|x64'">
     <ResourceCompile>
@@ -575,6 +584,9 @@
       <AdditionalDependencies>%(AdditionalDependencies);$(SDK_LIB_PATH)\strsafe.lib;$(SDK_LIB_PATH)\kernel32.lib;$(SDK_LIB_PATH)\advapi32.lib</AdditionalDependencies>
       <ModuleDefinitionFile>exports.def</ModuleDefinitionFile>
     </Link>
+    <Inf>
+      <TimeStamp>0.0.0.1</TimeStamp>
+    </Inf>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Win8 Debug|x64'">
     <ResourceCompile>
@@ -597,6 +609,9 @@
       <AdditionalDependencies>%(AdditionalDependencies);$(SDK_LIB_PATH)\strsafe.lib;$(SDK_LIB_PATH)\kernel32.lib;$(SDK_LIB_PATH)\advapi32.lib</AdditionalDependencies>
       <ModuleDefinitionFile>exports.def</ModuleDefinitionFile>
     </Link>
+    <Inf>
+      <TimeStamp>0.0.0.1</TimeStamp>
+    </Inf>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Win8.1 Debug|x64'">
     <ResourceCompile>
@@ -619,6 +634,9 @@
       <AdditionalDependencies>%(AdditionalDependencies);$(SDK_LIB_PATH)\strsafe.lib;$(SDK_LIB_PATH)\kernel32.lib;$(SDK_LIB_PATH)\advapi32.lib</AdditionalDependencies>
       <ModuleDefinitionFile>exports.def</ModuleDefinitionFile>
     </Link>
+    <Inf>
+      <TimeStamp>0.0.0.1</TimeStamp>
+    </Inf>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Win7 Release|Win32'">
     <ResourceCompile>
@@ -641,6 +659,9 @@
       <AdditionalDependencies>%(AdditionalDependencies);$(SDK_LIB_PATH)\strsafe.lib;$(SDK_LIB_PATH)\kernel32.lib;$(SDK_LIB_PATH)\advapi32.lib</AdditionalDependencies>
       <ModuleDefinitionFile>exports.def</ModuleDefinitionFile>
     </Link>
+    <Inf>
+      <TimeStamp>0.0.0.1</TimeStamp>
+    </Inf>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Win8 Release|Win32'">
     <ResourceCompile>
@@ -663,6 +684,9 @@
       <AdditionalDependencies>%(AdditionalDependencies);$(SDK_LIB_PATH)\strsafe.lib;$(SDK_LIB_PATH)\kernel32.lib;$(SDK_LIB_PATH)\advapi32.lib</AdditionalDependencies>
       <ModuleDefinitionFile>exports.def</ModuleDefinitionFile>
     </Link>
+    <Inf>
+      <TimeStamp>0.0.0.1</TimeStamp>
+    </Inf>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Win8.1 Release|Win32'">
     <ResourceCompile>
@@ -685,6 +709,9 @@
       <AdditionalDependencies>%(AdditionalDependencies);$(SDK_LIB_PATH)\strsafe.lib;$(SDK_LIB_PATH)\kernel32.lib;$(SDK_LIB_PATH)\advapi32.lib</AdditionalDependencies>
       <ModuleDefinitionFile>exports.def</ModuleDefinitionFile>
     </Link>
+    <Inf>
+      <TimeStamp>0.0.0.1</TimeStamp>
+    </Inf>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Win7 Debug|Win32'">
     <ResourceCompile>
@@ -707,6 +734,9 @@
       <AdditionalDependencies>%(AdditionalDependencies);$(SDK_LIB_PATH)\strsafe.lib;$(SDK_LIB_PATH)\kernel32.lib;$(SDK_LIB_PATH)\advapi32.lib</AdditionalDependencies>
       <ModuleDefinitionFile>exports.def</ModuleDefinitionFile>
     </Link>
+    <Inf>
+      <TimeStamp>0.0.0.1</TimeStamp>
+    </Inf>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Win8 Debug|Win32'">
     <ResourceCompile>
@@ -729,6 +759,9 @@
       <AdditionalDependencies>%(AdditionalDependencies);$(SDK_LIB_PATH)\strsafe.lib;$(SDK_LIB_PATH)\kernel32.lib;$(SDK_LIB_PATH)\advapi32.lib</AdditionalDependencies>
       <ModuleDefinitionFile>exports.def</ModuleDefinitionFile>
     </Link>
+    <Inf>
+      <TimeStamp>0.0.0.1</TimeStamp>
+    </Inf>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Win8.1 Debug|Win32'">
     <ResourceCompile>
@@ -751,6 +784,9 @@
       <AdditionalDependencies>%(AdditionalDependencies);$(SDK_LIB_PATH)\strsafe.lib;$(SDK_LIB_PATH)\kernel32.lib;$(SDK_LIB_PATH)\advapi32.lib</AdditionalDependencies>
       <ModuleDefinitionFile>exports.def</ModuleDefinitionFile>
     </Link>
+    <Inf>
+      <TimeStamp>0.0.0.1</TimeStamp>
+    </Inf>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ResourceCompile Include="WudfVhidmini.rc" />

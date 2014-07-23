@@ -1,34 +1,19 @@
-;/*++
-;
-;Copyright (c) Microsoft Corporation All rights Reserved
-;
-;Module Name:
-;
-;    WUDFVHIDMINI.INF
-;
-;Abstract:
-;    INF file for installing UMDF HID minidriver
-;
-;Installation Notes:
-;    Using Devcon: Type "devcon install Wudfvhidmini.inf root\Wudfvhidmini" to install
-;
-;--*/
 [Version]
 Signature="$WINDOWS NT$"
-Class=Sample
-ClassGuid={78A1C341-4539-11d3-B88D-00C04FAD5171}
+Class=SPenVirtualDevice
+ClassGuid={3F3F3F3F-3F3F-3F3F-3F3F-3F3F3F3F3F3F}
 Provider="f3flight"
-DriverVer=10/01/2002,6.0.5058.0
+DriverVer=01/01/1900,0.0.0.0
 CatalogFile=wudf.cat
 
 ; ================= Class section =====================
 
 [ClassInstall32]
-Addreg=SampleClassReg     
+Addreg=SPenVirtualDeviceClassReg     
 
-[SampleClassReg]
+[SPenVirtualDeviceClassReg]
 HKR,,,0,%ClassName%
-HKR,,Icon,,-5
+HKR,,Icon,,-39
 
 ; ================= Device section =====================
 
@@ -158,9 +143,9 @@ HKR,,CoInstallers32,0x00010000,"WudfUpdate_$UMDFCOINSTALLERVERSION$.dll"
 ;---------------------------------------------------------------;
 
 [Strings]
-MfgName="Microsoft"
-Disk_Description="WUDFVhidmini Installation Disk"
-DeviceDesc="UMDF HID minidriver Sample Device (Wudfvhidmini)"
-hidumdf.SvcDesc="Service for Vhidmini Sample Device"
-ClassName       = "Sample Device"
+MfgName="f3flight"
+Disk_Description="S-Pen Virtual Device installation files"
+DeviceDesc="S-Pen Virtual Device minidriver"
+hidumdf.SvcDesc="S-Pen Virtual Device Service"
+ClassName       = "S-Pen Virtual Device"
 WudfRdDisplayName="Windows Driver Foundation - User-mode Driver Framework Reflector"
