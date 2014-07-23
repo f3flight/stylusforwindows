@@ -1163,7 +1163,7 @@ Return Value:
     SIZE_T inBufferCb, reportSize;
     UCHAR reportId; 
     SIZE_T pOutBufferSize;
-    PHIDMINI_OUTPUT_REPORT outputReport = NULL;
+    //PHIDMINI_OUTPUT_REPORT outputReport = NULL;
 	PSPEN_REPORT spenReport = NULL;
 
     // *************************************************************************
@@ -1594,15 +1594,15 @@ CMyManualQueue::_TimerCallback(
     PVOID buffer;
     SIZE_T bufferSizeCb;
     ULONG readReportSizeCb = sizeof(HIDMINI_INPUT_REPORT);
-    PHIDMINI_INPUT_REPORT readReport;
+    //PHIDMINI_INPUT_REPORT readReport;
     
     UNREFERENCED_PARAMETER(Instance);
     UNREFERENCED_PARAMETER(Timer);
 
     //Trace(TRACE_LEVEL_INFORMATION, "_TimerCallback CMyQueue 0x%p\n", This);
 
-	ULONG spenReportSizeCb = sizeof(SPEN_REPORT);
-	PSPEN_REPORT spenReport;
+	//ULONG spenReportSizeCb = sizeof(SPEN_REPORT);
+	//PSPEN_REPORT spenReport;
 
     //
     // see if we have a request in manual queue
