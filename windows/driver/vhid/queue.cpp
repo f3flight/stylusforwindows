@@ -90,7 +90,9 @@ HID_REPORT_DESCRIPTOR           G_DefaultReportDescriptor[] = {
 	0xb4,                          //     POP
 	0x05, 0x0d,                    //     USAGE_PAGE (Digitizers)
 	0x09, 0x30,                    //     USAGE (Tip Pressure)
-	0x26, 0xff, 0xff,              //     LOGICAL_MAXIMUM (65535)
+	//0x27, 0xff, 0xff, 0x00, 0x00, 0x00,      //     LOGICAL_MAXIMUM (65535) - doesn't work
+	//0x26, 0xff, 0x00,			   //     LOGICAL_MAXIMUM (255)
+	0x26, 0xff, 0x7f,			   //	  LOGICAL_MAXIMUM (32767)
 	0x81, 0x02,                    //     INPUT (Data,Var,Abs)
 	0x75, 0x08,                    //     REPORT_SIZE (8)
 	0x09, 0x3d,                    //     USAGE (X Tilt)

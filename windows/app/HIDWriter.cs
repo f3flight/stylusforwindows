@@ -33,7 +33,7 @@ namespace SPenClient
         public const byte SwitchInvert  = 4;
         public const byte SwitchEraser  = 8;
         public const byte SwitchInRange = 16;
-        public const UInt16 PressureMax = 65535;
+        public const UInt16 PressureMax = 32767;
         //------------- Common -------------------------------
 
 
