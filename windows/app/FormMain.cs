@@ -21,6 +21,8 @@ namespace SPenClient
                 this.form = form;
             }
 
+            public byte switches;
+            public const byte SwitchFinger = 32;
             public float x;
             public float y;
             public float pressure;
@@ -42,10 +44,8 @@ namespace SPenClient
             public bool isNew =true;
             private FormMain form;
 
-            public void SetData(object raw)
+            public void SetData()
             {
-                LoadData(raw);
-
                 if (isNew)
                 {
                     isNew = false;
@@ -121,7 +121,7 @@ namespace SPenClient
                 }
             }
 
-            private void LoadData(object raw)
+            public void LoadData(object raw)
             {
                 string sep = System.Globalization.CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator;
                 string str = ((string)raw).Replace(",", sep).Replace(".", sep);
@@ -136,6 +136,14 @@ namespace SPenClient
                 this.up = this.dta[7];
             }
 
+            public void LoadByteData(byte[] receivedData)
+            {
+                this.switches = receivedData[0];
+                this.x = BitConverter.ToSingle(receivedData, 1);
+                this.y = BitConverter.ToSingle(receivedData, 5);
+                this.pressure = BitConverter.ToSingle(receivedData, 9);
+                this.index = BitConverter.ToInt32(receivedData, 13);
+            }
 
             public void SetBackup()
             {
@@ -174,6 +182,7 @@ namespace SPenClient
 
         private PenData pen;
         BackgroundWorker bw;
+        System.IO.MemoryStream ms = new System.IO.MemoryStream(13);
 
         static HIDWriter hwr;
 
@@ -199,7 +208,34 @@ namespace SPenClient
 
         void bw_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-            this.pen.SetData(e.UserState);
+            if (e.UserState.GetType() == typeof(string))
+            {
+                this.pen.LoadData(e.UserState);
+                this.pen.SetData();
+            }     
+            else
+            {
+                this.pen.LoadByteData((byte[])e.UserState);
+                hwr.spenReport.X = (UInt16)(this.pen.x * 20);
+                hwr.spenReport.Y = (UInt16)(this.pen.y * 20);
+                hwr.spenReport.Pressure = (this.pen.pressure <= 1) ? (UInt16)(this.pen.pressure * HIDWriter.PressureMax) : HIDWriter.PressureMax;
+                if ((this.pen.switches & HIDWriter.SwitchInRange) == HIDWriter.SwitchInRange)
+                {
+                    hwr.spenReport.Switches = this.pen.switches;
+                    hwr.Write();
+                }
+                else
+                {
+                    if (hwr.spenReport.Switches != 0)
+                    {
+                        hwr.spenReport.Switches = 0;
+                        hwr.Write();
+                    }
+                    Cursor.Position = new System.Drawing.Point((int)this.pen.x, (int)this.pen.y);
+
+                }
+            }
+                
         }
 
         void bw_DoWork(object sender, DoWorkEventArgs e)
@@ -214,6 +250,10 @@ namespace SPenClient
                 {
                     string returnData = Encoding.ASCII.GetString(receiveBytes);
                     worker.ReportProgress(0, returnData);
+                }
+                else
+                {
+                    worker.ReportProgress(0, receiveBytes);
                 }
             } while (!worker.CancellationPending);
         }
