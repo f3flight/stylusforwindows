@@ -29,8 +29,10 @@ import com.samsung.spensdk.SCanvasView;
 import com.samsung.spensdk.applistener.SCanvasInitializeListener;
 import com.samsung.spensdk.applistener.SPenHoverListener;
 import com.samsung.spensdk.applistener.SPenTouchListener;
+import java.nio.*;
 
 public class MainActivity extends Activity {
+	
 	private SCanvasView mSCanvas;
 	private Context mContext = null;
 	private DatagramSocket socket;
@@ -40,6 +42,17 @@ public class MainActivity extends Activity {
 	private int counter =0;
 	private String signalType;
 	private String upSignal="";
+	private ByteBuffer spenReport = ByteBuffer.allocate(13);
+	private byte SwitchTipState;
+	private byte SwitchBarrelState;
+	private byte SwitchInvertState;
+	private byte SwitchEraserState;
+	private byte SwitchInRangeState;
+	private final byte SwitchTip = 1;
+	private final byte SwitchBarrel = 2;
+	private final byte SwitchInvert = 4;
+	private final byte SwitchEraser = 8;
+	private final byte SwitchInRange = 16;
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -70,7 +83,13 @@ public class MainActivity extends Activity {
 	    	{
 	    		counter=0;
 	    	}
-	    	
+			spenReport.clear();
+			spenReport.put((byte)(SwitchTipState+SwitchBarrelState+SwitchInvertState+SwitchEraserState+SwitchInRangeState));
+			spenReport.putFloat(x);
+			spenReport.putFloat(y);
+			spenReport.putFloat(pressure);
+			//spenReportX = ByteBuffer.allocate(4).putFloat(x).array();
+			//spenReportY = ByteBuffer.allocate(4).putFloat(y).a
 			pack.setData((Float.toString(x)+"|"+Float.toString(y)+"|"+ Float.toString(pressure)+ "|"+Integer.toString(action)+ "|"+type+ "|"+Integer.toString(counter)+"|"+upSignal).getBytes());
 			upSignal = "";
 			socket.send(pack);
@@ -124,6 +143,7 @@ public class MainActivity extends Activity {
     
     public void Init()
     {
+		
     	SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
     	
         try {
