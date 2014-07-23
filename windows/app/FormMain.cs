@@ -127,13 +127,13 @@ namespace SPenClient
                 string str = ((string)raw).Replace(",", sep).Replace(".", sep);
                 this.dta = (str).Split(new char[] { '|' });
 
-                this.x = float.Parse(this.dta[0]);
-                this.y = float.Parse(this.dta[1]);
-                this.pressure = float.Parse(this.dta[2]);
-                this.action = int.Parse(this.dta[3]);
-                this.type = this.dta[4];
-                this.index = int.Parse(this.dta[5]);
-                this.up = this.dta[6];
+                this.x = float.Parse(this.dta[1]);
+                this.y = float.Parse(this.dta[2]);
+                this.pressure = float.Parse(this.dta[3]);
+                this.action = int.Parse(this.dta[4]);
+                this.type = this.dta[5];
+                this.index = int.Parse(this.dta[6]);
+                this.up = this.dta[7];
             }
 
 
@@ -210,8 +210,11 @@ namespace SPenClient
             do
             {
                 byte[] receiveBytes = udpClient.Receive(ref groupEP);
-                string returnData = Encoding.ASCII.GetString(receiveBytes);
-                worker.ReportProgress(0, returnData);
+                if (receiveBytes[0] == '|')
+                {
+                    string returnData = Encoding.ASCII.GetString(receiveBytes);
+                    worker.ReportProgress(0, returnData);
+                }
             } while (!worker.CancellationPending);
         }
 
