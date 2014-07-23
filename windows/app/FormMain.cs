@@ -82,9 +82,9 @@ namespace SPenClient
                         return;
                     }
 
-                    hwr.spenReport.X = (short)(x*15);
-                    hwr.spenReport.Y = (short)(y*15);
-                    hwr.spenReport.Pressure = (byte)(pressure * 255);
+                    hwr.spenReport.X = (UInt16)(x * 20);
+                    hwr.spenReport.Y = (UInt16)(y * 20);
+                    hwr.spenReport.Pressure = (pressure <= 1) ? (UInt16)(pressure * HIDWriter.PressureMax) : HIDWriter.PressureMax;
                     if (type.Equals("pen")){
                         hwr.spenReport.Switches = HIDWriter.SwitchInRange | HIDWriter.SwitchTip;
                         //hwr.spenReport.Switches = 255; //debug - all switches ON! may cause problems.

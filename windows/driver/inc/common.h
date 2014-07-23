@@ -122,23 +122,24 @@ typedef struct _HIDMINI_OUTPUT_REPORT {
 #define HID_PEN_REPORT_ID 0x02
 #define SPEN_OUTPUT_REPORT_ID 0x01 // has to be 1 for some reason
 
+#pragma pack(push)
+#pragma pack(1)
 typedef struct _SPEN_REPORT
 {
 	UCHAR ReportID	: 8;
-	UCHAR Tip		: 1;
-	UCHAR Barrel	: 1;
-	UCHAR Invert	: 1;
-	UCHAR Eraser	: 1;
-	UCHAR			: 1;
-	UCHAR InRange	: 1;
-	UCHAR			: 2;
+	UCHAR Switches  : 8;
 	USHORT X		: 16;
 	USHORT Y		: 16;
-	UCHAR Pressure	: 8;
+	USHORT Pressure : 16;
 	UCHAR XTilt		: 8;
 	UCHAR YTilt		: 8;
 	UCHAR Twist		: 8;
-	//UCHAR			: 8; // For some reason this gives 2 bytes instead of 1. So I disabled this and instead add 1 to sizeof.
 } SPEN_REPORT, *PSPEN_REPORT;
+#pragma pack(pop)
+#define SwitchTip		0x01
+#define SwitchBarrel	0x02
+#define SwitchInvert	0x04
+#define SwitchEraser	0x08
+#define SwitchInRange	0x10
 
 #endif //__VHIDMINI_COMMON_H__

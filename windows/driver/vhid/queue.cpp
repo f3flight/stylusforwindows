@@ -64,16 +64,13 @@ HID_REPORT_DESCRIPTOR           G_DefaultReportDescriptor[] = {
 	0x09, 0x44,                    //     USAGE (Barrel Switch)
 	0x09, 0x3c,                    //     USAGE (Invert)
 	0x09, 0x45,                    //     USAGE (Eraser)
+	0x09, 0x32,                    //     USAGE (In Range)
 	0x15, 0x00,                    //     LOGICAL_MINIMUM (0)
 	0x25, 0x01,                    //     LOGICAL_MAXIMUM (1)
 	0x75, 0x01,                    //     REPORT_SIZE (1)
-	0x95, 0x04,                    //     REPORT_COUNT (4)
+	0x95, 0x05,                    //     REPORT_COUNT (5)
 	0x81, 0x02,                    //     INPUT (Data,Var,Abs)
-	0x95, 0x01,                    //     REPORT_COUNT (1)
-	0x81, 0x03,                    //     INPUT (Cnst,Var,Abs)
-	0x09, 0x32,                    //     USAGE (In Range)
-	0x81, 0x02,                    //     INPUT (Data,Var,Abs)
-	0x95, 0x02,                    //     REPORT_COUNT (2)
+	0x95, 0x03,                    //     REPORT_COUNT (3)
 	0x81, 0x03,                    //     INPUT (Cnst,Var,Abs)
 	0x05, 0x01,                    //     USAGE_PAGE (Generic Desktop)
 	0x09, 0x30,                    //     USAGE (X)
@@ -93,7 +90,7 @@ HID_REPORT_DESCRIPTOR           G_DefaultReportDescriptor[] = {
 	0xb4,                          //     POP
 	0x05, 0x0d,                    //     USAGE_PAGE (Digitizers)
 	0x09, 0x30,                    //     USAGE (Tip Pressure)
-	0x26, 0xff, 0x00,              //     LOGICAL_MAXIMUM (255)
+	0x26, 0xff, 0xff,              //     LOGICAL_MAXIMUM (65535)
 	0x81, 0x02,                    //     INPUT (Data,Var,Abs)
 	0x75, 0x08,                    //     REPORT_SIZE (8)
 	0x09, 0x3d,                    //     USAGE (X Tilt)
@@ -382,12 +379,7 @@ Return Value:
         //
         // Returns a report from the device into a class driver-supplied 
         // buffer. 
-        //
-		//Trace(TRACE_LEVEL_INFORMATION,"IOCTL_HID_READ_REPORT\n");
-		if (m_Device->m_SpenLastState.InRange)
-			hr = ReadReport(fxRequest2, &completeRequest);
-		else
-			hr = HRESULT_FROM_NT(STATUS_NOT_IMPLEMENTED);
+		hr = ReadReport(fxRequest2, &completeRequest);
         break;
 
     case IOCTL_UMDF_HID_GET_FEATURE:       // METHOD_NEITHER
@@ -641,18 +633,17 @@ CMyQueue::ReadReport(
     HRESULT hr;
     PTP_TIMER timer = NULL;
 
-	Trace(TRACE_LEVEL_INFORMATION, "CMyQueue::ReadReport");
     //
     // start the timer if not already started
     //
     timer = m_Device->m_ManualQueue->GetTimer();
     if (IsThreadpoolTimerSet(timer) == FALSE) 
     {     
-        FILETIME dueTime;
+        /*FILETIME dueTime;
         Trace(TRACE_LEVEL_INFORMATION, "*** Setting the timer ***\n");
 
         *reinterpret_cast<PLONGLONG>(&dueTime) = 
-            -static_cast<LONGLONG>(MILLI_SECOND_TO_NANO100(100));
+            -static_cast<LONGLONG>(MILLI_SECOND_TO_NANO100(100));*/
         
 		FILETIME zeroTime;
 		zeroTime.dwHighDateTime = 0;
@@ -1221,7 +1212,7 @@ Return Value:
     // make sure buffer is big enough.
     //
     //reportSize = sizeof(HIDMINI_OUTPUT_REPORT);  
-	reportSize = sizeof(SPEN_REPORT)+1;
+	reportSize = sizeof(SPEN_REPORT);
 	if (inBufferCb != reportSize) 
     {
         hr =  HRESULT_FROM_NT(STATUS_INVALID_BUFFER_SIZE);
@@ -1236,11 +1227,7 @@ Return Value:
     //m_Device->m_DeviceData = outputReport->Data;
 	//memcpy(&m_Device->m_SpenLastState, spenReport, sizeof(SPEN_REPORT));
 	
-	m_Device->m_SpenLastState.Tip = spenReport->Tip;
-	m_Device->m_SpenLastState.Barrel = spenReport->Barrel;
-	m_Device->m_SpenLastState.Invert = spenReport->Invert;
-	m_Device->m_SpenLastState.Eraser = spenReport->Eraser;
-	m_Device->m_SpenLastState.InRange = spenReport->InRange;
+	m_Device->m_SpenLastState.Switches = spenReport->Switches;
 	m_Device->m_SpenLastState.X = spenReport->X;
 	m_Device->m_SpenLastState.Y = spenReport->Y;
 	m_Device->m_SpenLastState.Pressure = spenReport->Pressure;
@@ -1612,7 +1599,7 @@ CMyManualQueue::_TimerCallback(
 
     //Trace(TRACE_LEVEL_INFORMATION, "_TimerCallback CMyQueue 0x%p\n", This);
 
-	ULONG spenReportSizeCb = sizeof(SPEN_REPORT) + 1;
+	ULONG spenReportSizeCb = sizeof(SPEN_REPORT);
 	PSPEN_REPORT spenReport;
 
     //
@@ -1622,6 +1609,14 @@ CMyManualQueue::_TimerCallback(
     if (SUCCEEDED(hr)) {
         IWDFIoRequest2 *fxRequest2;
         
+		if (!((This->m_Device->m_SpenLastState.Switches & SwitchInRange) == SwitchInRange))
+		{
+			Trace(TRACE_LEVEL_INFORMATION, "Stylus not in range.");
+			hr = HRESULT_FROM_NT(STATUS_DEVICE_NOT_READY);
+			fxRequest->Complete(hr);
+			fxRequest->Release();
+			return;
+		}
         //Trace(TRACE_LEVEL_INFORMATION, "retrieved read request from manual queue CMyManualQueue 0x%p\n", This);
 
         hr = fxRequest->QueryInterface(IID_PPV_ARGS(&fxRequest2));

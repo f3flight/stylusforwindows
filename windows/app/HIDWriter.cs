@@ -20,19 +20,20 @@ namespace SPenClient
         {
 	        public byte ReportID;
             public byte Switches;
-            public Int16 X;
-            public Int16 Y;
-            public byte Pressure;
+            public UInt16 X;
+            public UInt16 Y;
+            public UInt16 Pressure;
             public byte XTilt;
             public byte YTilt;
             public byte Twist;
             //public byte Reserved;
         };
-        public const byte SwitchTip = 1;     // These const bytes should be used with logical OR to fill Switches byte; Bit-field imitation.
-        public const byte SwitchBarrel = 2;
-        public const byte SwitchInvert = 4;
-        public const byte SwitchEraser = 8;
-        public const byte SwitchInRange = 32;
+        public const byte SwitchTip     = 1;     // These const bytes should be used with logical OR to fill Switches byte; Bit-field imitation.
+        public const byte SwitchBarrel  = 2;
+        public const byte SwitchInvert  = 4;
+        public const byte SwitchEraser  = 8;
+        public const byte SwitchInRange = 16;
+        public const UInt16 PressureMax = 65535;
         //------------- Common -------------------------------
 
 
