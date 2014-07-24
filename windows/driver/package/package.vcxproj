@@ -351,7 +351,7 @@
     <ProjectReference Include="..\umdf\hidumdf.vcxproj">
       <Project>{e14c0590-7354-44ad-b97b-9a77670317d3}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\vhid\WUDFVhidmini.vcxproj">
+    <ProjectReference Include="..\vhid\spenvhid.vcxproj">
       <Project>{8bd06b4c-781c-4725-865a-a23d50f8960e}</Project>
     </ProjectReference>
   </ItemGroup>

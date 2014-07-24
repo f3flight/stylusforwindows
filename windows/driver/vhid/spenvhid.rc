@@ -1,7 +1,7 @@
 //---------------------------------------------------------------------------
-// WUDFVhidmini.rc
+// spenvhid.rc
 //
-// Copyright (c) Microsoft Corporation, All Rights Reserved
+// Copyright (c) Whatever
 //---------------------------------------------------------------------------
 
 
@@ -10,8 +10,8 @@
 
 #define VER_FILETYPE                VFT_DLL
 #define VER_FILESUBTYPE             VFT_UNKNOWN
-#define VER_FILEDESCRIPTION_STR     "WDF:UMDF Vhidmini User-Mode Driver Sample"
-#define VER_INTERNALNAME_STR        "WUDFVhidmini"
-#define VER_ORIGINALFILENAME_STR    "WUDFVhidmini.dll"
+#define VER_FILEDESCRIPTION_STR     "WDF:UMDF S-PEN Vhid User-Mode Driver"
+#define VER_INTERNALNAME_STR        "spenvhid"
+#define VER_ORIGINALFILENAME_STR    "spenvhid.dll"
 
 #include "common.ver"

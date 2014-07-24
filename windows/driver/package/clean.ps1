@@ -1,7 +1,7 @@
 if ([System.IntPtr]::Size -eq 4) {
- .\devcon32.exe remove root\wudfvhidmini
+ .\devcon32.exe remove root\spenvhid
  } else {
- .\devcon64.exe remove root\wudfvhidmini 
+ .\devcon64.exe remove root\spenvhid 
  }
 $pnputil = (pnputil -e ) | Out-String
 $inflist = New-Object System.Collections.Specialized.StringCollection
@@ -18,6 +18,6 @@ foreach ($inf in $inflist)
 	pnputil -d $inf
 }
 
-if (Test-Path "C:\Windows\System32\drivers\UMDF\WUDFvhidmini.dll") {
-    Remove-Item C:\Windows\System32\drivers\UMDF\WUDFvhidmini.dll
+if (Test-Path "C:\Windows\System32\drivers\UMDF\spenvhid.dll") {
+    Remove-Item C:\Windows\System32\drivers\UMDF\spenvhid.dll
 }

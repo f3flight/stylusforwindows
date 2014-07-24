@@ -57,6 +57,7 @@
     <Configuration Condition="'$(Configuration)' == ''">Win8.1 Debug</Configuration>
     <Platform Condition="'$(Platform)' == ''">Win32</Platform>
     <SampleGuid>{6ABD4EE3-7F56-433D-B527-4BB3B7DFCAF3}</SampleGuid>
+    <ProjectName>spenvhid</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Win7 Release|x64'">
@@ -189,12 +190,12 @@
       <WppDllMacro>true</WppDllMacro>
       <WppScanConfigurationData>internal.h</WppScanConfigurationData>
     </ClCompile>
-    <Inf Include="WUDFVhidmini.inx">
+    <Inf Include="spenvhid.inx">
       <Architecture>$(InfArch)</Architecture>
       <SpecifyArchitecture>true</SpecifyArchitecture>
-      <CopyOutput>.\$(IntDir)\WUDFVhidmini.Inf</CopyOutput>
+      <CopyOutput>.\$(IntDir)\spenvhid.Inf</CopyOutput>
     </Inf>
-    <OtherWpp Include="WudfVhidmini.rc">
+    <OtherWpp Include="spenvhid.rc">
       <WppEnabled>true</WppEnabled>
       <WppDllMacro>true</WppDllMacro>
       <WppScanConfigurationData>internal.h</WppScanConfigurationData>
@@ -789,7 +790,7 @@
     </Inf>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ResourceCompile Include="WudfVhidmini.rc" />
+    <ResourceCompile Include="spenvhid.rc" />
   </ItemGroup>
   <ItemGroup>
     <Inf Exclude="@(Inf)" Include="*.inf" />

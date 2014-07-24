@@ -22,11 +22,11 @@ HKR,,Icon,,-39
 
 ; For XP and later
 [Microsoft.NT$ARCH$]
-%DeviceDesc%=hidumdf, root\wudfvhidmini
+%DeviceDesc%=hidumdf, root\spenvhid
 
 ; For Win8 and later so we can use inbox HID-UMDF mapper
 [Microsoft.NT$ARCH$.6.2]
-%DeviceDesc%=hidumdf.win8, root\wudfvhidmini
+%DeviceDesc%=hidumdf.win8, root\spenvhid
 
 ;===============================================================
 ;   vhidmini for pre-win8 (uses developer-provided HID-UMDF mapper)
@@ -35,7 +35,7 @@ HKR,,Icon,,-39
 CopyFiles=hidumdf.Files.Ext,UMDriverCopy
 
 [hidumdf.NT.hw]
-AddReg=WudfVhidmini_AddReg
+AddReg=spenvhid_AddReg
 
 [hidumdf.NT.CoInstallers]
 AddReg=CoInstaller_AddReg
@@ -54,8 +54,8 @@ ServiceBinary  = %10%\System32\Drivers\hidumdf.sys
 LoadOrderGroup = Base
 
 [hidumdf.NT.Wdf]
-UmdfService="WUDFVhidmini", Wudfvhidmini_Install
-UmdfServiceOrder=WUDFVhidmini
+UmdfService="spenvhid", spenvhid_Install
+UmdfServiceOrder=spenvhid
 UmdfKernelModeClientPolicy=AllowKernelModeClients
 UmdfFileObjectPolicy=AllowNullAndUnknownFileObjects
 UmdfMethodNeitherAction=Copy
@@ -67,7 +67,7 @@ UmdfMethodNeitherAction=Copy
 CopyFiles=UMDriverCopy
 
 [hidumdf.win8.NT.hw]
-AddReg=WudfVhidmini_AddReg
+AddReg=spenvhid_AddReg
 
 [hidumdf.win8.NT.CoInstallers]
 AddReg=CoInstaller_AddReg
@@ -84,8 +84,8 @@ ErrorControl   = 1                  ; SERVICE_ERROR_NORMAL
 ServiceBinary  = %10%\System32\Drivers\mshidumdf.sys
 
 [hidumdf.win8.NT.Wdf]
-UmdfService="WUDFVhidmini", Wudfvhidmini_Install
-UmdfServiceOrder=WUDFVhidmini
+UmdfService="spenvhid", spenvhid_Install
+UmdfServiceOrder=spenvhid
 UmdfKernelModeClientPolicy=AllowKernelModeClients
 UmdfFileObjectPolicy=AllowNullAndUnknownFileObjects
 UmdfMethodNeitherAction=Copy
@@ -93,7 +93,7 @@ UmdfFsContextUsePolicy=CanUseFsContext2
 
 ; ================= common section =====================
 
-[WudfVhidmini_AddReg]
+[spenvhid_AddReg]
 HKR,,"LowerFilters",0x00010008,"WUDFRd" ; FLG_ADDREG_TYPE_MULTI_SZ | FLG_ADDREG_APPEND
 
 [WUDFRD_ServiceInstall]
@@ -104,10 +104,10 @@ ErrorControl = 1
 ServiceBinary = %12%\WUDFRd.sys
 LoadOrderGroup = Base
 
-[Wudfvhidmini_Install]
+[spenvhid_Install]
 UmdfLibraryVersion=$UMDFVERSION$
 DriverCLSID = "{522d8dbc-520d-4d7e-8f53-920e5c867e6c}"
-ServiceBinary = "%12%\UMDF\WUDFvhidmini.dll"
+ServiceBinary = "%12%\UMDF\spenvhid.dll"
 
 ; ================= copy files =====================
 
@@ -115,14 +115,14 @@ ServiceBinary = "%12%\UMDF\WUDFvhidmini.dll"
 hidumdf.sys
 
 [UMDriverCopy]
-WUDFvhidmini.dll
+spenvhid.dll
 
 [SourceDisksNames]
 1=%Disk_Description%,,,
 
 [SourceDisksFiles]
 hidumdf.sys = 1
-WudfVhidmini.dll=1
+spenvhid.dll=1
 WudfUpdate_$UMDFCOINSTALLERVERSION$.dll=1
 
 [DestinationDirs]

@@ -111,10 +111,10 @@ typedef class CMyManualQueue  *PCMyManualQueue;
 // Driver specific #defines
 //
 
-#define MYDRIVER_TRACING_ID      L"Microsoft\\UMDF\\wudfvhidmini"
-#define MYDRIVER_COM_DESCRIPTION L"UMDF HID minidriver"
+#define MYDRIVER_TRACING_ID      L"Microsoft\\UMDF\\spenvhid"
+#define MYDRIVER_COM_DESCRIPTION L"UMDF S-PEN HID minidriver"
 #define MYDRIVER_CLASS_ID        {0x522d8dbc, 0x520d, 0x4d7e, {0x8f, 0x53, 0x92, 0x0e, 0x5c, 0x86, 0x7e, 0x6c}}
-#define _DRIVER_NAME_            "WudfVhidmini: "
+#define _DRIVER_NAME_            "spenvhid: "
 //
 // Include the type specific headers.
 //

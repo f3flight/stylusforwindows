@@ -4,7 +4,7 @@
 ; TODO: Change the library name here to match your binary name.
 ;
 
-LIBRARY      "WudfVhidmini.DLL"
+LIBRARY      "spenvhid.dll"
 
 EXPORTS
     DllGetClassObject   PRIVATE
