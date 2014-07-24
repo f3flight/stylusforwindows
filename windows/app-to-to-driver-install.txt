@@ -1,0 +1,45 @@
+#define DICD_GENERATE_ID        0x00000001
+#define DIF_REGISTERDEVICE                  0x00000019
+
+
+HDEVINFO DeviceInfoSet = INVALID_HANDLE_VALUE;
+SP_DEVINFO_DATA DeviceInfoData;
+GUID ClassGUID; //should match Inf file
+TCHAR ClassName[MAX_CLASS_NAME_LEN]; //should match Inf file
+
+DeviceInfoSet = SetupDiCreateDeviceInfoList(&ClassGUID,0);
+DeviceInfoData.cbSize = sizeof(SP_DEVINFO_DATA);
+SetupDiCreateDeviceInfo(DeviceInfoSet,ClassName,&ClassGUID,NULL,0,DICD_GENERATE_ID,&DeviceInfoData);
+SetupDiCallClassInstaller(DIF_REGISTERDEVICE,DeviceInfoSet,&DeviceInfoData))
+
+----------------------------
+
+typedef BOOL (WINAPI *UpdateDriverForPlugAndPlayDevicesProto)(__in HWND hwndParent,
+                                                              __in LPCTSTR HardwareId,
+                                                              __in LPCTSTR FullInfPath,
+                                                              __in DWORD InstallFlags,
+                                                              __out_opt PBOOL bRebootRequired
+							);
+
+#ifdef _UNICODE
+#define UPDATEDRIVERFORPLUGANDPLAYDEVICES "UpdateDriverForPlugAndPlayDevicesW"
+#define SETUPUNINSTALLOEMINF "SetupUninstallOEMInfW"
+#else
+#define UPDATEDRIVERFORPLUGANDPLAYDEVICES "UpdateDriverForPlugAndPlayDevicesA"
+#define SETUPUNINSTALLOEMINF "SetupUninstallOEMInfA"
+#endif
+
+HMODULE newdevMod = NULL;
+newdevMod = LoadLibrary(TEXT("newdev.dll"));
+UpdateFn = (UpdateDriverForPlugAndPlayDevicesProto)GetProcAddress(newdevMod,UPDATEDRIVERFORPLUGANDPLAYDEVICES);
+
+// hwid is a string root\wudfvhidmini - should it match Inf file? dunno
+// inf is a full path to inf file
+DWORD flags = 0x00000001;
+BOOL reboot = false;
+UpdateFn(NULL,hwid,inf,flags,&reboot)
+
+------------------
+
+if (DeviceInfoSet != INVALID_HANDLE_VALUE) {
+        SetupDiDestroyDeviceInfoList(DeviceInfoSet);
