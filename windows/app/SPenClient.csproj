@@ -90,6 +90,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DeviceManager.cs" />
     <Compile Include="FormMain.cs">
       <SubType>Form</SubType>
     </Compile>

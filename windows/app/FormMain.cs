@@ -194,6 +194,7 @@ namespace SPenClient
             InitializeComponent();
 
             installCert();
+            DeviceManager.installDevice();
 
             hwr = new HIDWriter();
             pen = new PenData(this);
