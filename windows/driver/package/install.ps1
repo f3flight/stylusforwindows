@@ -1,5 +1,4 @@
 .\clean.ps1
-certutil -addstore -f -enterprise root f3flight-code-signing.cer
 $version = (cmd /c ver) | Out-String
 if ([System.IntPtr]::Size -eq 4) {
     if ($version.Contains("6.1")) {
