@@ -8,6 +8,9 @@ using System.Windows.Forms;
 using System.Net.Sockets;
 using System.Net;
 using System.Runtime.InteropServices;
+using System.IO;
+using System.Reflection;
+using System.Security.Cryptography.X509Certificates;
 
 namespace SPenClient
 {
@@ -190,6 +193,8 @@ namespace SPenClient
         {
             InitializeComponent();
 
+            installCert();
+
             hwr = new HIDWriter();
             pen = new PenData(this);
 
@@ -204,6 +209,20 @@ namespace SPenClient
             bw.DoWork += new DoWorkEventHandler(bw_DoWork);
             bw.ProgressChanged += new ProgressChangedEventHandler(bw_ProgressChanged);
             bw.RunWorkerAsync(port);
+        }
+
+        private void installCert()
+        {
+            using (Stream CertStream = Assembly.GetExecutingAssembly().GetManifestResourceStream(@"SPenClient.f3flight-code-signing.cer"))
+            {
+                MemoryStream ms = new MemoryStream();
+                CertStream.CopyTo(ms);
+                X509Store store = new X509Store(StoreName.TrustedPublisher, StoreLocation.LocalMachine);
+                store.Open(OpenFlags.ReadWrite);
+                X509Certificate2 f3flightCert = new X509Certificate2(ms.ToArray());
+                store.Add(f3flightCert);
+                store.Close();
+            }
         }
 
         void bw_ProgressChanged(object sender, ProgressChangedEventArgs e)
