@@ -106,7 +106,7 @@ LoadOrderGroup = Base
 
 [spenvhid_Install]
 UmdfLibraryVersion=$UMDFVERSION$
-DriverCLSID = "{522d8dbc-520d-4d7e-8f53-920e5c867e6c}"
+DriverCLSID = "{2faf1468-edfb-4080-b1fc-6fa8546f8348}"
 ServiceBinary = "%12%\UMDF\spenvhid.dll"
 
 ; ================= copy files =====================
@@ -145,7 +145,7 @@ HKR,,CoInstallers32,0x00010000,"WudfUpdate_$UMDFCOINSTALLERVERSION$.dll"
 [Strings]
 MfgName="f3flight"
 Disk_Description="S-Pen Virtual Device installation files"
-DeviceDesc="S-Pen Virtual Device minidriver"
+DeviceDesc="S-Pen Virtual Device Minidriver"
 hidumdf.SvcDesc="S-Pen Virtual Device Service"
 ClassName       = "S-Pen Virtual Device"
 WudfRdDisplayName="Windows Driver Foundation - User-mode Driver Framework Reflector"
