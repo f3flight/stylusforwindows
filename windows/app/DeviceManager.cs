@@ -11,7 +11,7 @@ namespace SPenClient
     {
         const int INVALID_HANDLE = -1;
         const UInt16 DICD_GENERATE_ID = 1;
-        static Guid f3flightGuid = new Guid("3F3F3F3F-3F3F-3F3F-3F3F-3F3F3F3F3F3F");
+        static Guid f3flightGuid = new Guid("a59a8c19-ab59-4161-8f58-09ecad135546");
 
         [DllImport("setupapi.dll", SetLastError = true)]
         static extern IntPtr SetupDiCreateDeviceInfoList(ref Guid ClassGuid, IntPtr hwndParent);

@@ -1,7 +1,7 @@
 [Version]
 Signature="$WINDOWS NT$"
 Class=SPenVirtualDevice
-ClassGuid={3F3F3F3F-3F3F-3F3F-3F3F-3F3F3F3F3F3F}
+ClassGuid={a59a8c19-ab59-4161-8f58-09ecad135546}
 Provider="f3flight"
 DriverVer=01/01/1900,0.0.0.0
 CatalogFile=wudf.cat
