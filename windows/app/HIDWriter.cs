@@ -179,6 +179,10 @@ namespace SPenClient
         public SPEN_REPORT spenReport = new SPEN_REPORT();
 
         public HIDWriter()
+        {          
+        }
+
+        public void Find()
         {
             Guid hidGuid;
             HidD_GetHidGuid(out hidGuid);
@@ -220,7 +224,6 @@ namespace SPenClient
                                     if (hidCaps.UsagePage == HIDMINI_USAGE_PAGE)
                                     {
                                         found = true;
-                                        Write();
                                         break;
                                     }
                                 }

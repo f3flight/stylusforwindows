@@ -194,12 +194,20 @@ namespace SPenClient
             InitializeComponent();
             checkProcessArchMatch();
             checkOSVersion();
-            installCert();
-            DeviceManager.installDevice();
-
             hwr = new HIDWriter();
+            hwr.Find();
+            if (!hwr.found)
+            {
+                installCert();
+                DeviceManager.installDevice();
+                hwr.Find();
+                if (!hwr.found)
+                {
+                    MessageBox.Show("Could not find S-Pen Virtual Device. Did you agree to install the driver?", "SPenClient error - no device");
+                    Environment.Exit(1);
+                }
+            }
             pen = new PenData(this);
-
             init(12333);
         }
 
