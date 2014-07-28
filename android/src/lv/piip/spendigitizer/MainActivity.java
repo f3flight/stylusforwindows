@@ -82,10 +82,10 @@ public class MainActivity extends Activity {
     private void SendSignal(float x, float y, float pressure, int action, String type)
     {
 		try {
-	    	if(signalType!=type)
-	    	{
-	    		counter=0;
-	    	}
+	    	//if(signalType!=type)
+	    	//{
+	    	//	counter=0;
+	    	//}
 			spenReport.clear();
 			spenReport.put((byte)(SwitchTipState+SwitchBarrelState+SwitchInvertState+SwitchEraserState+SwitchInRangeState+SwitchFingerState));
 			spenReport.putFloat(x);
@@ -103,7 +103,7 @@ public class MainActivity extends Activity {
 			
 	    	counter++;
 	    	
-			signalType=type;
+			//signalType=type;
 		} catch (Exception e) {
 			e.printStackTrace();
 			Toast.makeText(mContext, e.getMessage(), Toast.LENGTH_SHORT).show();
