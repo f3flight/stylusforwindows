@@ -112,8 +112,6 @@ namespace SPenClient
             bSuccess = SetupDiDestroyDeviceInfoList(DeviceInfoSet);
             bool bRebootRequired = false;
             bSuccess = UpdateDriverForPlugAndPlayDevices(IntPtr.Zero, hwid, InfPath, InstallFlags, ref bRebootRequired);
-            int error = Marshal.GetLastWin32Error();
-            error = error + 0;
             return true;
         }
 
