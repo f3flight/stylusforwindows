@@ -14,6 +14,7 @@ namespace SPenClient
         const uint DIF_REMOVE         = 0x00000005;
         const uint DIF_REGISTERDEVICE = 0x00000019;
         const uint SPDRP_HARDWAREID   = 0x00000001;
+        const uint InstallFlags       = 0x00000001;
 
         // Guid should match "ClassGuid" from driver's inf file. Otherwise need to to use SetupDiGetINFClass function
         static Guid f3flightGuid = new Guid("a59a8c19-ab59-4161-8f58-09ecad135546");
@@ -73,8 +74,26 @@ namespace SPenClient
         [DllImport("setupapi.dll", SetLastError = true)]
         static extern Boolean SetupDiCallClassInstaller(uint InstallFunction, IntPtr DeviceInfoSet, ref SP_DEVINFO_DATA DeviceInfoData);
 
+        [DllImport("newdev.dll", SetLastError = true)]
+        static extern Boolean UpdateDriverForPlugAndPlayDevices(
+            IntPtr hwndParent,
+            string HardwareId,
+            string FullInfPath,
+            uint InstallFlags,
+            ref bool bRebootRequired
+        );
+
         public static bool installDevice()
         {
+
+            //Version tv = new Version()
+            //OperatingSystem test = new OperatingSystem(PlatformID.Win32NT, Ver)
+            //if (Environment.OSVersion == OperatingSystem.Version.)
+            string InfPath = new Uri(System.Reflection.Assembly.GetExecutingAssembly().GetName().CodeBase).LocalPath;
+            InfPath = System.IO.Path.GetDirectoryName(InfPath);
+            string arch = (Environment.Is64BitOperatingSystem) ? "x64" : "x86";
+            string version = (Environment.OSVersion.Version.ToString().Contains("6.1.")) ? "Win7" : "Win8.1";
+            InfPath = InfPath + "\\driver\\" + arch + "\\" + version + "\\spenvhid.Inf";
             Boolean bSuccess = false;
             IntPtr DeviceInfoSet = SetupDiCreateDeviceInfoList(ref f3flightGuid, IntPtr.Zero);
             SP_DEVINFO_DATA DeviceInfoData = new SP_DEVINFO_DATA();
@@ -91,6 +110,10 @@ namespace SPenClient
             bSuccess = SetupDiCallClassInstaller(DIF_REGISTERDEVICE, DeviceInfoSet, ref DeviceInfoData);
             //bSuccess = SetupDiCallClassInstaller(DIF_REMOVE, DeviceInfoSet, ref DeviceInfoData);
             bSuccess = SetupDiDestroyDeviceInfoList(DeviceInfoSet);
+            bool bRebootRequired = false;
+            bSuccess = UpdateDriverForPlugAndPlayDevices(IntPtr.Zero, hwid, InfPath, InstallFlags, ref bRebootRequired);
+            int error = Marshal.GetLastWin32Error();
+            error = error + 0;
             return true;
         }
 

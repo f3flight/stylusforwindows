@@ -193,7 +193,7 @@ namespace SPenClient
         {
             InitializeComponent();
             checkProcessArchMatch();
-
+            checkOSVersion();
             installCert();
             DeviceManager.installDevice();
 
@@ -306,6 +306,18 @@ namespace SPenClient
             {
                 MessageBox.Show("Your system is x64, please run x64-version of the app!", "SPenClient error - wrong architecture");
                 Environment.Exit(1);
+            }
+        }
+
+        private void checkOSVersion()
+        {
+            if (Environment.OSVersion.Version.Major != 6)
+            {
+                MessageBox.Show("Your OS is not supported, sorry.", "SPenClient error - untested OS");
+            }
+            else if (Environment.OSVersion.Version.Minor != 1 && Environment.OSVersion.Version.Minor != 3)
+            {
+                MessageBox.Show("Your OS is not Windows 7 or Windows 8.1, sorry.", "SPenClient error - untested OS");
             }
         }
     }

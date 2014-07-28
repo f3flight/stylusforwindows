@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SPenClient", "app\SPenClient.csproj", "{0C80D1CA-1365-44AA-97B9-393A29B43F8B}"
+	ProjectSection(ProjectDependencies) = postProject
+		{58030CC7-7C32-4686-8551-55F484626892} = {58030CC7-7C32-4686-8551-55F484626892}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "hidumdf", "driver\umdf\hidumdf.vcxproj", "{E14C0590-7354-44AD-B97B-9A77670317D3}"
 EndProject
@@ -68,7 +71,8 @@ Global
 		{0C80D1CA-1365-44AA-97B9-393A29B43F8B}.Win7 Debug|Win32.Build.0 = Debug|x86
 		{0C80D1CA-1365-44AA-97B9-393A29B43F8B}.Win7 Debug|x32.ActiveCfg = Debug|x86
 		{0C80D1CA-1365-44AA-97B9-393A29B43F8B}.Win7 Debug|x32.Build.0 = Debug|x86
-		{0C80D1CA-1365-44AA-97B9-393A29B43F8B}.Win7 Debug|x64.ActiveCfg = Debug|x86
+		{0C80D1CA-1365-44AA-97B9-393A29B43F8B}.Win7 Debug|x64.ActiveCfg = Debug|x64
+		{0C80D1CA-1365-44AA-97B9-393A29B43F8B}.Win7 Debug|x64.Build.0 = Debug|x64
 		{0C80D1CA-1365-44AA-97B9-393A29B43F8B}.Win7 Release|Mixed Platforms.ActiveCfg = Release|x86
 		{0C80D1CA-1365-44AA-97B9-393A29B43F8B}.Win7 Release|Mixed Platforms.Build.0 = Release|x86
 		{0C80D1CA-1365-44AA-97B9-393A29B43F8B}.Win7 Release|Win32.ActiveCfg = Release|x86
@@ -136,7 +140,6 @@ Global
 		{E14C0590-7354-44AD-B97B-9A77670317D3}.Win7 Debug|x32.Build.0 = Win7 Debug|Win32
 		{E14C0590-7354-44AD-B97B-9A77670317D3}.Win7 Debug|x64.ActiveCfg = Win7 Debug|x64
 		{E14C0590-7354-44AD-B97B-9A77670317D3}.Win7 Debug|x64.Build.0 = Win7 Debug|x64
-		{E14C0590-7354-44AD-B97B-9A77670317D3}.Win7 Debug|x64.Deploy.0 = Win7 Debug|x64
 		{E14C0590-7354-44AD-B97B-9A77670317D3}.Win7 Release|Mixed Platforms.ActiveCfg = Win7 Release|Win32
 		{E14C0590-7354-44AD-B97B-9A77670317D3}.Win7 Release|Mixed Platforms.Build.0 = Win7 Release|Win32
 		{E14C0590-7354-44AD-B97B-9A77670317D3}.Win7 Release|Mixed Platforms.Deploy.0 = Win7 Release|Win32
@@ -231,7 +234,6 @@ Global
 		{58030CC7-7C32-4686-8551-55F484626892}.Win7 Debug|x32.Build.0 = Win7 Debug|Win32
 		{58030CC7-7C32-4686-8551-55F484626892}.Win7 Debug|x64.ActiveCfg = Win7 Debug|x64
 		{58030CC7-7C32-4686-8551-55F484626892}.Win7 Debug|x64.Build.0 = Win7 Debug|x64
-		{58030CC7-7C32-4686-8551-55F484626892}.Win7 Debug|x64.Deploy.0 = Win7 Debug|x64
 		{58030CC7-7C32-4686-8551-55F484626892}.Win7 Release|Mixed Platforms.ActiveCfg = Win7 Release|Win32
 		{58030CC7-7C32-4686-8551-55F484626892}.Win7 Release|Mixed Platforms.Build.0 = Win7 Release|Win32
 		{58030CC7-7C32-4686-8551-55F484626892}.Win7 Release|Mixed Platforms.Deploy.0 = Win7 Release|Win32
@@ -319,9 +321,9 @@ Global
 		{8BD06B4C-781C-4725-865A-A23D50F8960E}.Win7 Debug|Win32.Build.0 = Win7 Debug|Win32
 		{8BD06B4C-781C-4725-865A-A23D50F8960E}.Win7 Debug|Win32.Deploy.0 = Win7 Debug|Win32
 		{8BD06B4C-781C-4725-865A-A23D50F8960E}.Win7 Debug|x32.ActiveCfg = Win7 Debug|Win32
+		{8BD06B4C-781C-4725-865A-A23D50F8960E}.Win7 Debug|x32.Build.0 = Win7 Debug|Win32
 		{8BD06B4C-781C-4725-865A-A23D50F8960E}.Win7 Debug|x64.ActiveCfg = Win7 Debug|x64
 		{8BD06B4C-781C-4725-865A-A23D50F8960E}.Win7 Debug|x64.Build.0 = Win7 Debug|x64
-		{8BD06B4C-781C-4725-865A-A23D50F8960E}.Win7 Debug|x64.Deploy.0 = Win7 Debug|x64
 		{8BD06B4C-781C-4725-865A-A23D50F8960E}.Win7 Release|Mixed Platforms.ActiveCfg = Win7 Release|Win32
 		{8BD06B4C-781C-4725-865A-A23D50F8960E}.Win7 Release|Mixed Platforms.Build.0 = Win7 Release|Win32
 		{8BD06B4C-781C-4725-865A-A23D50F8960E}.Win7 Release|Mixed Platforms.Deploy.0 = Win7 Release|Win32
