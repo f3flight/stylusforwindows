@@ -114,6 +114,24 @@
     <Content Include="driver\x64\Win7\WudfUpdate_01011.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="driver\x64\Win8.1\spenvhid.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="driver\x64\Win8.1\spenvhid.Inf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="driver\x64\Win8.1\WudfUpdate_01011.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="driver\x86\Win8.1\spenvhid.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="driver\x86\Win8.1\spenvhid.Inf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="driver\x86\Win8.1\WudfUpdate_01011.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="icon.ico" />
     <Content Include="driver\x86\Win7\spenvhid.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -160,11 +178,20 @@
     <None Include="driver\x64\Win7\wudf.cat">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="driver\x64\Win8.1\hidumdf.sys">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="driver\x64\Win8.1\wudf.cat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="driver\x86\Win8.1\hidumdf.sys">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="driver\x86\Win8.1\wudf.cat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="driver\x64\Win8.1\" />
-    <Folder Include="driver\x86\Win8.1\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
