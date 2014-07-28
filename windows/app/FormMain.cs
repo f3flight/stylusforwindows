@@ -192,6 +192,7 @@ namespace SPenClient
         public FormMain()
         {
             InitializeComponent();
+            checkProcessArchMatch();
 
             installCert();
             DeviceManager.installDevice();
@@ -297,6 +298,15 @@ namespace SPenClient
             bw.CancelAsync();
             bw.Dispose();
             init(int.Parse(textBox1.Text));
+        }
+
+        private void checkProcessArchMatch()
+        {
+            if (Environment.Is64BitOperatingSystem & !Environment.Is64BitProcess)
+            {
+                MessageBox.Show("Your system is x64, please run x64-version of the app!", "SPenClient error - wrong architecture");
+                Environment.Exit(1);
+            }
         }
     }
 }
