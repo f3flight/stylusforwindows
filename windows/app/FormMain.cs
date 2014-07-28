@@ -42,102 +42,102 @@ namespace SPenClient
             public int _index;
             public string _up;
 
-            private string[] dta;
+            //private string[] dta;
 
             public bool isNew =true;
             private FormMain form;
 
-            public void SetData()
-            {
-                if (isNew)
-                {
-                    isNew = false;
-                    SetBackup();
-                }
+            //public void SetData()
+            //{
+            //    if (isNew)
+            //    {
+            //        isNew = false;
+            //        SetBackup();
+            //    }
 
-                if (!type.Equals(_type))
-                {
-                    this._index = this.index;
-                }
+            //    if (!type.Equals(_type))
+            //    {
+            //        this._index = this.index;
+            //    }
 
-                if (this.index >= this._index)
-                {
+            //    if (this.index >= this._index)
+            //    {
 
-                    //if (!type.Equals(_type))
-                    //{
-                    //    if (type.Equals("hover") && _type.Equals("pen"))
-                    //    {
-                    //        mouse_event((int)(MouseEventFlags.LEFTUP), 0, 0, 0, 0);
-                    //    }
+            //        //if (!type.Equals(_type))
+            //        //{
+            //        //    if (type.Equals("hover") && _type.Equals("pen"))
+            //        //    {
+            //        //        mouse_event((int)(MouseEventFlags.LEFTUP), 0, 0, 0, 0);
+            //        //    }
 
-                    //    if (type.Equals("pen") && _type.Equals("hover"))
-                    //    {
-                    //        mouse_event((int)(MouseEventFlags.LEFTDOWN), 0, 0, 0, 0);
-                    //    }
-                    //}
+            //        //    if (type.Equals("pen") && _type.Equals("hover"))
+            //        //    {
+            //        //        mouse_event((int)(MouseEventFlags.LEFTDOWN), 0, 0, 0, 0);
+            //        //    }
+            //        //}
 
 
-                    if (pressure <= 0 && Math.Min(x, y) <= 0 & type.Equals("hover") || type.Equals("finger") && up.Equals("up"))
-                    {
-                        mouse_event((int)(MouseEventFlags.LEFTUP), 0, 0, 0, 0);
-                        isNew = true;
-                        RestoreBackup();
-                        return;
-                    }
+            //        if (pressure <= 0 && Math.Min(x, y) <= 0 & type.Equals("hover") || type.Equals("finger") && up.Equals("up"))
+            //        {
+            //            mouse_event((int)(MouseEventFlags.LEFTUP), 0, 0, 0, 0);
+            //            isNew = true;
+            //            RestoreBackup();
+            //            return;
+            //        }
 
-                    hwr.spenReport.X = (UInt16)(x * 20);
-                    hwr.spenReport.Y = (UInt16)(y * 20);
-                    hwr.spenReport.Pressure = (pressure <= 1) ? (UInt16)(pressure * HIDWriter.PressureMax) : HIDWriter.PressureMax;
-                    if (type.Equals("pen")){
-                        hwr.spenReport.Switches = HIDWriter.SwitchInRange | HIDWriter.SwitchTip;
-                        //hwr.spenReport.Switches = 255; //debug - all switches ON! may cause problems.
-                        hwr.Write();
-                    }                     
-                    else if (type.Equals("hover"))
-                    {
-                        hwr.spenReport.Switches = HIDWriter.SwitchInRange;
-                        hwr.Write();
-                    }
-                    else
-                    {
-                        if (hwr.spenReport.Switches != 0)
-                        {
-                            hwr.spenReport.Switches = 0;
-                            hwr.Write();
-                        }
-                        Cursor.Position = new System.Drawing.Point(this.GetX, this.GetY);
+            //        hwr.spenReport.X = (UInt16)(x * 20);
+            //        hwr.spenReport.Y = (UInt16)(y * 20);
+            //        hwr.spenReport.Pressure = (pressure <= 1) ? (UInt16)(pressure * HIDWriter.PressureMax) : HIDWriter.PressureMax;
+            //        if (type.Equals("pen")){
+            //            hwr.spenReport.Switches = HIDWriter.SwitchInRange | HIDWriter.SwitchTip;
+            //            //hwr.spenReport.Switches = 255; //debug - all switches ON! may cause problems.
+            //            hwr.Write();
+            //        }                     
+            //        else if (type.Equals("hover"))
+            //        {
+            //            hwr.spenReport.Switches = HIDWriter.SwitchInRange;
+            //            hwr.Write();
+            //        }
+            //        else
+            //        {
+            //            if (hwr.spenReport.Switches != 0)
+            //            {
+            //                hwr.spenReport.Switches = 0;
+            //                hwr.Write();
+            //            }
+            //            Cursor.Position = new System.Drawing.Point(this.GetX, this.GetY);
                     
-                    }                       
+            //        }                       
 
-                    //if (form.WindowState == FormWindowState.Normal)
-                    //{
-                    //    form.labelx.Text = x.ToString();
-                    //    form.labely.Text = y.ToString();
-                    //    form.labelp.Text = pressure.ToString();
-                    //    form.labela.Text = action.ToString();
-                    //    form.labelt.Text = type.ToString();
-                    //    form.labeli.Text = index.ToString();
-                    //    form.labelu.Text = up.ToString();
-                    //}
+            //        //if (form.WindowState == FormWindowState.Normal)
+            //        //{
+            //        //    form.labelx.Text = x.ToString();
+            //        //    form.labely.Text = y.ToString();
+            //        //    form.labelp.Text = pressure.ToString();
+            //        //    form.labela.Text = action.ToString();
+            //        //    form.labelt.Text = type.ToString();
+            //        //    form.labeli.Text = index.ToString();
+            //        //    form.labelu.Text = up.ToString();
+            //        //}
 
-                    SetBackup();
-                }
-            }
+            //        SetBackup();
+            //    }
+            //}
 
-            public void LoadData(object raw)
-            {
-                string sep = System.Globalization.CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator;
-                string str = ((string)raw).Replace(",", sep).Replace(".", sep);
-                this.dta = (str).Split(new char[] { '|' });
+            //public void LoadData(object raw)
+            //{
+            //    string sep = System.Globalization.CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator;
+            //    string str = ((string)raw).Replace(",", sep).Replace(".", sep);
+            //    this.dta = (str).Split(new char[] { '|' });
 
-                this.x = float.Parse(this.dta[1]);
-                this.y = float.Parse(this.dta[2]);
-                this.pressure = float.Parse(this.dta[3]);
-                this.action = int.Parse(this.dta[4]);
-                this.type = this.dta[5];
-                this.index = int.Parse(this.dta[6]);
-                this.up = this.dta[7];
-            }
+            //    this.x = float.Parse(this.dta[1]);
+            //    this.y = float.Parse(this.dta[2]);
+            //    this.pressure = float.Parse(this.dta[3]);
+            //    this.action = int.Parse(this.dta[4]);
+            //    this.type = this.dta[5];
+            //    this.index = int.Parse(this.dta[6]);
+            //    this.up = this.dta[7];
+            //}
 
             public void LoadByteData(byte[] receivedData)
             {
@@ -237,8 +237,8 @@ namespace SPenClient
         {
             if (e.UserState.GetType() == typeof(string))
             {
-                this.pen.LoadData(e.UserState);
-                this.pen.SetData();
+                //this.pen.LoadData(e.UserState);
+                //this.pen.SetData();
             }     
             else
             {
@@ -255,8 +255,7 @@ namespace SPenClient
                 {
                     if (hwr.spenReport.Switches != 0)
                     {
-                        hwr.spenReport.Switches = 0;
-                        hwr.Write();
+                        stopStylus();
                     }
                     Cursor.Position = new System.Drawing.Point((int)this.pen.x, (int)this.pen.y);
 
@@ -301,7 +300,7 @@ namespace SPenClient
             RIGHTUP = 0x00000010
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void buttonChangePort_Click(object sender, EventArgs e)
         {
             bw.CancelAsync();
             bw.Dispose();
@@ -327,6 +326,20 @@ namespace SPenClient
             {
                 MessageBox.Show("Your OS is not Windows 7 or Windows 8.1, sorry.", "SPenClient error - untested OS");
             }
+        }
+
+        private void stopStylus()
+        {
+            hwr.spenReport.Switches = 0;
+            hwr.Write();
+        }
+
+        private void buttonUninstall_Click(object sender, EventArgs e)
+        {
+            bw.CancelAsync();
+            bw.Dispose();
+            stopStylus();
+            //Environment.Exit(0);
         }
     }
 }
