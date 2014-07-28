@@ -121,7 +121,7 @@ HID_REPORT_DESCRIPTOR           G_DefaultReportDescriptor[] = {
 	0x85, SPEN_OUTPUT_REPORT_ID,   //   REPORT_ID
 	0x09, 0x01,                      // USAGE (Vendor Usage 0x01)
 	0x75, 0x08,                    //     REPORT_SIZE (in bits - 1 byte)
-	0x95, 0x0a,						// REPORT_COUNT (10 bytes)
+	0x95, 0x0e,						// REPORT_COUNT (14 bytes)
 	0x91, 0x02,                    //     OUTPUT (Data,Var,Abs)
 	0xc0,                           // END_COLLECTION
 };
@@ -1164,7 +1164,7 @@ Return Value:
     UCHAR reportId; 
     SIZE_T pOutBufferSize;
     //PHIDMINI_OUTPUT_REPORT outputReport = NULL;
-	PSPEN_REPORT spenReport = NULL;
+	PSPEN_WRITEREPORT spenReport = NULL;
 
     // *************************************************************************
     // IOCTL_HID_WRITE_REPORT
@@ -1207,14 +1207,14 @@ Return Value:
     }
 
     //outputReport = (PHIDMINI_OUTPUT_REPORT) memory->GetDataBuffer(&inBufferCb);
-	spenReport = (PSPEN_REPORT)memory->GetDataBuffer(&inBufferCb);
+	spenReport = (PSPEN_WRITEREPORT)memory->GetDataBuffer(&inBufferCb);
     SAFE_RELEASE(memory);
 
     //
     // make sure buffer is big enough.
     //
     //reportSize = sizeof(HIDMINI_OUTPUT_REPORT);  
-	reportSize = sizeof(SPEN_REPORT);
+	reportSize = sizeof(SPEN_WRITEREPORT);
 	if (inBufferCb != reportSize) 
     {
         hr =  HRESULT_FROM_NT(STATUS_INVALID_BUFFER_SIZE);
@@ -1228,7 +1228,7 @@ Return Value:
     //
     //m_Device->m_DeviceData = outputReport->Data;
 	//memcpy(&m_Device->m_SpenLastState, spenReport, sizeof(SPEN_REPORT));
-	
+	m_Device->m_SpenLastStateIndex = spenReport->Index;
 	m_Device->m_SpenLastState.Switches = spenReport->Switches;
 	m_Device->m_SpenLastState.X = spenReport->X;
 	m_Device->m_SpenLastState.Y = spenReport->Y;
@@ -1236,6 +1236,7 @@ Return Value:
 	m_Device->m_SpenLastState.XTilt = spenReport->XTilt;
 	m_Device->m_SpenLastState.YTilt = spenReport->YTilt;
 	m_Device->m_SpenLastState.Twist = spenReport->Twist;
+	Trace(TRACE_LEVEL_INFORMATION, "WriteReport ok. LastIndex=%d, Index=%d, spenReport->Index=%d", m_Device->m_SpenLastStateLastIndex, m_Device->m_SpenLastStateIndex, spenReport->Index);
     //
     // set status and information
     //
@@ -1613,12 +1614,23 @@ CMyManualQueue::_TimerCallback(
         
 		if (!((This->m_Device->m_SpenLastState.Switches & SwitchInRange) == SwitchInRange))
 		{
+			This->m_Device->m_SpenLastStateLastIndex = 0;
+			This->m_Device->m_SpenLastStateIndex = 0;
 			Trace(TRACE_LEVEL_INFORMATION, "Stylus not in range.");
 			hr = HRESULT_FROM_NT(STATUS_DEVICE_NOT_READY);
 			fxRequest->Complete(hr);
 			fxRequest->Release();
 			return;
 		}
+
+		/*if (This->m_Device->m_SpenLastStateLastIndex >= This->m_Device->m_SpenLastStateIndex)
+		{
+			Trace(TRACE_LEVEL_INFORMATION, "No new data, skipping. LastIndex=%d, Index=%d", This->m_Device->m_SpenLastStateLastIndex, This->m_Device->m_SpenLastStateIndex);
+			hr = HRESULT_FROM_NT(STATUS_DEVICE_NOT_READY);
+			fxRequest->Complete(hr);
+			fxRequest->Release();
+			return;
+		}*/
         //Trace(TRACE_LEVEL_INFORMATION, "retrieved read request from manual queue CMyManualQueue 0x%p\n", This);
 
         hr = fxRequest->QueryInterface(IID_PPV_ARGS(&fxRequest2));
@@ -1655,6 +1667,8 @@ CMyManualQueue::_TimerCallback(
             //Create input report
             //
 			memcpy(buffer, &This->m_Device->m_SpenLastState, sizeof(SPEN_REPORT));
+			Trace(TRACE_LEVEL_INFORMATION, "ReadReport (TimerCallback) ok. LastIndex=%d, Index=%d", This->m_Device->m_SpenLastStateLastIndex, This->m_Device->m_SpenLastStateIndex);
+			This->m_Device->m_SpenLastStateLastIndex = This->m_Device->m_SpenLastStateIndex;
 			fxRequest2->SetInformation(bufferSizeCb);
 
             //readReport = (PHIDMINI_INPUT_REPORT)buffer;

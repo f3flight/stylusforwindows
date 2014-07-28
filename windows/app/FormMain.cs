@@ -31,7 +31,7 @@ namespace SPenClient
             public float pressure;
             public int action;
             public string type;
-            public int index;
+            public uint index;
             public string up;
 
             public float _x;
@@ -145,30 +145,30 @@ namespace SPenClient
                 this.x = BitConverter.ToSingle(receivedData, 1);
                 this.y = BitConverter.ToSingle(receivedData, 5);
                 this.pressure = BitConverter.ToSingle(receivedData, 9);
-                this.index = BitConverter.ToInt32(receivedData, 13);
+                this.index = BitConverter.ToUInt32(receivedData, 13);
             }
 
-            public void SetBackup()
-            {
-                this._x = this.x;
-                this._y = this.y;
-                this._pressure = this.pressure;
-                this._action = this.action;
-                this._type = this.type;
-                this._index = this.index;
-                this._up = this.up;
-            }
+            //public void SetBackup()
+            //{
+            //    this._x = this.x;
+            //    this._y = this.y;
+            //    this._pressure = this.pressure;
+            //    this._action = this.action;
+            //    this._type = this.type;
+            //    this._index = this.index;
+            //    this._up = this.up;
+            //}
 
-            public void RestoreBackup()
-            {
-                this.x = this._x;
-                this.y = this._y;
-                this.pressure = this._pressure;
-                this.action = this._action;
-                this.type = this._type;
-                this.index = this._index;
-                this.up = this._up;
-            }
+            //public void RestoreBackup()
+            //{
+            //    this.x = this._x;
+            //    this.y = this._y;
+            //    this.pressure = this._pressure;
+            //    this.action = this._action;
+            //    this.type = this._type;
+            //    this.index = this._index;
+            //    this.up = this._up;
+            //}
 
             public int GetX { 
                 get {
@@ -243,6 +243,7 @@ namespace SPenClient
             else
             {
                 this.pen.LoadByteData((byte[])e.UserState);
+                hwr.spenReport.Index = this.pen.index;
                 hwr.spenReport.X = (UInt16)(this.pen.x * 20);
                 hwr.spenReport.Y = (UInt16)(this.pen.y * 20);
                 hwr.spenReport.Pressure = (this.pen.pressure <= 1) ? (UInt16)(this.pen.pressure * HIDWriter.PressureMax) : HIDWriter.PressureMax;
@@ -338,6 +339,7 @@ namespace SPenClient
         {
             bw.CancelAsync();
             bw.Dispose();
+            System.Threading.Thread.Sleep(1000);
             stopStylus();
             //Environment.Exit(0);
         }

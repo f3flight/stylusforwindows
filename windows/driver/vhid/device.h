@@ -59,6 +59,8 @@ public:
     BYTE m_DeviceData;
 
 	SPEN_REPORT m_SpenLastState;
+	UINT m_SpenLastStateIndex = 0;
+	UINT m_SpenLastStateLastIndex = 0;
 
 //
 // Private methods.
