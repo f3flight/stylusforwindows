@@ -254,12 +254,7 @@ namespace SPenClient
                 }
                 else
                 {
-                    if (hwr.spenReport.Switches != 0)
-                    {
-                        stopStylus();
-                    }
                     Cursor.Position = new System.Drawing.Point((int)this.pen.x, (int)this.pen.y);
-
                 }
             }
                 
@@ -329,18 +324,11 @@ namespace SPenClient
             }
         }
 
-        private void stopStylus()
-        {
-            hwr.spenReport.Switches = 0;
-            hwr.Write();
-        }
-
         private void buttonUninstall_Click(object sender, EventArgs e)
         {
             bw.CancelAsync();
             bw.Dispose();
             System.Threading.Thread.Sleep(1000);
-            stopStylus();
             //Environment.Exit(0);
         }
     }
