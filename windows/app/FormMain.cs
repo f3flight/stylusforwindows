@@ -17,11 +17,15 @@ namespace SPenClient
 
     public partial class FormMain : Form
     {
+        uint index, _index, indexC, lost;
+        long tick, time, _time, tpstime, slowest, average, fastest;
+        float tps;
+
         public class PenData
         {
             public PenData(FormMain form)
             {
-                this.form = form;
+            //    this.form = form;
             }
 
             public byte switches;
@@ -29,23 +33,23 @@ namespace SPenClient
             public float x;
             public float y;
             public float pressure;
-            public int action;
-            public string type;
+            //public int action;
+            //public string type;
             public uint index;
             public string up;
 
-            public float _x;
-            public float _y;
-            public float _pressure;
-            public int _action;
-            public string _type;
-            public int _index;
-            public string _up;
+            //public float _x;
+            //public float _y;
+            //public float _pressure;
+            //public int _action;
+            //public string _type;
+            //public int _index;
+            //public string _up;
 
-            //private string[] dta;
+            ////private string[] dta;
 
-            public bool isNew =true;
-            private FormMain form;
+            //public bool isNew =true;
+            //private FormMain form;
 
             //public void SetData()
             //{
@@ -139,14 +143,14 @@ namespace SPenClient
             //    this.up = this.dta[7];
             //}
 
-            public void LoadByteData(byte[] receivedData)
-            {
-                this.switches = receivedData[0];
-                this.x = BitConverter.ToSingle(receivedData, 1);
-                this.y = BitConverter.ToSingle(receivedData, 5);
-                this.pressure = BitConverter.ToSingle(receivedData, 9);
-                this.index = BitConverter.ToUInt32(receivedData, 13);
-            }
+            //public void LoadByteData(byte[] receivedData)
+            //{
+            //    this.switches = receivedData[0];
+            //    this.x = BitConverter.ToSingle(receivedData, 1);
+            //    this.y = BitConverter.ToSingle(receivedData, 5);
+            //    this.pressure = BitConverter.ToSingle(receivedData, 9);
+            //    this.index = BitConverter.ToUInt32(receivedData, 13);
+            //}
 
             //public void SetBackup()
             //{
@@ -170,17 +174,17 @@ namespace SPenClient
             //    this.up = this._up;
             //}
 
-            public int GetX { 
-                get {
-                    return Cursor.Position.X + (int)(x - _x);
-                } 
-            }
+            //public int GetX { 
+            //    get {
+            //        return Cursor.Position.X + (int)(x - _x);
+            //    } 
+            //}
 
-            public int GetY { 
-                get {
-                    return Cursor.Position.Y + (int)(y - _y);
-                } 
-            }
+            //public int GetY { 
+            //    get {
+            //        return Cursor.Position.Y + (int)(y - _y);
+            //    } 
+            //}
         }
 
         private PenData pen;
@@ -188,12 +192,18 @@ namespace SPenClient
         System.IO.MemoryStream ms = new System.IO.MemoryStream(13);
 
         static HIDWriter hwr;
+        string CurrentPath;
+        string LogFilePacketTime;
 
         public FormMain()
         {
             InitializeComponent();
             checkProcessArchMatch();
             checkOSVersion();
+
+            CurrentPath = new Uri(System.Reflection.Assembly.GetExecutingAssembly().GetName().CodeBase).LocalPath;
+            CurrentPath = System.IO.Path.GetDirectoryName(CurrentPath);
+            LogFilePacketTime = CurrentPath + "\\PacketTime.log";
             hwr = new HIDWriter();
             hwr.Find();
             if (!hwr.found)
@@ -275,11 +285,34 @@ namespace SPenClient
                 }
                 else
                 {
+                    time = DateTime.Now.Ticks;
+                    if (tick == 0)
+                        _time = time;
+                    else
+                    {
+                        System.IO.File.AppendAllText(LogFilePacketTime, ((time - _time) / 10000).ToString() + "\n");
+                    }
+                    tick++;
+                    if (time - tpstime >= 10000000)
+                    {
+                        tps = tick;
+                        tick = 0;
+                        tpstime = time;
+                        labelTPS.Text = tps.ToString();
+                        labelSlowest.Text = ((uint)(slowest / 10000)).ToString();
+                    }
+                    if (slowest < (time - _time))
+                        slowest = time - _time;
+                    _time = time;
                     hwr.spenReport.Switches = receiveBytes[0];
                     this.pen.x = BitConverter.ToSingle(receiveBytes, 1);
                     this.pen.y = BitConverter.ToSingle(receiveBytes, 5);
                     this.pen.pressure = BitConverter.ToSingle(receiveBytes, 9);
-                    this.pen.index = BitConverter.ToUInt32(receiveBytes, 13);
+                    index = BitConverter.ToUInt32(receiveBytes, 13);
+                    if (index != 0)
+                        lost = index - _index - 1;
+                    indexC = indexC + index - _index;
+                    _index = index;
                     hwr.spenReport.Index = this.pen.index;
                     hwr.spenReport.X = (UInt16)(this.pen.x * 20);
                     hwr.spenReport.Y = (UInt16)(this.pen.y * 20);
@@ -345,7 +378,18 @@ namespace SPenClient
         {
             bw.CancelAsync();
             bw.Dispose();
+            if (indexC != 0)
+                MessageBox.Show("Packet loss was "+(uint)(lost/indexC)+"%", "SPenClient debug - packet loss report");
             Environment.Exit(0);
+        }
+
+        private void buttonReset_Click(object sender, EventArgs e)
+        {
+            tps = 0;
+            slowest = 0;
+            tick = 0;
+            labelTPS.Text = "0";
+            labelSlowest.Text = "0";
         }
     }
 }

@@ -57,7 +57,7 @@ namespace SPenClient
             ref SP_DEVINFO_DATA DeviceInfoData,
             uint Property,
             string PropertyBuffer,
-            ushort PropertyBufferSize
+            uint PropertyBufferSize
         );
 
         //[DllImport("setupapi.dll", SetLastError = true)]
@@ -94,13 +94,17 @@ namespace SPenClient
             string arch = (Environment.Is64BitOperatingSystem) ? "x64" : "x86";
             string version = (Environment.OSVersion.Version.ToString().Contains("6.1.")) ? "Win7" : "Win8.1";
             InfPath = InfPath + "\\driver\\" + arch + "\\" + version + "\\spenvhid.Inf";
+            //System.Windows.Forms.MessageBox.Show(InfPath, "SPenClient debug - InfPath");
             Boolean bSuccess = false;
             IntPtr DeviceInfoSet = SetupDiCreateDeviceInfoList(ref f3flightGuid, IntPtr.Zero);
             SP_DEVINFO_DATA DeviceInfoData = new SP_DEVINFO_DATA();
             DeviceInfoData.cbSize = (uint)Marshal.SizeOf(DeviceInfoData);
             //if (DeviceInfoSet != ) {
             bSuccess = SetupDiCreateDeviceInfo(DeviceInfoSet, ClassName, ref f3flightGuid, IntPtr.Zero, IntPtr.Zero, DICD_GENERATE_ID, ref DeviceInfoData);
-            bSuccess = SetupDiSetDeviceRegistryProperty(DeviceInfoSet, ref DeviceInfoData, SPDRP_HARDWAREID, hwid, (ushort)hwid.Length);
+            //System.Windows.Forms.MessageBox.Show("SetupDiCreateDeviceInfo result is " + bSuccess, "SPenClient debug");
+            bSuccess = SetupDiSetDeviceRegistryProperty(DeviceInfoSet, ref DeviceInfoData, SPDRP_HARDWAREID, hwid, (uint)hwid.Length);
+            //System.Windows.Forms.MessageBox.Show("SetupDiSetDeviceRegistryProperty result is " + bSuccess, "SPenClient debug");
+
             //uint reqSize = 0;
             //uint propRegDataType = 0;
             //uint bufferSize = 50;
@@ -108,10 +112,14 @@ namespace SPenClient
             //StringBuilder pBuf = new StringBuilder(50);
             //bSuccess = SetupDiGetDeviceRegistryProperty(DeviceInfoSet, ref DeviceInfoData, SPDRP_HARDWAREID, out propRegDataType, propBuffer, bufferSize, out reqSize);
             bSuccess = SetupDiCallClassInstaller(DIF_REGISTERDEVICE, DeviceInfoSet, ref DeviceInfoData);
+            //System.Windows.Forms.MessageBox.Show("SetupDiCallClassInstaller result is " + bSuccess, "SPenClient debug");
+
             //bSuccess = SetupDiCallClassInstaller(DIF_REMOVE, DeviceInfoSet, ref DeviceInfoData);
             bSuccess = SetupDiDestroyDeviceInfoList(DeviceInfoSet);
             bool bRebootRequired = false;
             bSuccess = UpdateDriverForPlugAndPlayDevices(IntPtr.Zero, hwid, InfPath, InstallFlags, ref bRebootRequired);
+            //System.Windows.Forms.MessageBox.Show("UpdateDriverForPlugAndPlayDevices result is " + bSuccess, "SPenClient debug");
+
             return true;
         }
 
