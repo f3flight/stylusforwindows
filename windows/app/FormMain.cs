@@ -217,7 +217,7 @@ namespace SPenClient
             bw.WorkerReportsProgress = true;
             bw.WorkerSupportsCancellation = true;
             bw.DoWork += new DoWorkEventHandler(bw_DoWork);
-            bw.ProgressChanged += new ProgressChangedEventHandler(bw_ProgressChanged);
+            //bw.ProgressChanged += new ProgressChangedEventHandler(bw_ProgressChanged);
             bw.RunWorkerAsync(port);
         }
 
@@ -233,32 +233,32 @@ namespace SPenClient
             store.Close();
         }
 
-        void bw_ProgressChanged(object sender, ProgressChangedEventArgs e)
-        {
-            if (e.UserState.GetType() == typeof(string))
-            {
-                //this.pen.LoadData(e.UserState);
-                //this.pen.SetData();
-            }     
-            else
-            {
-                this.pen.LoadByteData((byte[])e.UserState);
-                hwr.spenReport.Index = this.pen.index;
-                hwr.spenReport.X = (UInt16)(this.pen.x * 20);
-                hwr.spenReport.Y = (UInt16)(this.pen.y * 20);
-                hwr.spenReport.Pressure = (this.pen.pressure <= 1) ? (UInt16)(this.pen.pressure * HIDWriter.PressureMax) : HIDWriter.PressureMax;
-                if ((this.pen.switches & HIDWriter.SwitchInRange) == HIDWriter.SwitchInRange)
-                {
-                    hwr.spenReport.Switches = this.pen.switches;
-                    hwr.Write();
-                }
-                else
-                {
-                    Cursor.Position = new System.Drawing.Point((int)this.pen.x, (int)this.pen.y);
-                }
-            }
+        //void bw_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        //{
+        //    if (e.UserState.GetType() == typeof(string))
+        //    {
+        //        //this.pen.LoadData(e.UserState);
+        //        //this.pen.SetData();
+        //    }     
+        //    else
+        //    {
+        //        this.pen.LoadByteData((byte[])e.UserState);
+        //        hwr.spenReport.Index = this.pen.index;
+        //        hwr.spenReport.X = (UInt16)(this.pen.x * 20);
+        //        hwr.spenReport.Y = (UInt16)(this.pen.y * 20);
+        //        hwr.spenReport.Pressure = (this.pen.pressure <= 1) ? (UInt16)(this.pen.pressure * HIDWriter.PressureMax) : HIDWriter.PressureMax;
+        //        if ((this.pen.switches & HIDWriter.SwitchInRange) == HIDWriter.SwitchInRange)
+        //        {
+        //            hwr.spenReport.Switches = this.pen.switches;
+        //            hwr.Write();
+        //        }
+        //        else
+        //        {
+        //            Cursor.Position = new System.Drawing.Point((int)this.pen.x, (int)this.pen.y);
+        //        }
+        //    }
                 
-        }
+        //}
 
         void bw_DoWork(object sender, DoWorkEventArgs e)
         {
@@ -275,7 +275,24 @@ namespace SPenClient
                 }
                 else
                 {
-                    worker.ReportProgress(0, receiveBytes);
+                    hwr.spenReport.Switches = receiveBytes[0];
+                    this.pen.x = BitConverter.ToSingle(receiveBytes, 1);
+                    this.pen.y = BitConverter.ToSingle(receiveBytes, 5);
+                    this.pen.pressure = BitConverter.ToSingle(receiveBytes, 9);
+                    this.pen.index = BitConverter.ToUInt32(receiveBytes, 13);
+                    hwr.spenReport.Index = this.pen.index;
+                    hwr.spenReport.X = (UInt16)(this.pen.x * 20);
+                    hwr.spenReport.Y = (UInt16)(this.pen.y * 20);
+                    hwr.spenReport.Pressure = (this.pen.pressure <= 1) ? (UInt16)(this.pen.pressure * HIDWriter.PressureMax) : HIDWriter.PressureMax;
+                    if ((hwr.spenReport.Switches & HIDWriter.SwitchInRange) == HIDWriter.SwitchInRange)
+                    {
+                        hwr.Write();
+                    }
+                    else
+                    {
+                        Cursor.Position = new System.Drawing.Point((int)this.pen.x, (int)this.pen.y);
+                    }
+                    //worker.ReportProgress(0, receiveBytes);
                 }
             } while (!worker.CancellationPending);
         }
@@ -328,8 +345,7 @@ namespace SPenClient
         {
             bw.CancelAsync();
             bw.Dispose();
-            System.Threading.Thread.Sleep(1000);
-            //Environment.Exit(0);
+            Environment.Exit(0);
         }
     }
 }
