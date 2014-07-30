@@ -30,13 +30,14 @@ import com.samsung.spensdk.applistener.SCanvasInitializeListener;
 import com.samsung.spensdk.applistener.SPenHoverListener;
 import com.samsung.spensdk.applistener.SPenTouchListener;
 import java.nio.*;
+import android.os.*;
 
 public class MainActivity extends Activity {
 	
 	private SCanvasView mSCanvas;
 	private Context mContext = null;
 	private DatagramSocket socket;
-	private byte[] dtab =new byte[50];
+	private byte[] dtab =new byte[17];
 	private DatagramPacket pack;
 	private InetAddress broadcastAddress;
 	private int counter = 0;
@@ -55,17 +56,31 @@ public class MainActivity extends Activity {
 	private final byte SwitchEraser = 8;
 	private final byte SwitchInRange = 16;
 	private final byte SwitchFinger = 32;
+	
+	int penOnlyTime = 500;
+	long penTimerCountDown;
+	long penTime;
+	
     @Override
     public void onCreate(Bundle savedInstanceState) {
 		spenReport.order(ByteOrder.LITTLE_ENDIAN);
 		
-    	requestWindowFeature(Window.FEATURE_NO_TITLE);
+//    	requestWindowFeature(Window.FEATURE_NO_TITLE);
+		
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy); 
     	super.onCreate(savedInstanceState);
 
     	mContext = this;
         setContentView(R.layout.activity_main);
+		
+		getWindow().getDecorView().setSystemUiVisibility(
+			View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+			| View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+//			| View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+//			| View.SYSTEM_UI_FLAG_FULLSCREEN
+			| View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+		);
         
 		mSCanvas = (SCanvasView) findViewById(R.id.canvas_view);
 		mSCanvas.setSCanvasInitializeListener(mSCanvasInitializeListener);
@@ -133,11 +148,11 @@ public class MainActivity extends Activity {
         return true;
     }
     
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        android.os.Process.killProcess(android.os.Process.myPid());
-    }
+//    @Override
+//    protected void onDestroy() {
+//        super.onDestroy();
+//        android.os.Process.killProcess(android.os.Process.myPid());
+//    }
     
     InetAddress getBroadcastAddress() throws IOException {
         WifiManager wifi = (WifiManager)mContext.getSystemService(WIFI_SERVICE);
@@ -205,9 +220,17 @@ public class MainActivity extends Activity {
 	
 	SPenHoverListener mSPenHoverListener = new SPenHoverListener(){
 		public boolean onHover(View view, MotionEvent event) {
+			
+			penTimeSet();
+			
 			SwitchInRangeState = SwitchInRange;
 			SwitchTipState = 0;
 			SendSignal(event.getX(), event.getY(), event.getPressure(), event.getAction(), "hover");
+			
+			//if(event.getAction() == MotionEvent.ACTION_UP) {
+            //	Toast.makeText(mContext, "UP!", Toast.LENGTH_SHORT).show();
+            //} this doesn't happen
+			
 			return false;
 		}
 
@@ -221,16 +244,18 @@ public class MainActivity extends Activity {
 	SPenTouchListener mSPenTouchListener = new SPenTouchListener(){
 
 		public boolean onTouchFinger(View view, MotionEvent event) {
-            if(event.getAction() == MotionEvent.ACTION_UP) {
-            	upSignal = "up";
-            }
-			SwitchInRangeState = 0;
-			SwitchTipState = 0;
-			SendSignal(event.getX(), event.getY(), event.getPressure(), event.getAction(), "finger");
-			return false;
+			penTimeUpCheck();
+			if(SwitchInRangeState == 0) {
+				if(event.getAction() == MotionEvent.ACTION_UP) {
+					upSignal = "up";
+				}
+				SendSignal(event.getX(), event.getY(), 0, event.getAction(), "finger");
+			}
+			return true;
 		}
 
 		public boolean onTouchPen(View view, MotionEvent event) {
+			penTimeSet();
 			SwitchInRangeState = SwitchInRange;
 			SwitchTipState = SwitchTip;
 			SendSignal(event.getX(), event.getY(), event.getPressure(), event.getAction(), "pen");				
@@ -258,4 +283,21 @@ public class MainActivity extends Activity {
 			AttributeSet attrs) {
 		// TODO Auto-generated method stub
 		return null;
-	}}
+	}
+	
+	void penTimeSet()
+	{
+		penTime = SystemClock.uptimeMillis();
+	}
+	void penTimeUpCheck()
+	{
+		if (SwitchInRangeState != 0)
+	        if (SystemClock.uptimeMillis() - penTime >= penOnlyTime)
+		    {
+			    SwitchInRangeState = 0;
+				SwitchTipState = 0;
+		    }
+			
+	}
+	
+}
