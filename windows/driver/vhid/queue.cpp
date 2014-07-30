@@ -121,7 +121,7 @@ HID_REPORT_DESCRIPTOR           G_DefaultReportDescriptor[] = {
 	0x85, SPEN_OUTPUT_REPORT_ID,   //   REPORT_ID
 	0x09, 0x01,                      // USAGE (Vendor Usage 0x01)
 	0x75, 0x08,                    //     REPORT_SIZE (in bits - 1 byte)
-	0x95, 0x0e,						// REPORT_COUNT (14 bytes)
+	0x95, 0x0a,						// REPORT_COUNT (14 bytes)
 	0x91, 0x02,                    //     OUTPUT (Data,Var,Abs)
 	0xc0,                           // END_COLLECTION
 };
@@ -1164,7 +1164,7 @@ Return Value:
     UCHAR reportId; 
     SIZE_T pOutBufferSize;
     //PHIDMINI_OUTPUT_REPORT outputReport = NULL;
-	PSPEN_WRITEREPORT spenReport = NULL;
+	PSPEN_REPORT spenReport = NULL;
 
 	IWDFMemory *memory2 = NULL;
 	PVOID buffer;
@@ -1212,14 +1212,14 @@ Return Value:
     }
 
     //outputReport = (PHIDMINI_OUTPUT_REPORT) memory->GetDataBuffer(&inBufferCb);
-	spenReport = (PSPEN_WRITEREPORT)memory->GetDataBuffer(&inBufferCb);
+	spenReport = (PSPEN_REPORT)memory->GetDataBuffer(&inBufferCb);
     SAFE_RELEASE(memory);
 
     //
     // make sure buffer is big enough.
     //
     //reportSize = sizeof(HIDMINI_OUTPUT_REPORT);  
-	reportSize = sizeof(SPEN_WRITEREPORT);
+	reportSize = sizeof(SPEN_REPORT);
 	if (inBufferCb != reportSize) 
     {
         hr =  HRESULT_FROM_NT(STATUS_INVALID_BUFFER_SIZE);
@@ -1228,6 +1228,7 @@ Return Value:
         return hr;
     }
 
+	FxRequest->SetInformation(reportSize);
     //
     // Store the device data in device extension. 
     //
@@ -1243,21 +1244,20 @@ Return Value:
     //
     // set status and information
     //
-    FxRequest->SetInformation(reportSize);
 
 	IWDFIoRequest *readFxRequest = NULL;
 	hr = m_Device->m_ManualQueue->GetQueue()->RetrieveNextRequest(&readFxRequest);
 	if (SUCCEEDED(hr)) {
 		IWDFIoRequest2 *fxRequest2;
 
-		if (!((m_Device->m_SpenLastState.Switches & SwitchInRange) == SwitchInRange))
-		{
-			Trace(TRACE_LEVEL_INFORMATION, "Stylus not in range.");
-			hr = HRESULT_FROM_NT(STATUS_DEVICE_NOT_READY);
-			readFxRequest->Complete(hr);
-			readFxRequest->Release();
-			return hr;
-		}
+		//if (!((spenReport->Switches & SwitchInRange) == SwitchInRange))
+		//{
+		//	Trace(TRACE_LEVEL_INFORMATION, "Stylus not in range.");
+		//	hr = HRESULT_FROM_NT(STATUS_DEVICE_NOT_READY);
+		//	readFxRequest->Complete(hr);
+		//	readFxRequest->Release();
+		//	return hr;
+		//}
 
 		/*if (This->m_Device->m_SpenLastStateLastIndex >= This->m_Device->m_SpenLastStateIndex)
 		{

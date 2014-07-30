@@ -26,7 +26,6 @@ namespace SPenClient
             public byte XTilt;
             public byte YTilt;
             public byte Twist;
-            public UInt32 Index;
             //public byte Reserved;
         };
         public const byte SwitchTip     = 1;     // These const bytes should be used with logical OR to fill Switches byte; Bit-field imitation.

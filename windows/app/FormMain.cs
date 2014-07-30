@@ -18,7 +18,7 @@ namespace SPenClient
     public partial class FormMain : Form
     {
         uint index, _index, indexC, lost;
-        long tick, time, _time, tpstime, slowest, average, fastest;
+        long tick, time, _time, tpstime, slowest;
         float tps;
 
         public class PenData
@@ -298,8 +298,8 @@ namespace SPenClient
                         tps = tick;
                         tick = 0;
                         tpstime = time;
-                        labelTPS.Text = tps.ToString();
-                        labelSlowest.Text = ((uint)(slowest / 10000)).ToString();
+                        //labelTPS.Text = tps.ToString();
+                        //labelSlowest.Text = ((uint)(slowest / 10000)).ToString();
                     }
                     if (slowest < (time - _time))
                         slowest = time - _time;
@@ -313,7 +313,6 @@ namespace SPenClient
                         lost = index - _index - 1;
                     indexC = indexC + index - _index;
                     _index = index;
-                    hwr.spenReport.Index = this.pen.index;
                     hwr.spenReport.X = (UInt16)(this.pen.x * 20);
                     hwr.spenReport.Y = (UInt16)(this.pen.y * 20);
                     hwr.spenReport.Pressure = (this.pen.pressure <= 1) ? (UInt16)(this.pen.pressure * HIDWriter.PressureMax) : HIDWriter.PressureMax;

@@ -136,18 +136,6 @@ typedef struct _SPEN_REPORT
 	UCHAR Twist		: 8;
 } SPEN_REPORT, *PSPEN_REPORT;
 
-typedef struct _SPEN_WRITEREPORT
-{
-	UCHAR ReportID : 8;
-	UCHAR Switches : 8;
-	USHORT X : 16;
-	USHORT Y : 16;
-	USHORT Pressure : 16;
-	UCHAR XTilt : 8;
-	UCHAR YTilt : 8;
-	UCHAR Twist : 8;
-	UINT Index : 32;
-} SPEN_WRITEREPORT, *PSPEN_WRITEREPORT;
 #pragma pack(pop)
 #define SwitchTip		0x01
 #define SwitchBarrel	0x02
