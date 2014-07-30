@@ -382,6 +382,9 @@
     <PostBuildEvent>
       <Command>xcopy /Y $(ProjectDir)x64\Win8.1Debug\package\* $(SolutionDir)app\driver\x64\Win8.1\</Command>
     </PostBuildEvent>
+    <Inf2Cat>
+      <UseLocalTime>true</UseLocalTime>
+    </Inf2Cat>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Win7 Debug|x64'">
     <PostBuildEvent>

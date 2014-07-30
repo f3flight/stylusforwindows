@@ -20,6 +20,7 @@ namespace SPenClient
         uint index, _index, indexC, lost;
         long tick, time, _time, tpstime, slowest;
         float tps;
+        bool stylus = false;
 
         public class PenData
         {
@@ -227,7 +228,7 @@ namespace SPenClient
             bw.WorkerReportsProgress = true;
             bw.WorkerSupportsCancellation = true;
             bw.DoWork += new DoWorkEventHandler(bw_DoWork);
-            //bw.ProgressChanged += new ProgressChangedEventHandler(bw_ProgressChanged);
+            bw.ProgressChanged += new ProgressChangedEventHandler(bw_ProgressChanged);
             bw.RunWorkerAsync(port);
         }
 
@@ -243,8 +244,11 @@ namespace SPenClient
             store.Close();
         }
 
-        //void bw_ProgressChanged(object sender, ProgressChangedEventArgs e)
-        //{
+        void bw_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            labelTPS.Text = tps.ToString();
+            labelSlowest.Text = ((long)(slowest / 10000)).ToString();
+        }
         //    if (e.UserState.GetType() == typeof(string))
         //    {
         //        //this.pen.LoadData(e.UserState);
@@ -298,8 +302,6 @@ namespace SPenClient
                         tps = tick;
                         tick = 0;
                         tpstime = time;
-                        //labelTPS.Text = tps.ToString();
-                        //labelSlowest.Text = ((uint)(slowest / 10000)).ToString();
                     }
                     if (slowest < (time - _time))
                         slowest = time - _time;
@@ -307,24 +309,32 @@ namespace SPenClient
                     hwr.spenReport.Switches = receiveBytes[0];
                     this.pen.x = BitConverter.ToSingle(receiveBytes, 1);
                     this.pen.y = BitConverter.ToSingle(receiveBytes, 5);
-                    this.pen.pressure = BitConverter.ToSingle(receiveBytes, 9);
+                   
                     index = BitConverter.ToUInt32(receiveBytes, 13);
                     if (index != 0)
                         lost = index - _index - 1;
                     indexC = indexC + index - _index;
                     _index = index;
-                    hwr.spenReport.X = (UInt16)(this.pen.x * 20);
-                    hwr.spenReport.Y = (UInt16)(this.pen.y * 20);
-                    hwr.spenReport.Pressure = (this.pen.pressure <= 1) ? (UInt16)(this.pen.pressure * HIDWriter.PressureMax) : HIDWriter.PressureMax;
+
                     if ((hwr.spenReport.Switches & HIDWriter.SwitchInRange) == HIDWriter.SwitchInRange)
                     {
+                        stylus = true;
+                        this.pen.pressure = BitConverter.ToSingle(receiveBytes, 9);
+                        hwr.spenReport.X = (UInt16)(this.pen.x * 20);
+                        hwr.spenReport.Y = (UInt16)(this.pen.y * 20);
+                        hwr.spenReport.Pressure = (this.pen.pressure <= 1) ? (UInt16)(this.pen.pressure * HIDWriter.PressureMax) : HIDWriter.PressureMax;
                         hwr.Write();
                     }
                     else
                     {
+                        if (stylus)
+                        {
+                            stylus = false;
+                            hwr.Write();
+                        }
                         Cursor.Position = new System.Drawing.Point((int)this.pen.x, (int)this.pen.y);
                     }
-                    //worker.ReportProgress(0, receiveBytes);
+                    worker.ReportProgress(0, null);
                 }
             } while (!worker.CancellationPending);
         }

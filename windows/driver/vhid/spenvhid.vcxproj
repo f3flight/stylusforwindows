@@ -511,7 +511,7 @@
       <ModuleDefinitionFile>exports.def</ModuleDefinitionFile>
     </Link>
     <Inf>
-      <TimeStamp>0.0.0.1</TimeStamp>
+      <TimeStamp>0.0.0.3</TimeStamp>
     </Inf>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Win8 Release|x64'">
@@ -536,7 +536,7 @@
       <ModuleDefinitionFile>exports.def</ModuleDefinitionFile>
     </Link>
     <Inf>
-      <TimeStamp>0.0.0.1</TimeStamp>
+      <TimeStamp>0.0.0.3</TimeStamp>
     </Inf>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Win8.1 Release|x64'">
@@ -561,7 +561,7 @@
       <ModuleDefinitionFile>exports.def</ModuleDefinitionFile>
     </Link>
     <Inf>
-      <TimeStamp>0.0.0.1</TimeStamp>
+      <TimeStamp>0.0.0.3</TimeStamp>
     </Inf>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Win7 Debug|x64'">
@@ -586,7 +586,7 @@
       <ModuleDefinitionFile>exports.def</ModuleDefinitionFile>
     </Link>
     <Inf>
-      <TimeStamp>0.0.0.1</TimeStamp>
+      <TimeStamp>0.0.0.3</TimeStamp>
     </Inf>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Win8 Debug|x64'">
@@ -611,7 +611,7 @@
       <ModuleDefinitionFile>exports.def</ModuleDefinitionFile>
     </Link>
     <Inf>
-      <TimeStamp>0.0.0.1</TimeStamp>
+      <TimeStamp>0.0.0.3</TimeStamp>
     </Inf>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Win8.1 Debug|x64'">
@@ -636,7 +636,7 @@
       <ModuleDefinitionFile>exports.def</ModuleDefinitionFile>
     </Link>
     <Inf>
-      <TimeStamp>0.0.0.1</TimeStamp>
+      <TimeStamp>0.0.0.3</TimeStamp>
     </Inf>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Win7 Release|Win32'">
@@ -661,7 +661,7 @@
       <ModuleDefinitionFile>exports.def</ModuleDefinitionFile>
     </Link>
     <Inf>
-      <TimeStamp>0.0.0.1</TimeStamp>
+      <TimeStamp>0.0.0.3</TimeStamp>
     </Inf>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Win8 Release|Win32'">
@@ -686,7 +686,7 @@
       <ModuleDefinitionFile>exports.def</ModuleDefinitionFile>
     </Link>
     <Inf>
-      <TimeStamp>0.0.0.1</TimeStamp>
+      <TimeStamp>0.0.0.3</TimeStamp>
     </Inf>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Win8.1 Release|Win32'">
@@ -711,7 +711,7 @@
       <ModuleDefinitionFile>exports.def</ModuleDefinitionFile>
     </Link>
     <Inf>
-      <TimeStamp>0.0.0.1</TimeStamp>
+      <TimeStamp>0.0.0.3</TimeStamp>
     </Inf>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Win7 Debug|Win32'">
@@ -736,7 +736,7 @@
       <ModuleDefinitionFile>exports.def</ModuleDefinitionFile>
     </Link>
     <Inf>
-      <TimeStamp>0.0.0.1</TimeStamp>
+      <TimeStamp>0.0.0.3</TimeStamp>
     </Inf>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Win8 Debug|Win32'">
@@ -761,7 +761,7 @@
       <ModuleDefinitionFile>exports.def</ModuleDefinitionFile>
     </Link>
     <Inf>
-      <TimeStamp>0.0.0.1</TimeStamp>
+      <TimeStamp>0.0.0.3</TimeStamp>
     </Inf>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Win8.1 Debug|Win32'">
@@ -786,7 +786,7 @@
       <ModuleDefinitionFile>exports.def</ModuleDefinitionFile>
     </Link>
     <Inf>
-      <TimeStamp>0.0.0.1</TimeStamp>
+      <TimeStamp>0.0.0.3</TimeStamp>
     </Inf>
   </ItemDefinitionGroup>
   <ItemGroup>
