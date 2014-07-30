@@ -1,4 +1,4 @@
-package lv.piip.spendigitizer;
+package ru.f3flight.spendigitizer;
 
 import java.io.IOException;
 import java.net.DatagramPacket;

@@ -1,4 +1,4 @@
-package lv.piip.spendigitizer;
+package ru.f3flight.spendigitizer;
 
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
