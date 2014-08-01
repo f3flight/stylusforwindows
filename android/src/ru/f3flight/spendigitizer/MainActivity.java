@@ -31,6 +31,7 @@ import com.samsung.spensdk.applistener.SPenHoverListener;
 import com.samsung.spensdk.applistener.SPenTouchListener;
 import java.nio.*;
 import android.os.*;
+import java.lang.reflect.*;
 
 public class MainActivity extends Activity {
 	
@@ -157,11 +158,60 @@ public class MainActivity extends Activity {
     InetAddress getBroadcastAddress() throws IOException {
         WifiManager wifi = (WifiManager)mContext.getSystemService(WIFI_SERVICE);
         DhcpInfo dhcp = wifi.getDhcpInfo();
-        int broadcast = (dhcp.ipAddress & dhcp.netmask) | ~dhcp.netmask;
-        byte[] quads = new byte[4];
-        for (int k = 0; k < 4; k++)
-          quads[k] = (byte) ((broadcast >> k * 8) & 0xFF);
-        return InetAddress.getByAddress(quads);
+		if (dhcp.ipAddress == 0)
+		{
+			try
+			{
+				Method method = wifi.getClass().getDeclaredMethod("getWifiApState");
+				method.setAccessible(true);
+				try
+				{
+					int actualState = (Integer) method.invoke(wifi, (Object[]) null);
+					// Fix for Android 4
+					if (actualState>= 10) {
+				        actualState -= 10;
+					}
+					if (actualState == 3)
+					{
+						Toast.makeText(mContext, "WiFi AP mode", Toast.LENGTH_SHORT).show();
+						return InetAddress.getByName("192.168.43.255");
+					}
+					else
+					{
+						Toast.makeText(mContext, "WiFi AP state is bad: "+actualState, Toast.LENGTH_SHORT).show();
+					}
+					
+				}
+				catch (IllegalArgumentException e)
+				{
+					Toast.makeText(mContext, "invoke - illegalArgument", Toast.LENGTH_SHORT).show();
+				}
+				catch (IllegalAccessException e)
+				{
+					Toast.makeText(mContext, "invoke - illegalAccess", Toast.LENGTH_SHORT).show();
+				}
+				catch (InvocationTargetException e)
+				{
+					Toast.makeText(mContext, "invoke - invocationTargetException", Toast.LENGTH_SHORT).show();
+				}
+			}
+			catch (NoSuchMethodException e)
+			{
+				Toast.makeText(mContext, "getWifiApState - no such method", Toast.LENGTH_SHORT).show();
+			}
+			
+		}
+		else
+		{
+			int broadcast = (dhcp.ipAddress & dhcp.netmask) | ~dhcp.netmask;
+			byte[] quads = new byte[4];
+			for (int k = 0; k < 4; k++)
+				quads[k] = (byte) ((broadcast >> k * 8) & 0xFF);
+				Toast.makeText(mContext, "WiFi mode", Toast.LENGTH_SHORT).show();
+			return InetAddress.getByAddress(quads);
+		}
+		Toast.makeText(mContext, "No network detected, please use wifi or hotspot and restart the app", Toast.LENGTH_LONG).show();
+		return InetAddress.getLoopbackAddress();
     }
     
     public void Init()
