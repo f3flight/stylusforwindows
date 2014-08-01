@@ -1,0 +1,10 @@
+VERSION LOG
+
+0.0.0.3:
+- HotSpot wifi mode should be supported (preliminary support, may not work)
+
+0.0.0.2:
+- don't remember really %) a few changes
+
+0.0.0.1:
+- initial version
