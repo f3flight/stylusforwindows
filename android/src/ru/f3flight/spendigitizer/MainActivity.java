@@ -1,50 +1,38 @@
 package ru.f3flight.spendigitizer;
 
-import java.io.IOException;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
-import java.net.InetAddress;
-
-import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.graphics.Color;
-import android.net.DhcpInfo;
-import android.net.wifi.WifiManager;
-import android.os.Bundle;
-import android.os.StrictMode;
-import android.preference.PreferenceManager;
-import android.util.AttributeSet;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
-import android.widget.Toast;
-
-import com.samsung.samm.common.SObjectStroke;
-import com.samsung.spensdk.SCanvasView;
-import com.samsung.spensdk.applistener.SCanvasInitializeListener;
-import com.samsung.spensdk.applistener.SPenHoverListener;
-import com.samsung.spensdk.applistener.SPenTouchListener;
-import java.nio.*;
+import android.app.*;
+import android.content.*;
+import android.graphics.*;
+import android.net.*;
+import android.net.wifi.*;
 import android.os.*;
+import android.preference.*;
+import android.util.*;
+import android.view.*;
+import android.widget.*;
+import com.samsung.samm.common.*;
+import com.samsung.spensdk.*;
+import com.samsung.spensdk.applistener.*;
+import java.io.*;
 import java.lang.reflect.*;
+import java.net.*;
+import java.nio.*;
 
 public class MainActivity extends Activity {
 	
 	private SCanvasView mSCanvas;
 	private Context mContext = null;
 	private DatagramSocket socket;
-	private byte[] dtab =new byte[17];
+	private byte[] dtab =new byte[21]; //size of data packet
 	private DatagramPacket pack;
 	private InetAddress broadcastAddress;
 	private int counter = 0;
-	private String signalType;
+	//private String signalType;
+	private int screenWidth, screenHeight;
+	private float screenProportions, inputX, inputY;
+	
 	private String upSignal="";
-	private ByteBuffer spenReport = ByteBuffer.allocate(17);
+	private ByteBuffer spenReport;
 	private byte SwitchTipState;
 	private byte SwitchBarrelState;
 	private byte SwitchInvertState;
@@ -64,8 +52,8 @@ public class MainActivity extends Activity {
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
+		spenReport = ByteBuffer.allocate(dtab.length);
 		spenReport.order(ByteOrder.LITTLE_ENDIAN);
-		
 //    	requestWindowFeature(Window.FEATURE_NO_TITLE);
 		
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
@@ -93,8 +81,23 @@ public class MainActivity extends Activity {
     protected void onResume() {
         super.onResume();
         Init();
+		
+		Display display = getWindowManager().getDefaultDisplay();
+		Point point = new Point();
+		display.getSize(point);
+		screenWidth = point.x;
+		screenHeight = point.y;
+		screenProportions = 1.0f*screenWidth/screenHeight;
+		//Toast.makeText(mContext, "prop:"+screenProportions, Toast.LENGTH_SHORT).show();
     }
 
+	private void setInputXY(float x, float y)
+	{
+		inputX = x/screenWidth;
+		inputY = y/screenHeight;
+		
+	}
+	
     private void SendSignal(float x, float y, float pressure, int action, String type)
     {
 		try {
@@ -102,10 +105,12 @@ public class MainActivity extends Activity {
 	    	//{
 	    	//	counter=0;
 	    	//}
+			setInputXY(x, y);
 			spenReport.clear();
 			spenReport.put((byte)(SwitchTipState+SwitchBarrelState+SwitchInvertState+SwitchEraserState+SwitchInRangeState+SwitchFingerState));
-			spenReport.putFloat(x);
-			spenReport.putFloat(y);
+			spenReport.putFloat(inputX);
+			spenReport.putFloat(inputY);
+			spenReport.putFloat(screenProportions);
 			spenReport.putFloat(pressure);
 			spenReport.putInt(counter);
 			//spenReportX = ByteBuffer.allocate(4).putFloat(x).array();
@@ -122,7 +127,7 @@ public class MainActivity extends Activity {
 			//signalType=type;
 		} catch (Exception e) {
 			e.printStackTrace();
-			Toast.makeText(mContext, e.getMessage(), Toast.LENGTH_SHORT).show();
+			Toast.makeText(mContext, "error in SendSignal:"+e.getMessage(), Toast.LENGTH_SHORT).show();
 		}
     }
     
