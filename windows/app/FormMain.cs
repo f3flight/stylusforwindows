@@ -11,6 +11,7 @@ using System.Runtime.InteropServices;
 using System.IO;
 using System.Reflection;
 using System.Security.Cryptography.X509Certificates;
+using System.Diagnostics;
 
 namespace SPenClient
 {
@@ -21,6 +22,12 @@ namespace SPenClient
         long tick, time, _time, tpstime, slowest;
         float tps;
         bool stylus = false;
+        float spenScreenProportions, currentScreenProportions, proportionsDiff, inputX, inputY, convertedX, convertedY;
+        float currentScreenWidth, currentScreenHeight, proportionalScreenWidth, proportionalScreenHeight;
+        float virtualEdgeXLow, virtualEdgeXHigh, virtualEdgeYLow, virtualEdgeYHigh;
+        Screen currentScreen;
+        int penMaxX = 32767;
+        int penMaxY = 32767;
 
         public class PenData
         {
@@ -220,6 +227,7 @@ namespace SPenClient
             }
             pen = new PenData(this);
             init(12333);
+            updateScreenProperties();
         }
 
         private void init(int port)
@@ -307,21 +315,32 @@ namespace SPenClient
                         slowest = time - _time;
                     _time = time;
                     hwr.spenReport.Switches = receiveBytes[0];
-                    this.pen.x = BitConverter.ToSingle(receiveBytes, 1);
-                    this.pen.y = BitConverter.ToSingle(receiveBytes, 5);
-                   
-                    index = BitConverter.ToUInt32(receiveBytes, 13);
+                    inputX = BitConverter.ToSingle(receiveBytes, 1);
+                    inputY = BitConverter.ToSingle(receiveBytes, 5);
+                    spenScreenProportions = BitConverter.ToSingle(receiveBytes, 9);
+                    index = BitConverter.ToUInt32(receiveBytes, 17);
                     if (index != 0)
                         lost = index - _index - 1;
                     indexC = indexC + index - _index;
                     _index = index;
 
+                    proportionsDiff = spenScreenProportions - currentScreenProportions;
+
+                    virtualEdgeXLow = (proportionsDiff > 0) ? (spenScreenProportions - currentScreenProportions) / 2 : 0;
+                    virtualEdgeXHigh = 1 - virtualEdgeXLow;
+                    virtualEdgeYLow = (proportionsDiff < 0) ? (1 - spenScreenProportions / currentScreenProportions) / 2 : 0;
+                    virtualEdgeYHigh = 1 - virtualEdgeYLow;
+                    proportionalScreenWidth = virtualEdgeXHigh - virtualEdgeXLow;
+                    proportionalScreenHeight = virtualEdgeYHigh - virtualEdgeYLow;
+                    convertedX = (inputX - virtualEdgeXLow) / proportionalScreenWidth;
+                    convertedY = (inputY - virtualEdgeYLow) / proportionalScreenHeight;
+
                     if ((hwr.spenReport.Switches & HIDWriter.SwitchInRange) == HIDWriter.SwitchInRange)
                     {
                         stylus = true;
-                        this.pen.pressure = BitConverter.ToSingle(receiveBytes, 9);
-                        hwr.spenReport.X = (UInt16)(this.pen.x * 20);
-                        hwr.spenReport.Y = (UInt16)(this.pen.y * 20);
+                        this.pen.pressure = BitConverter.ToSingle(receiveBytes, 13);
+                        hwr.spenReport.X = (UInt16)(convertedX * penMaxX);
+                        hwr.spenReport.Y = (UInt16)(convertedY * penMaxY);
                         hwr.spenReport.Pressure = (this.pen.pressure <= 1) ? (UInt16)(this.pen.pressure * HIDWriter.PressureMax) : HIDWriter.PressureMax;
                         hwr.Write();
                     }
@@ -332,7 +351,7 @@ namespace SPenClient
                             stylus = false;
                             hwr.Write();
                         }
-                        Cursor.Position = new System.Drawing.Point((int)this.pen.x, (int)this.pen.y);
+                        Cursor.Position = new System.Drawing.Point((int)(convertedY * currentScreen.Bounds.Width), (int)(currentScreen.Bounds.Height));
                     }
                     worker.ReportProgress(0, null);
                 }
@@ -381,6 +400,12 @@ namespace SPenClient
             {
                 MessageBox.Show("Your OS is not Windows 7 or Windows 8.1, sorry.", "SPenClient error - untested OS");
             }
+        }
+
+        private void updateScreenProperties()
+        {
+            currentScreen = System.Windows.Forms.Screen.FromHandle(Process.GetCurrentProcess().MainWindowHandle);
+            currentScreenProportions = (float)currentScreen.Bounds.Width / currentScreen.Bounds.Height;
         }
 
         private void buttonUninstall_Click(object sender, EventArgs e)
