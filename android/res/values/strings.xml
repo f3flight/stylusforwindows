@@ -4,6 +4,7 @@
     <string name="menu_settings">Settings</string>
     <string name="menu_exit">Exit</string>
     <string name="menu_clear">Clear</string>
+	<string name="menu_background_image">Set Background Image...</string>
     <string name="title_activity_main">S-Pen Digitizer</string>
     <string name="set_preferences">S-Pen Digitizer Preferences</string>
     <string-array name="listArray">
