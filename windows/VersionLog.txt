@@ -2,3 +2,8 @@ VERSION LOG
 
 0.0.0.5:
  - fixed typo in 0.0.0.4 which caused finger input to move mouse to wrong coordinates.
+ 
+0.0.0.4:
+ - Windows screen fits android screen, with proper proportions.
+	In portrain mode upper and lower areas of Android screen are discarded (due to fitting),
+	unless you use your Windows screen in portrait mode too.
