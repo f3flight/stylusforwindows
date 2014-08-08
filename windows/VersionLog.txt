@@ -1,0 +1,4 @@
+VERSION LOG
+
+0.0.0.5:
+ - fixed typo in 0.0.0.4 which caused finger input to move mouse to wrong coordinates.
