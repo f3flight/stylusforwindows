@@ -125,6 +125,32 @@ namespace SPenClient
 
         public static bool removeDevice()
         {
+            HIDWriter.CloseHIDHandle();
+            IntPtr hardwareDeviceInfo = HIDWriter.SetupDiGetClassDevs(ref f3flightGuid, IntPtr.Zero, IntPtr.Zero, 0);
+            HIDWriter.SP_DEVICE_INTERFACE_DATA deviceInterfaceData = new HIDWriter.SP_DEVICE_INTERFACE_DATA();
+            deviceInterfaceData.cbSize = (uint)Marshal.SizeOf(deviceInterfaceData);
+            UInt32 i = 0;
+            while (HIDWriter.SetupDiEnumDeviceInterfaces(hardwareDeviceInfo, IntPtr.Zero, ref f3flightGuid, i, ref deviceInterfaceData))
+            {
+                HIDWriter.SP_DEVICE_INTERFACE_DETAIL_DATA didd = new HIDWriter.SP_DEVICE_INTERFACE_DETAIL_DATA();
+                if (IntPtr.Size == 8) // for 64 bit operating systems
+                    didd.cbSize = 8;
+                else
+                    didd.cbSize = 4 + (uint)Marshal.SystemDefaultCharSize;
+                UInt32 bufferSize = 0;
+                UInt32 requiredSize = 0;
+                bool result;
+                int error;
+                result = HIDWriter.SetupDiGetDeviceInterfaceDetail(hardwareDeviceInfo, ref deviceInterfaceData, IntPtr.Zero, bufferSize, out requiredSize, IntPtr.Zero);
+                error = Marshal.GetLastWin32Error();
+                didd.DevicePath = new string(char.MinValue, 256);
+                uint nBytes = (uint)didd.DevicePath.Length;
+                result = HIDWriter.SetupDiGetDeviceInterfaceDetail(hardwareDeviceInfo, ref deviceInterfaceData, ref didd, nBytes, out requiredSize, IntPtr.Zero);
+                if (result)
+                {
+                    return true;
+                }
+            }
             return true;
         }
     }

@@ -413,8 +413,9 @@ namespace SPenClient
         {
             bw.CancelAsync();
             bw.Dispose();
+            DeviceManager.removeDevice();
             if (indexC != 0)
-                MessageBox.Show("Packet loss was "+(uint)(lost/indexC)+"%", "SPenClient debug - packet loss report");
+                MessageBox.Show("total packets "+indexC+", lost "+lost, "SPenClient debug - packet loss report");
             Environment.Exit(0);
         }
 

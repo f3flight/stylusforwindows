@@ -45,7 +45,7 @@ namespace SPenClient
 
         //------------- SetupDiGetClassDevs ------------------
         [DllImport("setupapi.dll", CharSet = CharSet.Auto)]
-        static extern IntPtr SetupDiGetClassDevs(ref Guid ClassGuid, IntPtr Enumerator, IntPtr hwndParent, int Flags);
+        public static extern IntPtr SetupDiGetClassDevs(ref Guid ClassGuid, IntPtr Enumerator, IntPtr hwndParent, int Flags);
         const int DIGCF_PRESENT = 0x00000002;
         const int DIGCF_INTERFACEDEVICE = 0x00000010;
         //------------- SetupDiGetClassDevs ------------------
@@ -61,7 +61,7 @@ namespace SPenClient
             public IntPtr Reserved;
         }
         [DllImport("setupapi.dll", CharSet = CharSet.Auto, SetLastError = true)]
-        static extern Boolean SetupDiEnumDeviceInterfaces(
+        public static extern Boolean SetupDiEnumDeviceInterfaces(
            IntPtr hDevInfo, IntPtr devInfo,
            ref Guid interfaceClassGuid, UInt32 memberIndex,
            ref SP_DEVICE_INTERFACE_DATA deviceInterfaceData
@@ -78,7 +78,7 @@ namespace SPenClient
             public string DevicePath;
         }
         [DllImport("setupapi.dll", CharSet = CharSet.Auto, SetLastError = true)]
-        static extern Boolean SetupDiGetDeviceInterfaceDetail(
+        public static extern Boolean SetupDiGetDeviceInterfaceDetail(
            IntPtr hDevInfo,
            ref SP_DEVICE_INTERFACE_DATA deviceInterfaceData,
            ref SP_DEVICE_INTERFACE_DETAIL_DATA deviceInterfaceDetailData,
@@ -88,7 +88,7 @@ namespace SPenClient
         );
 
         [DllImport("setupapi.dll", CharSet = CharSet.Auto, SetLastError = true)]
-        static extern Boolean SetupDiGetDeviceInterfaceDetail(
+        public static extern Boolean SetupDiGetDeviceInterfaceDetail(
            IntPtr hDevInfo,
            ref SP_DEVICE_INTERFACE_DATA deviceInterfaceData,
            IntPtr NULL,
@@ -174,7 +174,13 @@ namespace SPenClient
         //------------- SetupDiDestroyDeviceInfoList ---------
 
 
-        private SafeFileHandle file;
+        //------------- CloseHandle --------------------------
+        [DllImport("Kernel32.dll", SetLastError = true)]
+        static extern Boolean CloseHandle(SafeFileHandle handle);
+        //------------- CloseHandle --------------------------
+
+
+        private static SafeFileHandle file;
         public bool found = false;
         public SPEN_REPORT spenReport = new SPEN_REPORT();
 
@@ -273,6 +279,11 @@ namespace SPenClient
                 int error = Marshal.GetLastWin32Error();
             }
             return bSuccess;
+        }
+
+        public static Boolean CloseHIDHandle()
+        {
+            return CloseHandle(file);
         }
     }
 }
