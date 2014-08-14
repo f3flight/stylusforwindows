@@ -1245,6 +1245,15 @@ Return Value:
     // set status and information
     //
 
+	//m_Device->m_TimestampCurrent = GetTickCount64();
+	//if (m_Device->m_TimestampLast == 0)
+	//	m_Device->m_TimestampLast = m_Device->m_TimestampCurrent;
+
+	FILETIME dueTime;
+	// here we set timer to fire if no input was received in 80 milliseconds - to fight interruptions)
+	*reinterpret_cast<PLONGLONG>(&dueTime) = -static_cast<LONGLONG>(MILLI_SECOND_TO_NANO100(80));
+	SetThreadpoolTimer(m_Device->m_ManualQueue->GetTimer(), &dueTime, 0, 0);
+
 	IWDFIoRequest *readFxRequest = NULL;
 	hr = m_Device->m_ManualQueue->GetQueue()->RetrieveNextRequest(&readFxRequest);
 	if (SUCCEEDED(hr)) {
@@ -1670,46 +1679,26 @@ CMyManualQueue::_TimerCallback(
     IWDFMemory *memory = NULL;
     PVOID buffer;
     SIZE_T bufferSizeCb;
-    ULONG readReportSizeCb = sizeof(HIDMINI_INPUT_REPORT);
-    //PHIDMINI_INPUT_REPORT readReport;
-    
+    ULONG readReportSizeCb = sizeof(SPEN_REPORT);
     UNREFERENCED_PARAMETER(Instance);
+	UNREFERENCED_PARAMETER(Context);
     UNREFERENCED_PARAMETER(Timer);
-
-    //Trace(TRACE_LEVEL_INFORMATION, "_TimerCallback CMyQueue 0x%p\n", This);
-
-	//ULONG spenReportSizeCb = sizeof(SPEN_REPORT);
-	//PSPEN_REPORT spenReport;
-
-    //
-    // see if we have a request in manual queue
-    //
     hr = This->GetQueue()->RetrieveNextRequest(&fxRequest);
+
     if (SUCCEEDED(hr)) {
-        IWDFIoRequest2 *fxRequest2; 
-
-		/*if (This->m_Device->m_SpenLastStateLastIndex >= This->m_Device->m_SpenLastStateIndex)
-		{
-			Trace(TRACE_LEVEL_INFORMATION, "No new data, skipping. LastIndex=%d, Index=%d", This->m_Device->m_SpenLastStateLastIndex, This->m_Device->m_SpenLastStateIndex);
-			hr = HRESULT_FROM_NT(STATUS_DEVICE_NOT_READY);
-			fxRequest->Complete(hr);
-			fxRequest->Release();
-			return;
-		}*/
-        //Trace(TRACE_LEVEL_INFORMATION, "retrieved read request from manual queue CMyManualQueue 0x%p\n", This);
-
+        IWDFIoRequest2 *fxRequest2;
         hr = fxRequest->QueryInterface(IID_PPV_ARGS(&fxRequest2));
+
         if (FAILED(hr)){
             Trace(TRACE_LEVEL_ERROR, "QueryInterface failed %!hresult!", hr);
             fxRequest->Complete(hr);
             fxRequest->Release();
             return;
         }
+
         fxRequest2->Release();
-
-        //Trace(TRACE_LEVEL_INFORMATION, "EffectiveIoType: %d\n", fxRequest2->GetEffectiveIoType());
-
         hr = fxRequest2->RetrieveOutputMemory(&memory);
+
         if (FAILED(hr)) {
             Trace(TRACE_LEVEL_ERROR, "RetrieveINputMemory failed %!hresult!", hr);
             fxRequest2->Complete(hr);
@@ -1719,29 +1708,17 @@ CMyManualQueue::_TimerCallback(
 
         buffer = memory->GetDataBuffer(&bufferSizeCb);
         memory->Release();
-        
-        if (bufferSizeCb < readReportSizeCb) 
+
+        if (bufferSizeCb != readReportSizeCb) 
         {
             hr = HRESULT_FROM_NT(STATUS_INVALID_BUFFER_SIZE);
             Trace(TRACE_LEVEL_ERROR, 
-                "%!FUNC! Insufficient read report buffer size %!hresult!", hr);
-        }
-        else
-        {
-            //
-            //Create input report
-            //
+                "%!FUNC! Wrong read report buffer size %!hresult!", hr);
+        } else {
 			memcpy(buffer, &This->m_Device->m_SpenLastState, sizeof(SPEN_REPORT));
 			fxRequest2->SetInformation(bufferSizeCb);
-
-            //readReport = (PHIDMINI_INPUT_REPORT)buffer;
-            //readReport->ReportId = CONTROL_FEATURE_REPORT_ID;
-            //readReport->Data = This->m_Device->m_DeviceData;
-            //
-            // Report how many bytes were copied
-            //
-            //fxRequest2->SetInformation(readReportSizeCb);
             hr = S_OK;
+			Trace(TRACE_LEVEL_INFORMATION,"Anti-interruption timer fired");
         }
 
         fxRequest2->Complete(hr);
