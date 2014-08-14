@@ -55,7 +55,7 @@ HID_REPORT_DESCRIPTOR           G_DefaultReportDescriptor[] = {
  //   0xC0,                           // END_COLLECTION
 
 	0x05, 0x0d,                    // USAGE_PAGE (Digitizers)
-	0x09, 0x02,                    // USAGE (Pen)
+	0x09, 0x01,                    // USAGE (Pen)
 	0xa1, 0x01,                    // COLLECTION (Application)
 	0x85, HID_PEN_REPORT_ID,       //   REPORT_ID
 	0x09, 0x20,                    //   USAGE (Stylus)
