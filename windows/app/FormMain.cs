@@ -351,7 +351,7 @@ namespace SPenClient
                             stylus = false;
                             hwr.Write();
                         }
-                        Cursor.Position = new System.Drawing.Point((int)(convertedX * currentScreen.Bounds.Width), (int)(convertedY * currentScreen.Bounds.Height));
+                        Cursor.Position = new System.Drawing.Point((int)(convertedX * SystemInformation.VirtualScreen.Width), (int)(convertedY * SystemInformation.VirtualScreen.Height));
                     }
                     worker.ReportProgress(0, null);
                 }
