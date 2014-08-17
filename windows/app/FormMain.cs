@@ -406,7 +406,7 @@ namespace SPenClient
         {
             //currentScreen = System.Windows.Forms.Screen.FromHandle(Process.GetCurrentProcess().MainWindowHandle);
             //currentScreenProportions = (float)currentScreen.Bounds.Width / currentScreen.Bounds.Height;
-            currentScreenProportions = SystemInformation.VirtualScreen.Width / SystemInformation.VirtualScreen.Height;
+            currentScreenProportions = (float)SystemInformation.VirtualScreen.Width / SystemInformation.VirtualScreen.Height;
         }
 
         private void buttonUninstall_Click(object sender, EventArgs e)
