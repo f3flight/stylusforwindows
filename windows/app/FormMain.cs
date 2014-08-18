@@ -23,12 +23,12 @@ namespace SPenClient
         float tps;
         bool stylus = false;
         float spenScreenProportions, currentScreenProportions, proportionsDiff, inputX, inputY, convertedX, convertedY;
-        float currentScreenWidth, currentScreenHeight, proportionalScreenWidth, proportionalScreenHeight;
+        float proportionalScreenWidth, proportionalScreenHeight;
         float virtualEdgeXLow, virtualEdgeXHigh, virtualEdgeYLow, virtualEdgeYHigh;
-        Screen currentScreen;
         int penMaxX = 32767;
         int penMaxY = 32767;
-
+        long touchTime;
+        long touchClickMaxDelayMSNano100 = 250 * 10000;
         public class PenData
         {
             public PenData(FormMain form)
@@ -37,7 +37,6 @@ namespace SPenClient
             }
 
             public byte switches;
-            public const byte SwitchFinger = 32;
             public float x;
             public float y;
             public float pressure;
@@ -351,7 +350,22 @@ namespace SPenClient
                             stylus = false;
                             hwr.Write();
                         }
-                        Cursor.Position = new System.Drawing.Point((int)(convertedX * SystemInformation.VirtualScreen.Width), (int)(convertedY * SystemInformation.VirtualScreen.Height));
+                        if ((receiveBytes[0] & HIDWriter.SwitchFingerDown) == HIDWriter.SwitchFingerDown)
+                        {
+                            touchTime = DateTime.Now.Ticks;
+                        }
+                        else if ((receiveBytes[0] & HIDWriter.SwitchFingerUp) == HIDWriter.SwitchFingerUp)
+                        {
+                            if (DateTime.Now.Ticks - touchTime <= touchClickMaxDelayMSNano100)
+                            {
+                                mouse_event((int)(MouseEventFlags.LEFTDOWN), 0, 0, 0, 0);
+                                mouse_event((int)(MouseEventFlags.LEFTUP), 0, 0, 0, 0);
+                            }
+                        }
+                        else
+                        {
+                            Cursor.Position = new System.Drawing.Point((int)(convertedX * SystemInformation.VirtualScreen.Width), (int)(convertedY * SystemInformation.VirtualScreen.Height));
+                        }
                     }
                     worker.ReportProgress(0, null);
                 }
