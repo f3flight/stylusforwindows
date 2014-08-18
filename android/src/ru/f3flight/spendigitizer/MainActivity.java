@@ -46,7 +46,8 @@ public class MainActivity extends Activity {
 	private final byte SwitchInvert = 4;
 	private final byte SwitchEraser = 8;
 	private final byte SwitchInRange = 16;
-	private final byte SwitchFinger = 32;
+	private final byte SwitchFingerDown = 32;
+	private final byte SwitchFingerUp = 64;
 	
 	int penOnlyTime = 500;
 	long penTimerCountDown;
@@ -272,7 +273,7 @@ public class MainActivity extends Activity {
 	SCanvasInitializeListener mSCanvasInitializeListener = new SCanvasInitializeListener() {
 		public void onInitialized() {
 			Init();
-			Toast.makeText(mContext, "Digitizer Ready", Toast.LENGTH_SHORT).show();
+			//Toast.makeText(mContext, "Digitizer Ready", Toast.LENGTH_SHORT).show();
 		}
 	};
 	
@@ -303,11 +304,18 @@ public class MainActivity extends Activity {
 
 		public boolean onTouchFinger(View view, MotionEvent event) {
 			penTimeUpCheck();
-			if(SwitchInRangeState == 0) {
-				if(event.getAction() == MotionEvent.ACTION_UP) {
-					upSignal = "up";
+			if (SwitchInRangeState == 0)
+			{
+				if (event.getAction() == MotionEvent.ACTION_DOWN)
+				{
+					SwitchFingerState = SwitchFingerDown;
+				}
+				else if (event.getAction() == MotionEvent.ACTION_UP)
+				{
+					SwitchFingerState = SwitchFingerUp;
 				}
 				SendSignal(event.getX(), event.getY(), 0, event.getAction(), "finger");
+				SwitchFingerState = 0;
 			}
 			return true;
 		}
@@ -321,7 +329,7 @@ public class MainActivity extends Activity {
 		}
 
 		public boolean onTouchPenEraser(View view, MotionEvent event) {
-			return false;
+			return true;
 		}		
 
 		public void onTouchButtonDown(View view, MotionEvent event) {
@@ -363,7 +371,7 @@ public class MainActivity extends Activity {
 		@Override
 		public void onSystemUiVisibilityChange(int p1)
 		{
-			Toast.makeText(mContext, "visibility is "+p1, Toast.LENGTH_SHORT).show();
+			//Toast.makeText(mContext, "visibility is "+p1, Toast.LENGTH_SHORT).show();
 			if (p1 == 0) {
 				Timer t = new Timer();
 				TimerTask ttask = new TimerTask() {

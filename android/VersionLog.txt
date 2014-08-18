@@ -1,5 +1,10 @@
 VERSION LOG
 
+1.0.0:
+- reworked fullscreen mode (menu option does nothing so far)
+- finger input allows clicking
+- better screen size handling
+
 0.0.0.3:
 - HotSpot wifi mode should be supported (preliminary support, may not work)
 
