@@ -33,6 +33,8 @@ namespace SPenClient
         public const byte SwitchInvert  = 4;
         public const byte SwitchEraser  = 8;
         public const byte SwitchInRange = 16;
+        public const byte SwitchFingerDown = 32; // not used in driver, used by app only
+        public const byte SwitchFingerUp = 64; // not used in driver, used by app only
         public const UInt16 PressureMax = 32767;
         //------------- Common -------------------------------
 
