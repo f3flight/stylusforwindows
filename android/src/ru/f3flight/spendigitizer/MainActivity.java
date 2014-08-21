@@ -230,14 +230,14 @@ public class MainActivity extends Activity {
     	
         try {
         	
-        	if(prefs.getBoolean("fullscreen", true))
-        	{
-        		this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        	}
-        	else
-        	{
-        		this.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        	}
+//        	if(prefs.getBoolean("fullscreen", true))
+//        	{
+//        		this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+//        	}
+//        	else
+//        	{
+//        		this.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+//        	}
         	
         	if(socket!=null)
         	{

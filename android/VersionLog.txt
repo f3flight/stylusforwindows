@@ -1,5 +1,8 @@
 VERSION LOG
 
+1.0.1:
+- to hell the fullscreen option in menu, better without it
+
 1.0.0:
 - reworked fullscreen mode (menu option does nothing so far)
 - finger input allows clicking
