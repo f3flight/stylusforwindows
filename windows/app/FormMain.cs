@@ -332,7 +332,9 @@ namespace SPenClient
                     proportionalScreenWidth = virtualEdgeXHigh - virtualEdgeXLow;
                     proportionalScreenHeight = virtualEdgeYHigh - virtualEdgeYLow;
                     convertedX = (inputX - virtualEdgeXLow) / proportionalScreenWidth;
+                    convertedX = (convertedX < 0) ? 0 : convertedX;
                     convertedY = (inputY - virtualEdgeYLow) / proportionalScreenHeight;
+                    convertedY = (convertedY < 0) ? 0 : convertedY;
 
                     if ((hwr.spenReport.Switches & HIDWriter.SwitchInRange) == HIDWriter.SwitchInRange)
                     {
