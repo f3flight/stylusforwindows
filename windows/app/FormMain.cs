@@ -211,19 +211,17 @@ namespace SPenClient
             CurrentPath = new Uri(System.Reflection.Assembly.GetExecutingAssembly().GetName().CodeBase).LocalPath;
             CurrentPath = System.IO.Path.GetDirectoryName(CurrentPath);
             LogFilePacketTime = CurrentPath + "\\PacketTime.log";
-            hwr = new HIDWriter();
-            hwr.Find();
-            if (!hwr.found)
+            if (!DeviceManager.Found())
             {
                 installCert();
                 DeviceManager.installDevice();
-                hwr.Find();
-                if (!hwr.found)
+                if (!DeviceManager.Found())
                 {
                     MessageBox.Show("Could not find S-Pen Virtual Device. Did you agree to install the driver?", "SPenClient error - no device");
                     Environment.Exit(1);
                 }
             }
+            hwr = new HIDWriter();
             pen = new PenData(this);
             init(12333);
             updateScreenProperties();
