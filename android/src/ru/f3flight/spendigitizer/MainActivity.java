@@ -10,35 +10,33 @@ import android.preference.*;
 import android.util.*;
 import android.view.*;
 import android.widget.*;
-import com.samsung.samm.common.*;
-import com.samsung.spensdk.*;
-import com.samsung.spensdk.applistener.*;
 import java.io.*;
 import java.lang.reflect.*;
 import java.net.*;
 import java.nio.*;
 import android.view.View.*;
 import java.util.*;
+import android.widget.SeekBar.*;
 
 public class MainActivity extends Activity {
 	
 	boolean debug = false;
+	int counter = 0;
 	
 	LinearLayout vMotion, vMargin, vDebug;
-	TextView vEvent, vAction, vX, vY, vButtons, vMaxX, vMaxY, vEventCounter, vPressure;
+	TextView vEvent, vAction, vX, vY, vButtons, vMaxX, vMaxY, vEventCounter, vPressure, vSentX, vSentY, vProportions;
 	SeekBar sb;
-	long counter = 0L;
 	
 	Context c;
+	
+	int margin = 0;
+	float maxX = 0, maxY = 0, proportions = 0, sentX, sentY;
 	
 	private DatagramSocket socket;
 	private byte[] dtab =new byte[21]; //size of data packet
 	private DatagramPacket pack;
 	private InetAddress broadcastAddress;
-	private int counter = 0;
 	//private String signalType;
-	private int screenWidth, screenHeight;
-	private float screenProportions, inputX, inputY;
 	
 	private String upSignal="";
 	private ByteBuffer spenReport;
@@ -92,12 +90,6 @@ public class MainActivity extends Activity {
 		
         Init();
 		
-		if (debug)
-		{
-			vDebug = (LinearLayout)findViewById(R.id.mainLinearLayoutDebug);
-			vDebug.setVisibility(View.VISIBLE);
-		}
-		
 		vMotion = (LinearLayout)findViewById(R.id.mainLinearLayoutMotion);
 		vMargin = (LinearLayout)findViewById(R.id.mainLinearLayoutMargin);
 		
@@ -110,29 +102,58 @@ public class MainActivity extends Activity {
 				return true;
 			}	
 		};
-		v.setOnGenericMotionListener(ogml);
+		vMotion.setOnGenericMotionListener(ogml);
 		
 		OnTouchListener otl = new OnTouchListener()
 		{
 			@Override
 			public boolean onTouch(View p1, MotionEvent p2)
 			{
+				if (p2.getToolType(0) == MotionEvent.TOOL_TYPE_STYLUS)
+				{
+					penTimeSet();
+					SwitchInRangeState = SwitchInRange;
+					SwitchTipState = SwitchTip;
+					SendSignal(p2.getX(), p2.getY(), p2.getPressure(), p2.getAction(), "pen");
+				}
+				else
+				{
+					penTimeUpCheck();
+					if (SwitchInRangeState == 0)
+					{
+						if (p2.getAction() == MotionEvent.ACTION_DOWN)
+						{
+							SwitchFingerState = SwitchFingerDown;
+						}
+						else if (p2.getAction() == MotionEvent.ACTION_UP)
+						{
+							SwitchFingerState = SwitchFingerUp;
+						}
+						SendSignal(p2.getX(), p2.getY(), 0, p2.getAction(), "finger");
+						SwitchFingerState = 0;
+					}
+				}
 				logMotion("onTouch", p2);
 				return true;
 			}
 		};
-		v.setOnTouchListener(otl);
+		vMotion.setOnTouchListener(otl);
 		
 		OnHoverListener ohl = new OnHoverListener()
 		{
 			@Override
 			public boolean onHover(View p1, MotionEvent p2)
 			{
+				penTimeSet();
+
+				SwitchInRangeState = SwitchInRange;
+				SwitchTipState = 0;
+				SendSignal(p2.getX(), p2.getY(), p2.getPressure(), p2.getAction(), "hover");
 				logMotion("onHover", p2);
 				return true;
 			}
 		};
-		v.setOnHoverListener(ohl);
+		vMotion.setOnHoverListener(ohl);
 		
 		vX = (TextView)findViewById(R.id.mainTextViewX);
 		vY = (TextView)findViewById(R.id.mainTextViewY);
@@ -143,6 +164,9 @@ public class MainActivity extends Activity {
 		vEvent = (TextView)findViewById(R.id.mainTextViewEvent);
 		vAction = (TextView)findViewById(R.id.mainTextViewAction);
 		vButtons = (TextView)findViewById(R.id.mainTextViewButtons);
+		vSentX = (TextView)findViewById(R.id.mainTextViewSentX);
+		vSentY = (TextView)findViewById(R.id.mainTextViewSentY);
+		vProportions = (TextView)findViewById(R.id.mainTextViewProportions);
 		
 		sb = (SeekBar)findViewById(R.id.mainSeekBar1);
 		OnSeekBarChangeListener osbcl = new OnSeekBarChangeListener()
@@ -151,9 +175,7 @@ public class MainActivity extends Activity {
 			@Override
 			public void onProgressChanged(SeekBar p1, int p2, boolean p3)
 			{
-				ViewGroup.MarginLayoutParams lp = (ViewGroup.MarginLayoutParams)vMargin.getLayoutParams();
-				lp.setMargins(p2,p2,p2,p2);
-				vMargin.setLayoutParams(lp);
+				setMargin(p2);
 			}
 
 			@Override
@@ -169,7 +191,6 @@ public class MainActivity extends Activity {
 			}	
 		};
 		sb.setOnSeekBarChangeListener(osbcl);
-		screenProportions = 1.0f*vMargin.getWidth()/vMargin.getHeight();
     }
 	
 	void logMotion(String ListenerName, MotionEvent p2)
@@ -181,18 +202,37 @@ public class MainActivity extends Activity {
 			vX.setText(String.valueOf(p2.getX()));
 			vY.setText(String.valueOf(p2.getY()));
 			vButtons.setText(String.valueOf(p2.getButtonState()));
-			vMaxX.setText(String.valueOf(vMargin.getWidth()));
-			vMaxY.setText(String.valueOf(vMargin.getHeight()));
+			vMaxX.setText(String.valueOf(maxX));
+			vMaxY.setText(String.valueOf(maxY));
 			vPressure.setText(String.valueOf(p2.getPressure()));
+			vSentX.setText(String.valueOf(sentX));
+			vSentY.setText(String.valueOf(sentY));
+			vProportions.setText(String.valueOf(maxX / maxY));
 			counter++;
 			vEventCounter.setText(String.valueOf(counter));
 		}	
 	}
 
+	void setMargin(int m)
+	{
+		ViewGroup.MarginLayoutParams lp = (ViewGroup.MarginLayoutParams)vMargin.getLayoutParams();
+		lp.setMargins(m,m,m,m);
+		vMargin.setLayoutParams(lp);
+		margin = m;
+	}
+	
 	private void setInputXY(float x, float y)
 	{
-		inputX = x/vMargin.getWidth();
-		inputY = y/vMargin.getHeight();
+		
+		sentX = (x-margin)/vMargin.getWidth();
+		sentY = (y-margin)/vMargin.getHeight();
+		if (sentX < 0) sentX = 0;
+		if (sentX > 1) sentX = 1;
+		if (sentY < 0) sentY = 0;
+		if (sentY > 1) sentY = 1;
+		maxX = vMargin.getWidth();
+		maxY = vMargin.getHeight();
+		proportions = maxX / maxY;
 		
 	}
 	
@@ -206,9 +246,9 @@ public class MainActivity extends Activity {
 			setInputXY(x, y);
 			spenReport.clear();
 			spenReport.put((byte)(SwitchTipState+SwitchBarrelState+SwitchInvertState+SwitchEraserState+SwitchInRangeState+SwitchFingerState));
-			spenReport.putFloat(inputX);
-			spenReport.putFloat(inputY);
-			spenReport.putFloat(screenProportions);
+			spenReport.putFloat(sentX);
+			spenReport.putFloat(sentY);
+			spenReport.putFloat(proportions);
 			spenReport.putFloat(pressure);
 			spenReport.putInt(counter);
 			//spenReportX = ByteBuffer.allocate(4).putFloat(x).array();
@@ -225,7 +265,7 @@ public class MainActivity extends Activity {
 			//signalType=type;
 		} catch (Exception e) {
 			e.printStackTrace();
-			Toast.makeText(mContext, "error in SendSignal:"+e.getMessage(), Toast.LENGTH_SHORT).show();
+			//Toast.makeText(mContext, "error in SendSignal:"+e.getMessage(), Toast.LENGTH_SHORT).show();
 		}
     }
     
@@ -242,10 +282,10 @@ public class MainActivity extends Activity {
             	finish();	
                 break;
             case R.id.menu_clear:
-            	mSCanvas.clearSCanvasView();
+            	//mSCanvas.clearSCanvasView();
                 break;
             case R.id.menu_settings:
-            	Intent settingsActivity = new Intent(mContext,Preferences.class);
+            	Intent settingsActivity = new Intent(c,Preferences.class);
             	startActivity(settingsActivity);
                 break;
         }
@@ -259,7 +299,7 @@ public class MainActivity extends Activity {
 //    }
     
     InetAddress getBroadcastAddress() throws IOException {
-        WifiManager wifi = (WifiManager)mContext.getSystemService(WIFI_SERVICE);
+        WifiManager wifi = (WifiManager)c.getSystemService(WIFI_SERVICE);
         DhcpInfo dhcp = wifi.getDhcpInfo();
 		if (dhcp.ipAddress == 0)
 		{
@@ -276,31 +316,31 @@ public class MainActivity extends Activity {
 					}
 					if (actualState == 3)
 					{
-						Toast.makeText(mContext, "WiFi AP mode", Toast.LENGTH_SHORT).show();
+						Toast.makeText(c, "WiFi AP mode", Toast.LENGTH_SHORT).show();
 						return InetAddress.getByName("192.168.43.255");
 					}
 					else
 					{
-						Toast.makeText(mContext, "WiFi AP state is bad: "+actualState, Toast.LENGTH_SHORT).show();
+						Toast.makeText(c, "WiFi AP state is bad: "+actualState, Toast.LENGTH_SHORT).show();
 					}
 					
 				}
 				catch (IllegalArgumentException e)
 				{
-					Toast.makeText(mContext, "invoke - illegalArgument", Toast.LENGTH_SHORT).show();
+					Toast.makeText(c, "invoke - illegalArgument", Toast.LENGTH_SHORT).show();
 				}
 				catch (IllegalAccessException e)
 				{
-					Toast.makeText(mContext, "invoke - illegalAccess", Toast.LENGTH_SHORT).show();
+					Toast.makeText(c, "invoke - illegalAccess", Toast.LENGTH_SHORT).show();
 				}
 				catch (InvocationTargetException e)
 				{
-					Toast.makeText(mContext, "invoke - invocationTargetException", Toast.LENGTH_SHORT).show();
+					Toast.makeText(c, "invoke - invocationTargetException", Toast.LENGTH_SHORT).show();
 				}
 			}
 			catch (NoSuchMethodException e)
 			{
-				Toast.makeText(mContext, "getWifiApState - no such method", Toast.LENGTH_SHORT).show();
+				Toast.makeText(c, "getWifiApState - no such method", Toast.LENGTH_SHORT).show();
 			}
 			
 		}
@@ -310,10 +350,10 @@ public class MainActivity extends Activity {
 			byte[] quads = new byte[4];
 			for (int k = 0; k < 4; k++)
 				quads[k] = (byte) ((broadcast >> k * 8) & 0xFF);
-				Toast.makeText(mContext, "WiFi mode", Toast.LENGTH_SHORT).show();
+				Toast.makeText(c, "WiFi mode", Toast.LENGTH_SHORT).show();
 			return InetAddress.getByAddress(quads);
 		}
-		Toast.makeText(mContext, "No network detected, please use wifi or hotspot and restart the app", Toast.LENGTH_LONG).show();
+		Toast.makeText(c, "No network detected, please use wifi or hotspot and restart the app", Toast.LENGTH_LONG).show();
 		return InetAddress.getLoopbackAddress();
     }
     
@@ -323,7 +363,16 @@ public class MainActivity extends Activity {
     	SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
     	
         try {
-        	
+			
+			if (prefs.getBoolean("debug", true))
+			{
+				debug = true;
+				vDebug = (LinearLayout)findViewById(R.id.mainLinearLayoutDebug);
+				vDebug.setVisibility(View.VISIBLE);
+			}
+			
+			setMargin(prefs.getInt("margin",0));
+			
 //        	if(prefs.getBoolean("fullscreen", true))
 //        	{
 //        		this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -356,84 +405,13 @@ public class MainActivity extends Activity {
 			
 		} catch (Exception e) {
 			e.printStackTrace();
-			Toast.makeText(mContext, e.getMessage(), Toast.LENGTH_SHORT).show();
+			Toast.makeText(c, e.getMessage(), Toast.LENGTH_SHORT).show();
 		}
-        
-		mSCanvas.setBGColor(Color.BLACK);
-		mSCanvas.setSettingStrokeInfo(SObjectStroke.SAMM_STROKE_STYLE_SOLID, 5, Color.DKGRAY);
-		mSCanvas.clearSCanvasView();
     }
     
-	SCanvasInitializeListener mSCanvasInitializeListener = new SCanvasInitializeListener() {
-		public void onInitialized() {
-			Init();
-			//Toast.makeText(mContext, "Digitizer Ready", Toast.LENGTH_SHORT).show();
-		}
-	};
 	
-	SPenHoverListener mSPenHoverListener = new SPenHoverListener(){
-		public boolean onHover(View view, MotionEvent event) {
-			
-			penTimeSet();
-			
-			SwitchInRangeState = SwitchInRange;
-			SwitchTipState = 0;
-			SendSignal(event.getX(), event.getY(), event.getPressure(), event.getAction(), "hover");
-			
-			//if(event.getAction() == MotionEvent.ACTION_UP) {
-            //	Toast.makeText(mContext, "UP!", Toast.LENGTH_SHORT).show();
-            //} this doesn't happen
-			
-			return false;
-		}
-
-		public void onHoverButtonDown(View view, MotionEvent event) {
-		}
-
-		public void onHoverButtonUp(View view, MotionEvent event) {
-		}
-	};
 	
-	SPenTouchListener mSPenTouchListener = new SPenTouchListener(){
-
-		public boolean onTouchFinger(View view, MotionEvent event) {
-			penTimeUpCheck();
-			if (SwitchInRangeState == 0)
-			{
-				if (event.getAction() == MotionEvent.ACTION_DOWN)
-				{
-					SwitchFingerState = SwitchFingerDown;
-				}
-				else if (event.getAction() == MotionEvent.ACTION_UP)
-				{
-					SwitchFingerState = SwitchFingerUp;
-				}
-				SendSignal(event.getX(), event.getY(), 0, event.getAction(), "finger");
-				SwitchFingerState = 0;
-			}
-			return true;
-		}
-
-		public boolean onTouchPen(View view, MotionEvent event) {
-			penTimeSet();
-			SwitchInRangeState = SwitchInRange;
-			SwitchTipState = SwitchTip;
-			SendSignal(event.getX(), event.getY(), event.getPressure(), event.getAction(), "pen");				
-			return false;
-		}
-
-		public boolean onTouchPenEraser(View view, MotionEvent event) {
-			return true;
-		}		
-
-		public void onTouchButtonDown(View view, MotionEvent event) {
-		}
-
-		public void onTouchButtonUp(View view, MotionEvent event) {
-		}			
-	};
-
-
+	
 	public View onCreateView(String name, Context context, AttributeSet attrs) {
 		// TODO Auto-generated method stub
 		return null;

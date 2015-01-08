@@ -4,14 +4,15 @@
 	android:layout_height="match_parent"
 	android:layout_width="match_parent"
 	android:id="@+id/mainLinearLayoutMotion"
-	android:orientation="vertical">
+	android:orientation="vertical"
+	android:background="#8F8F8F">
 
 	<LinearLayout
 		android:layout_height="match_parent"
 		android:layout_width="match_parent"
 		android:id="@+id/mainLinearLayoutMargin"
 		android:orientation="vertical"
-		android:background="#E5E5E5">
+		android:background="#000000">
 
 		<LinearLayout
 			android:layout_width="match_parent"
@@ -170,7 +171,27 @@
 				<TextView
 					android:layout_height="wrap_content"
 					android:textAppearance="?android:attr/textAppearanceLarge"
+					android:layout_width="wrap_content"
+					android:id="@+id/mainTextViewSentY"/>
+
+			</LinearLayout>
+
+			<LinearLayout
+				android:layout_height="wrap_content"
+				android:layout_width="wrap_content"
+				android:orientation="horizontal">
+
+				<TextView
+					android:layout_height="wrap_content"
+					android:text="proportions:"
+					android:textAppearance="?android:attr/textAppearanceLarge"
 					android:layout_width="wrap_content"/>
+
+				<TextView
+					android:layout_height="wrap_content"
+					android:textAppearance="?android:attr/textAppearanceLarge"
+					android:layout_width="wrap_content"
+					android:id="@+id/mainTextViewProportions"/>
 
 			</LinearLayout>
 

@@ -7,6 +7,17 @@
                         android:summary="App will utilize entire screen"
                         android:key="fullscreen" />
         </PreferenceCategory>-->
+	<CheckBoxPreference
+		android:title="Debug"
+		android:defaultValue="false"
+		android:summary="Show debug information"
+		android:key="debug" />
+	<SeekBarPreference
+		android:title="Margin"
+		android:defaultValue="0"
+		android:max="100"
+		android:summary="Set edge matgin"
+		android:key="margin" />
         <PreferenceCategory android:title="Connection">
 	       	<EditTextPreference
 	                android:title="Port"
