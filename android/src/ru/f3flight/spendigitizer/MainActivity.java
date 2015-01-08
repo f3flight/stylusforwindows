@@ -191,8 +191,8 @@ public class MainActivity extends Activity {
 
 	private void setInputXY(float x, float y)
 	{
-		inputX = x/screenWidth;
-		inputY = y/screenHeight;
+		inputX = x/vMargin.getWidth();
+		inputY = y/vMargin.getHeight();
 		
 	}
 	
