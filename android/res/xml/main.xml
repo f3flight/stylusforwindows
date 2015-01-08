@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_height="match_parent"
+	android:layout_width="match_parent"
+	android:id="@+id/mainLinearLayoutMotion"
+	android:orientation="vertical">
+
+	<LinearLayout
+		android:layout_height="match_parent"
+		android:layout_width="match_parent"
+		android:id="@+id/mainLinearLayoutMargin"
+		android:orientation="vertical"
+		android:background="#E5E5E5">
+
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			android:orientation="vertical"
+			android:id="@+id/mainLinearLayoutDebug"
+			android:gravity="center"
+			android:visibility="invisible">
+
+			<LinearLayout
+				android:layout_height="wrap_content"
+				android:layout_width="wrap_content"
+				android:orientation="horizontal">
+
+				<TextView
+					android:layout_height="wrap_content"
+					android:text="event:"
+					android:textAppearance="?android:attr/textAppearanceLarge"
+					android:layout_width="wrap_content"/>
+
+				<TextView
+					android:layout_height="wrap_content"
+					android:textAppearance="?android:attr/textAppearanceLarge"
+					android:layout_width="wrap_content"
+					android:id="@+id/mainTextViewEvent"/>
+
+			</LinearLayout>
+
+			<LinearLayout
+				android:layout_height="wrap_content"
+				android:layout_width="wrap_content"
+				android:orientation="horizontal">
+
+				<TextView
+					android:layout_height="wrap_content"
+					android:text="action:"
+					android:textAppearance="?android:attr/textAppearanceLarge"
+					android:layout_width="wrap_content"/>
+
+				<TextView
+					android:layout_height="wrap_content"
+					android:textAppearance="?android:attr/textAppearanceLarge"
+					android:layout_width="wrap_content"
+					android:id="@+id/mainTextViewAction"/>
+
+			</LinearLayout>
+
+			<LinearLayout
+				android:layout_height="wrap_content"
+				android:layout_width="wrap_content"
+				android:orientation="horizontal"
+				android:gravity="center">
+
+				<TextView
+					android:text="event x:"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:textAppearance="?android:attr/textAppearanceLarge"/>
+
+				<TextView
+					android:layout_height="wrap_content"
+					android:textAppearance="?android:attr/textAppearanceLarge"
+					android:layout_width="wrap_content"
+					android:id="@+id/mainTextViewX"/>
+
+			</LinearLayout>
+
+			<LinearLayout
+				android:layout_height="wrap_content"
+				android:layout_width="wrap_content"
+				android:orientation="horizontal"
+				android:gravity="center">
+
+				<TextView
+					android:layout_height="wrap_content"
+					android:text="event y:"
+					android:layout_width="wrap_content"
+					android:textAppearance="?android:attr/textAppearanceLarge"/>
+
+				<TextView
+					android:layout_height="wrap_content"
+					android:textAppearance="?android:attr/textAppearanceLarge"
+					android:layout_width="wrap_content"
+					android:id="@+id/mainTextViewY"/>
+
+			</LinearLayout>
+
+			<LinearLayout
+				android:layout_height="wrap_content"
+				android:layout_width="wrap_content"
+				android:orientation="horizontal">
+
+				<TextView
+					android:layout_height="wrap_content"
+					android:text="pressure:"
+					android:textAppearance="?android:attr/textAppearanceLarge"
+					android:layout_width="wrap_content"/>
+
+				<TextView
+					android:layout_height="wrap_content"
+					android:textAppearance="?android:attr/textAppearanceLarge"
+					android:layout_width="wrap_content"
+					android:id="@+id/mainTextViewPressure"/>
+
+			</LinearLayout>
+
+			<LinearLayout
+				android:layout_height="wrap_content"
+				android:layout_width="wrap_content"
+				android:orientation="horizontal">
+
+				<TextView
+					android:layout_height="wrap_content"
+					android:text="buttons:"
+					android:textAppearance="?android:attr/textAppearanceLarge"
+					android:layout_width="wrap_content"/>
+
+				<TextView
+					android:layout_height="wrap_content"
+					android:textAppearance="?android:attr/textAppearanceLarge"
+					android:layout_width="wrap_content"
+					android:id="@+id/mainTextViewButtons"/>
+
+			</LinearLayout>
+
+			<LinearLayout
+				android:layout_height="wrap_content"
+				android:layout_width="wrap_content"
+				android:orientation="horizontal">
+
+				<TextView
+					android:layout_height="wrap_content"
+					android:text="sent x:"
+					android:textAppearance="?android:attr/textAppearanceLarge"
+					android:layout_width="wrap_content"/>
+
+				<TextView
+					android:layout_height="wrap_content"
+					android:textAppearance="?android:attr/textAppearanceLarge"
+					android:layout_width="wrap_content"
+					android:id="@+id/mainTextViewSentX"/>
+
+			</LinearLayout>
+
+			<LinearLayout
+				android:layout_height="wrap_content"
+				android:layout_width="wrap_content"
+				android:orientation="horizontal">
+
+				<TextView
+					android:layout_height="wrap_content"
+					android:text="sent y:"
+					android:textAppearance="?android:attr/textAppearanceLarge"
+					android:layout_width="wrap_content"/>
+
+				<TextView
+					android:layout_height="wrap_content"
+					android:textAppearance="?android:attr/textAppearanceLarge"
+					android:layout_width="wrap_content"/>
+
+			</LinearLayout>
+
+			<SeekBar
+				android:layout_height="wrap_content"
+				android:layout_width="wrap_content"
+				android:minWidth="100dp"
+				android:id="@+id/mainSeekBar1"/>
+
+			<LinearLayout
+				android:layout_height="wrap_content"
+				android:layout_width="wrap_content"
+				android:orientation="horizontal"
+				android:gravity="center">
+
+				<TextView
+					android:layout_height="wrap_content"
+					android:text="max x:"
+					android:layout_width="wrap_content"
+					android:textAppearance="?android:attr/textAppearanceLarge"/>
+
+				<TextView
+					android:layout_height="wrap_content"
+					android:textAppearance="?android:attr/textAppearanceLarge"
+					android:layout_width="wrap_content"
+					android:id="@+id/mainTextViewMaxX"/>
+
+			</LinearLayout>
+
+			<LinearLayout
+				android:layout_height="wrap_content"
+				android:layout_width="wrap_content"
+				android:orientation="horizontal"
+				android:gravity="center">
+
+				<TextView
+					android:layout_height="wrap_content"
+					android:text="max y:"
+					android:layout_width="wrap_content"
+					android:textAppearance="?android:attr/textAppearanceLarge"/>
+
+				<TextView
+					android:layout_height="wrap_content"
+					android:textAppearance="?android:attr/textAppearanceLarge"
+					android:layout_width="wrap_content"
+					android:id="@+id/mainTextViewMaxY"/>
+
+			</LinearLayout>
+
+			<LinearLayout
+				android:layout_height="wrap_content"
+				android:layout_width="wrap_content"
+				android:orientation="horizontal">
+
+				<TextView
+					android:layout_height="wrap_content"
+					android:text="event counter:"
+					android:textAppearance="?android:attr/textAppearanceLarge"
+					android:layout_width="wrap_content"/>
+
+				<TextView
+					android:layout_height="wrap_content"
+					android:textAppearance="?android:attr/textAppearanceLarge"
+					android:layout_width="wrap_content"
+					android:id="@+id/mainTextViewEventCounter"/>
+
+			</LinearLayout>
+
+		</LinearLayout>
+
+	</LinearLayout>
+
+</LinearLayout>
+
