@@ -88,11 +88,11 @@ public class MainActivity extends Activity {
 		
 		c = this;
 		
+		vMargin = (LinearLayout)findViewById(R.id.mainLinearLayoutMargin);
+		
         Init();
 		
 		vMotion = (LinearLayout)findViewById(R.id.mainLinearLayoutMotion);
-		vMargin = (LinearLayout)findViewById(R.id.mainLinearLayoutMargin);
-		
 		OnGenericMotionListener ogml = new OnGenericMotionListener()
 		{
 			@Override
@@ -103,7 +103,6 @@ public class MainActivity extends Activity {
 			}	
 		};
 		vMotion.setOnGenericMotionListener(ogml);
-		
 		OnTouchListener otl = new OnTouchListener()
 		{
 			@Override
@@ -138,7 +137,6 @@ public class MainActivity extends Activity {
 			}
 		};
 		vMotion.setOnTouchListener(otl);
-		
 		OnHoverListener ohl = new OnHoverListener()
 		{
 			@Override
@@ -281,9 +279,6 @@ public class MainActivity extends Activity {
             case R.id.menu_exit:
             	finish();	
                 break;
-            case R.id.menu_clear:
-            	//mSCanvas.clearSCanvasView();
-                break;
             case R.id.menu_settings:
             	Intent settingsActivity = new Intent(c,Preferences.class);
             	startActivity(settingsActivity);
@@ -361,17 +356,34 @@ public class MainActivity extends Activity {
     {
 		
     	SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-    	
-        try {
-			
-			if (prefs.getBoolean("debug", true))
+	    try
+		{
+			margin = prefs.getInt("margin",0);
+		}
+		catch (ClassCastException e)
+		{
+			Toast.makeText(c, "getInt for margin failed", Toast.LENGTH_SHORT).show();
+			Toast.makeText(c, e.getMessage(), Toast.LENGTH_SHORT).show();
+		}
+    	setMargin(margin);
+		
+        try
+		{
+			if (prefs.getBoolean("debug", false))
 			{
 				debug = true;
 				vDebug = (LinearLayout)findViewById(R.id.mainLinearLayoutDebug);
 				vDebug.setVisibility(View.VISIBLE);
 			}
+		}
+		catch (ClassCastException e)
+		{
+			Toast.makeText(c, "getBoolean for debug failed", Toast.LENGTH_SHORT).show();
+			Toast.makeText(c, e.getMessage(), Toast.LENGTH_SHORT).show();
+		}
 			
-			setMargin(prefs.getInt("margin",0));
+		try
+		{
 			
 //        	if(prefs.getBoolean("fullscreen", true))
 //        	{

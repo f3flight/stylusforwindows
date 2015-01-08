@@ -16,7 +16,7 @@
 		android:title="Margin"
 		android:defaultValue="0"
 		android:max="100"
-		android:summary="Set edge matgin"
+		android:summary="Set edge margin"
 		android:key="margin" />
         <PreferenceCategory android:title="Connection">
 	       	<EditTextPreference
