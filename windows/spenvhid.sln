@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Express 2013 for Windows Desktop
-VisualStudioVersion = 12.0.21005.1
+# Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SPenClient", "app\SPenClient.csproj", "{0C80D1CA-1365-44AA-97B9-393A29B43F8B}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -113,7 +113,6 @@ Global
 		{E14C0590-7354-44AD-B97B-9A77670317D3}.Debug|Mixed Platforms.Build.0 = Win8.1 Debug|x64
 		{E14C0590-7354-44AD-B97B-9A77670317D3}.Debug|Win32.ActiveCfg = Win8 Debug|Win32
 		{E14C0590-7354-44AD-B97B-9A77670317D3}.Debug|Win32.Build.0 = Win8 Debug|Win32
-		{E14C0590-7354-44AD-B97B-9A77670317D3}.Debug|Win32.Deploy.0 = Win8 Debug|Win32
 		{E14C0590-7354-44AD-B97B-9A77670317D3}.Debug|x32.ActiveCfg = Win8.1 Debug|Win32
 		{E14C0590-7354-44AD-B97B-9A77670317D3}.Debug|x32.Build.0 = Win8.1 Debug|Win32
 		{E14C0590-7354-44AD-B97B-9A77670317D3}.Debug|x64.ActiveCfg = Win8.1 Debug|x64
@@ -203,13 +202,10 @@ Global
 		{58030CC7-7C32-4686-8551-55F484626892}.Debug|Mixed Platforms.Deploy.0 = Win8.1 Debug|Win32
 		{58030CC7-7C32-4686-8551-55F484626892}.Debug|Win32.ActiveCfg = Win8 Debug|Win32
 		{58030CC7-7C32-4686-8551-55F484626892}.Debug|Win32.Build.0 = Win8 Debug|Win32
-		{58030CC7-7C32-4686-8551-55F484626892}.Debug|Win32.Deploy.0 = Win8 Debug|Win32
 		{58030CC7-7C32-4686-8551-55F484626892}.Debug|x32.ActiveCfg = Win8.1 Debug|Win32
 		{58030CC7-7C32-4686-8551-55F484626892}.Debug|x32.Build.0 = Win8.1 Debug|Win32
-		{58030CC7-7C32-4686-8551-55F484626892}.Debug|x32.Deploy.0 = Win8.1 Debug|Win32
 		{58030CC7-7C32-4686-8551-55F484626892}.Debug|x64.ActiveCfg = Win8.1 Debug|x64
 		{58030CC7-7C32-4686-8551-55F484626892}.Debug|x64.Build.0 = Win8.1 Debug|x64
-		{58030CC7-7C32-4686-8551-55F484626892}.Debug|x64.Deploy.0 = Win8.1 Debug|x64
 		{58030CC7-7C32-4686-8551-55F484626892}.Release|Mixed Platforms.ActiveCfg = Win8.1 Release|Win32
 		{58030CC7-7C32-4686-8551-55F484626892}.Release|Mixed Platforms.Build.0 = Win8.1 Release|Win32
 		{58030CC7-7C32-4686-8551-55F484626892}.Release|Mixed Platforms.Deploy.0 = Win8.1 Release|Win32
@@ -295,11 +291,10 @@ Global
 		{8BD06B4C-781C-4725-865A-A23D50F8960E}.Debug|Mixed Platforms.Deploy.0 = Win8.1 Debug|Win32
 		{8BD06B4C-781C-4725-865A-A23D50F8960E}.Debug|Win32.ActiveCfg = Win8.1 Debug|Win32
 		{8BD06B4C-781C-4725-865A-A23D50F8960E}.Debug|Win32.Build.0 = Win8.1 Debug|Win32
-		{8BD06B4C-781C-4725-865A-A23D50F8960E}.Debug|Win32.Deploy.0 = Win8.1 Debug|Win32
 		{8BD06B4C-781C-4725-865A-A23D50F8960E}.Debug|x32.ActiveCfg = Win8.1 Debug|Win32
+		{8BD06B4C-781C-4725-865A-A23D50F8960E}.Debug|x32.Build.0 = Win8.1 Debug|Win32
 		{8BD06B4C-781C-4725-865A-A23D50F8960E}.Debug|x64.ActiveCfg = Win8.1 Debug|x64
 		{8BD06B4C-781C-4725-865A-A23D50F8960E}.Debug|x64.Build.0 = Win8.1 Debug|x64
-		{8BD06B4C-781C-4725-865A-A23D50F8960E}.Debug|x64.Deploy.0 = Win8.1 Debug|x64
 		{8BD06B4C-781C-4725-865A-A23D50F8960E}.Release|Mixed Platforms.ActiveCfg = Win8.1 Release|Win32
 		{8BD06B4C-781C-4725-865A-A23D50F8960E}.Release|Mixed Platforms.Build.0 = Win8.1 Release|Win32
 		{8BD06B4C-781C-4725-865A-A23D50F8960E}.Release|Mixed Platforms.Deploy.0 = Win8.1 Release|Win32
