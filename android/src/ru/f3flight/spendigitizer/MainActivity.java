@@ -113,6 +113,7 @@ public class MainActivity extends Activity {
 					penTimeSet();
 					SwitchInRangeState = SwitchInRange;
 					SwitchTipState = SwitchTip;
+					setButtons(p2.getButtonState());
 					SendSignal(p2.getX(), p2.getY(), p2.getPressure(), p2.getAction(), "pen");
 				}
 				else
@@ -146,6 +147,7 @@ public class MainActivity extends Activity {
 
 				SwitchInRangeState = SwitchInRange;
 				SwitchTipState = 0;
+				setButtons(p2.getButtonState());
 				SendSignal(p2.getX(), p2.getY(), p2.getPressure(), p2.getAction(), "hover");
 				logMotion("onHover", p2);
 				return true;
@@ -232,6 +234,12 @@ public class MainActivity extends Activity {
 		maxY = vMargin.getHeight();
 		proportions = maxX / maxY;
 		
+	}
+	
+	void setButtons(int buttonState)
+	{
+		if (buttonState == 0) SwitchBarrelState = 0;
+		if (buttonState == 2) SwitchBarrelState = SwitchBarrel;
 	}
 	
     private void SendSignal(float x, float y, float pressure, int action, String type)
