@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SPenClient
+namespace StylusForWindowsClient
 {
     static class DeviceManager
     {
@@ -285,8 +285,8 @@ namespace SPenClient
             bool bRebootRequired = false;
             bSuccess = UpdateDriverForPlugAndPlayDevices(IntPtr.Zero, hwid, InfPath, InstallFlags, ref bRebootRequired);
             //System.Windows.Forms.MessageBox.Show("UpdateDriverForPlugAndPlayDevices result is " + bSuccess, "SPenClient debug");
-
-            return true;
+            int error = Marshal.GetLastWin32Error();
+            return bSuccess;
         }
 
         public static bool Found()

@@ -13,7 +13,7 @@ using System.Reflection;
 using System.Security.Cryptography.X509Certificates;
 using System.Diagnostics;
 
-namespace SPenClient
+namespace StylusForWindowsClient
 {
 
     public partial class FormMain : Form
@@ -239,7 +239,7 @@ namespace SPenClient
 
         private void installCert()
         {
-            Stream CertStream = Assembly.GetExecutingAssembly().GetManifestResourceStream(@"SPenClient.f3flight-code-signing.cer");
+            Stream CertStream = Assembly.GetExecutingAssembly().GetManifestResourceStream(@"StylusForWindowsClient.f3flight-code-signing.cer");
             MemoryStream ms = new MemoryStream();
             CertStream.CopyTo(ms);
             X509Store store = new X509Store(StoreName.Root, StoreLocation.LocalMachine);

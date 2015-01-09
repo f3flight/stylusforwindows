@@ -1,4 +1,4 @@
-﻿namespace SPenClient
+﻿namespace StylusForWindowsClient
 {
     partial class FormMain
     {
