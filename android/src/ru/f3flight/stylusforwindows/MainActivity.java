@@ -1,4 +1,4 @@
-package ru.f3flight.spendigitizer;
+package ru.f3flight.stylusforwindows;
 
 import android.app.*;
 import android.content.*;
@@ -239,7 +239,11 @@ public class MainActivity extends Activity {
 	void setButtons(int buttonState)
 	{
 		if (buttonState == 0) SwitchBarrelState = 0;
-		if (buttonState == 2) SwitchBarrelState = SwitchBarrel;
+		if (buttonState == 2) 
+		{
+			SwitchTipState = SwitchTip;
+			SwitchBarrelState = SwitchBarrel;
+		}
 	}
 	
     private void SendSignal(float x, float y, float pressure, int action, String type)

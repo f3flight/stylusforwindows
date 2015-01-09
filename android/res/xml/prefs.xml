@@ -15,7 +15,7 @@
 	<SeekBarPreference
 		android:title="Margin"
 		android:defaultValue="0"
-		android:max="100"
+		android:max="200"
 		android:summary="Set edge margin"
 		android:key="margin" />
         <PreferenceCategory android:title="Connection">

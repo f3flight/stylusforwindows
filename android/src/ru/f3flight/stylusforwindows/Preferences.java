@@ -1,4 +1,4 @@
-package ru.f3flight.spendigitizer;
+package ru.f3flight.stylusforwindows;
 
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
