@@ -45,7 +45,7 @@
             this.buttonChangePort.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.buttonChangePort.Location = new System.Drawing.Point(156, 5);
             this.buttonChangePort.Name = "buttonChangePort";
-            this.buttonChangePort.Size = new System.Drawing.Size(123, 23);
+            this.buttonChangePort.Size = new System.Drawing.Size(222, 23);
             this.buttonChangePort.TabIndex = 2;
             this.buttonChangePort.Text = "Change port";
             this.buttonChangePort.UseVisualStyleBackColor = true;
@@ -72,7 +72,7 @@
             // 
             this.buttonUninstall.Location = new System.Drawing.Point(12, 33);
             this.buttonUninstall.Name = "buttonUninstall";
-            this.buttonUninstall.Size = new System.Drawing.Size(267, 22);
+            this.buttonUninstall.Size = new System.Drawing.Size(366, 22);
             this.buttonUninstall.TabIndex = 3;
             this.buttonUninstall.Text = "Uninstall device and exit";
             this.buttonUninstall.UseVisualStyleBackColor = true;
@@ -118,7 +118,7 @@
             // 
             this.buttonReset.Location = new System.Drawing.Point(156, 61);
             this.buttonReset.Name = "buttonReset";
-            this.buttonReset.Size = new System.Drawing.Size(123, 26);
+            this.buttonReset.Size = new System.Drawing.Size(222, 26);
             this.buttonReset.TabIndex = 8;
             this.buttonReset.Text = "Reset";
             this.buttonReset.UseVisualStyleBackColor = true;
@@ -128,7 +128,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(291, 92);
+            this.ClientSize = new System.Drawing.Size(390, 92);
             this.Controls.Add(this.buttonReset);
             this.Controls.Add(this.labelSlowest);
             this.Controls.Add(this.labelSlowestlabel);
@@ -143,7 +143,7 @@
             this.MaximizeBox = false;
             this.Name = "FormMain";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "S-Pen Digitizer (beta)";
+            this.Text = "Stylus for Windows - Client - 1.0.0.0";
             this.TopMost = true;
             this.WindowState = System.Windows.Forms.FormWindowState.Minimized;
             this.ResumeLayout(false);
